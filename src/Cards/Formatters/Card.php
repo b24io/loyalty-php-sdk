@@ -24,7 +24,7 @@ class Card
             'barcode' => $card->getBarcode(),
             'status' => $card->getStatus()->getCode(),
             'user' => [
-                'userId' => $card->getUser()->getUserId()->getId()
+                'user-id' => $card->getUser()->getUserId()->getId()
             ],
             'balance' => [
                 'amount' => $card->getBalance()->getAmount(),
