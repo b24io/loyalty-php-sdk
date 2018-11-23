@@ -39,6 +39,16 @@ final class Reason
     }
 
     /**
+     * @param array $arReason
+     *
+     * @return Reason
+     */
+    public static function initReasonFromArray(array $arReason): self
+    {
+        return new Reason($arReason['code'], $arReason['comment'], $arReason['id']);
+    }
+
+    /**
      * @return string
      */
     public function getCode(): string
