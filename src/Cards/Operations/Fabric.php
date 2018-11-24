@@ -31,6 +31,24 @@ class Fabric
     }
 
     /**
+     * @param array $arDeleteCardOperation
+     *
+     * @return DeleteCard
+     * @throws \Exception
+     */
+    public static function initDeleteCardOperationFromArray(array $arDeleteCardOperation): DeleteCard
+    {
+        $deleteCardOperation = new DeleteCard();
+        $deleteCardOperation
+            ->setTimestamp(new \DateTime($arDeleteCardOperation['timestamp']))
+            ->setOperationCode($arDeleteCardOperation['operation_code'])
+            ->setCardNumber((int)$arDeleteCardOperation['card_number'])
+            ->setReason(Reason::initReasonFromArray($arDeleteCardOperation['reason']));
+
+        return $deleteCardOperation;
+    }
+
+    /**
      * @param array $arUnblockCardOperation
      *
      * @return UnblockCard
@@ -80,6 +98,25 @@ class Fabric
         $unblockCardOperation
             ->setTimestamp(new \DateTime())
             ->setOperationCode('unblock-card')
+            ->setCardNumber($cardNumber)
+            ->setReason($reason);
+
+        return $unblockCardOperation;
+    }
+
+    /**
+     * @param int    $cardNumber
+     * @param Reason $reason
+     *
+     * @return DeleteCard
+     * @throws \Exception
+     */
+    public static function createDeleteCardOperation(int $cardNumber, Reason $reason): DeleteCard
+    {
+        $unblockCardOperation = new DeleteCard();
+        $unblockCardOperation
+            ->setTimestamp(new \DateTime())
+            ->setOperationCode('delete-card')
             ->setCardNumber($cardNumber)
             ->setReason($reason);
 
