@@ -5,6 +5,7 @@ namespace B24io\Loyalty\SDK\Cards\Operations;
 
 use B24io\Loyalty\SDK\Cards\DTO\Percentage;
 use B24io\Loyalty\SDK\Transport\DTO\Reason;
+use B24io\Loyalty\SDK\Users\DTO\UserId;
 
 /**
  * Class Fabric
@@ -86,6 +87,24 @@ class Fabric
         return $changePercentageOperation;
     }
 
+    /**
+     * @param array $arAddCardOperation
+     *
+     * @return AddCard
+     * @throws \Exception
+     */
+    public static function initAddCardOperationFromArray(array $arAddCardOperation): AddCard
+    {
+        $addCardOperation = new AddCard();
+        $addCardOperation
+            ->setTimestamp(new \DateTime($arAddCardOperation['timestamp']))
+            ->setOperationCode($arAddCardOperation['operation_code'])
+            ->setCardNumber((int)$arAddCardOperation['card_number'])
+            ->setUserId(new UserId((int)$arAddCardOperation['user']['user_id']))
+            ->setReason(Reason::initReasonFromArray($arAddCardOperation['reason']));
+
+        return $addCardOperation;
+    }
 
     /**
      * @param int    $cardNumber
@@ -157,10 +176,32 @@ class Fabric
         $changePercentageOperation = new ChangePercentage();
         $changePercentageOperation
             ->setTimestamp(new \DateTime())
+            ->setPercentage($percentage)
             ->setOperationCode('change-percentage')
             ->setCardNumber($cardNumber)
             ->setReason($reason);
 
         return $changePercentageOperation;
+    }
+
+    /**
+     * @param int    $cardNumber
+     * @param Reason $reason
+     * @param UserId $userId
+     *
+     * @return AddCard
+     * @throws \Exception
+     */
+    public static function createAddCardOperation(int $cardNumber, Reason $reason, UserId $userId): AddCard
+    {
+        $addCardOperation = new AddCard();
+        $addCardOperation
+            ->setTimestamp(new \DateTime())
+            ->setUserId($userId)
+            ->setOperationCode('add-card')
+            ->setCardNumber($cardNumber)
+            ->setReason($reason);
+
+        return $addCardOperation;
     }
 }
