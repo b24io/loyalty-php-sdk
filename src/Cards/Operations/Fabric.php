@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace B24io\Loyalty\SDK\Cards\Operations;
 
+use B24io\Loyalty\SDK\Cards\DTO\Percentage;
 use B24io\Loyalty\SDK\Transport\DTO\Reason;
 
 /**
@@ -67,6 +68,26 @@ class Fabric
     }
 
     /**
+     * @param array $arChangePercentageOperation
+     *
+     * @return ChangePercentage
+     * @throws \Exception
+     */
+    public static function initChangePercentageOperationFromArray(array $arChangePercentageOperation): ChangePercentage
+    {
+        $changePercentageOperation = new ChangePercentage();
+        $changePercentageOperation
+            ->setPercentage(new Percentage((string)$arChangePercentageOperation['percentage']))
+            ->setTimestamp(new \DateTime($arChangePercentageOperation['timestamp']))
+            ->setOperationCode($arChangePercentageOperation['operation_code'])
+            ->setCardNumber((int)$arChangePercentageOperation['card_number'])
+            ->setReason(Reason::initReasonFromArray($arChangePercentageOperation['reason']));
+
+        return $changePercentageOperation;
+    }
+
+
+    /**
      * @param int    $cardNumber
      * @param Reason $reason
      *
@@ -121,5 +142,25 @@ class Fabric
             ->setReason($reason);
 
         return $unblockCardOperation;
+    }
+
+    /**
+     * @param int        $cardNumber
+     * @param Reason     $reason
+     * @param Percentage $percentage
+     *
+     * @return ChangePercentage
+     * @throws \Exception
+     */
+    public static function createChangePercentageOperation(int $cardNumber, Reason $reason, Percentage $percentage): ChangePercentage
+    {
+        $changePercentageOperation = new ChangePercentage();
+        $changePercentageOperation
+            ->setTimestamp(new \DateTime())
+            ->setOperationCode('change-percentage')
+            ->setCardNumber($cardNumber)
+            ->setReason($reason);
+
+        return $changePercentageOperation;
     }
 }
