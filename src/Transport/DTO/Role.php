@@ -37,11 +37,9 @@ class Role extends Enumeration\AbstractMultiton
     }
 
     /**
-     *
-     *
      * @param string $code
      *
-     * @return null|static
+     * @return static
      * @throws \Eloquent\Enumeration\Exception\UndefinedMemberExceptionInterface
      */
     public static function initializeByCode(string $code)
