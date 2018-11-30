@@ -61,7 +61,7 @@ class Transport extends SDK\Transport\AbstractTransport
      * @throws SDK\Exceptions\NetworkException
      * @throws SDK\Exceptions\UnknownException
      */
-    public function addNewCardWithCardNumber(int $cardNumber, SDK\Users\DTO\UserId $userId, SDK\Transport\DTO\Reason $reason): Cards\Transport\DTO\CardResponse
+    public function addNewCardWithNumber(int $cardNumber, SDK\Users\DTO\UserId $userId, SDK\Transport\DTO\Reason $reason): Cards\Transport\DTO\CardResponse
     {
         $this->log->debug('b24io.loyalty.sdk.cards.transport.admin.addNewCardWithCardNumber.start', [
             'cardNumber' => $cardNumber,
@@ -98,7 +98,7 @@ class Transport extends SDK\Transport\AbstractTransport
      * @throws SDK\Exceptions\NetworkException
      * @throws SDK\Exceptions\UnknownException
      */
-    public function blockCardWithCardNumber(int $cardNumber, SDK\Transport\DTO\Reason $reason): Cards\Transport\DTO\CardResponse
+    public function blockCardWithNumber(int $cardNumber, SDK\Transport\DTO\Reason $reason): Cards\Transport\DTO\CardResponse
     {
         $this->log->debug('b24io.loyalty.sdk.cards.transport.admin.blockCardWithCardNumber.start', [
             'cardNumber' => $cardNumber,
@@ -134,7 +134,7 @@ class Transport extends SDK\Transport\AbstractTransport
      * @throws SDK\Exceptions\NetworkException
      * @throws SDK\Exceptions\UnknownException
      */
-    public function unblockCardWithCardNumber(int $cardNumber, SDK\Transport\DTO\Reason $reason): Cards\Transport\DTO\CardResponse
+    public function unblockCardWithNumber(int $cardNumber, SDK\Transport\DTO\Reason $reason): Cards\Transport\DTO\CardResponse
     {
         $this->log->debug('b24io.loyalty.sdk.cards.transport.admin.unblockCardWithCardNumber.start', [
             'cardNumber' => $cardNumber,
@@ -153,6 +153,42 @@ class Transport extends SDK\Transport\AbstractTransport
         );
 
         $this->log->debug('b24io.loyalty.sdk.cards.transport.admin.unblockCardWithCardNumber.finish', [
+            'cardNumber' => $cardResponse->getCard()->getNumber(),
+            'metadata' => SDK\Transport\Formatters\Metadata::toArray($cardResponse->getMeta()),
+        ]);
+
+        return $cardResponse;
+    }
+
+    /**
+     * @param int                      $cardNumber
+     * @param SDK\Transport\DTO\Reason $reason
+     *
+     * @return Cards\Transport\DTO\CardResponse
+     * @throws SDK\Exceptions\ApiClientException
+     * @throws SDK\Exceptions\BaseLoyaltyException
+     * @throws SDK\Exceptions\NetworkException
+     * @throws SDK\Exceptions\UnknownException
+     */
+    public function deleteCardWithNumber(int $cardNumber, SDK\Transport\DTO\Reason $reason): Cards\Transport\DTO\CardResponse
+    {
+        $this->log->debug('b24io.loyalty.sdk.cards.transport.admin.deleteCardWithNumber.start', [
+            'cardNumber' => $cardNumber,
+            'reason' => SDK\Transport\Formatters\Reason::toArray($reason),
+        ]);
+
+        $requestResult = $this->apiClient->executeApiRequest(
+            'admin/card/delete',
+            RequestMethodInterface::METHOD_POST,
+            SDK\Cards\Formatters\DeleteCard::toArray(SDK\Cards\Operations\Fabric::createDeleteCardOperation($cardNumber, $reason))
+        );
+
+        $cardResponse = new SDK\Cards\Transport\DTO\CardResponse(
+            Cards\DTO\Fabric::initFromArray($requestResult['result']),
+            $this->initMetadata($requestResult['meta'])
+        );
+
+        $this->log->debug('b24io.loyalty.sdk.cards.transport.admin.deleteCardWithNumber.finish', [
             'cardNumber' => $cardResponse->getCard()->getNumber(),
             'metadata' => SDK\Transport\Formatters\Metadata::toArray($cardResponse->getMeta()),
         ]);
