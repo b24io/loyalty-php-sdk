@@ -26,14 +26,30 @@ final class Percentage
     public function __construct(string $percentage, $decimalSeparator = '.')
     {
         if ($percentage !== '' && !is_numeric($percentage)) {
-            throw new \InvalidArgumentException('invalid vat percentage');
+            throw new \InvalidArgumentException(sprintf('invalid vat percentage [%s]', $percentage));
+        }
+        // percentage string ends with $decimalSeparator? example: 5.
+        if ((strpos($percentage, $decimalSeparator) !== false)
+            && substr($percentage, strpos($percentage, $decimalSeparator)) === $decimalSeparator) {
+            throw new \InvalidArgumentException(sprintf('invalid vat percentage [%s]', $percentage));
         }
         if ($percentage < 0) {
             throw new \InvalidArgumentException('percentage value must be positive');
         }
 
-        if (strpos($decimalSeparator, $percentage) === null) {
+        // string without decimal part? example: 5 → 5.0
+        if (strpos($percentage, $decimalSeparator) === false) {
             $percentage .= $decimalSeparator . '0';
+        }
+        // string with trailing zeros in end? examples:
+        //  5.000000 → 5.0
+        //  4.400000 → 4.4
+        if (substr($percentage, strpos($percentage, $decimalSeparator)) !== '.0') {
+            // strip trailing zeros
+            $percentage = rtrim($percentage, '0');
+            if (substr($percentage, -1) === $decimalSeparator) {
+                $percentage .= '0';
+            }
         }
 
         $this->percentage = $percentage;

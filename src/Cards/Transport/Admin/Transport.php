@@ -195,4 +195,42 @@ class Transport extends SDK\Transport\AbstractTransport
 
         return $cardResponse;
     }
+
+    /**
+     * @param int                      $cardNumber
+     * @param Cards\DTO\Percentage     $percentage
+     * @param SDK\Transport\DTO\Reason $reason
+     *
+     * @return Cards\Transport\DTO\CardResponse
+     * @throws SDK\Exceptions\ApiClientException
+     * @throws SDK\Exceptions\BaseLoyaltyException
+     * @throws SDK\Exceptions\NetworkException
+     * @throws SDK\Exceptions\UnknownException
+     */
+    public function setPercentageForCardWithNumber(int $cardNumber, Cards\DTO\Percentage $percentage, SDK\Transport\DTO\Reason $reason): Cards\Transport\DTO\CardResponse
+    {
+        $this->log->debug('b24io.loyalty.sdk.cards.transport.admin.setPercentageForCardWithNumber.start', [
+            'cardNumber' => $cardNumber,
+            'percentage' => $percentage,
+            'reason' => SDK\Transport\Formatters\Reason::toArray($reason),
+        ]);
+
+        $requestResult = $this->apiClient->executeApiRequest(
+            'admin/card/percentage',
+            RequestMethodInterface::METHOD_POST,
+            SDK\Cards\Formatters\ChangePercentage::toArray(SDK\Cards\Operations\Fabric::createChangePercentageOperation($cardNumber, $reason, $percentage))
+        );
+
+        $cardResponse = new SDK\Cards\Transport\DTO\CardResponse(
+            Cards\DTO\Fabric::initFromArray($requestResult['result']),
+            $this->initMetadata($requestResult['meta'])
+        );
+
+        $this->log->debug('b24io.loyalty.sdk.cards.transport.admin.setPercentageForCardWithNumber.finish', [
+            'cardNumber' => $cardResponse->getCard()->getNumber(),
+            'metadata' => SDK\Transport\Formatters\Metadata::toArray($cardResponse->getMeta()),
+        ]);
+
+        return $cardResponse;
+    }
 }
