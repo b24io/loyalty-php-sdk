@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace B24io\Loyalty\SDK\Cards\Operations;
+namespace B24io\Loyalty\SDK\Transport\Operations;
 
 use B24io\Loyalty\SDK\Transport\DTO\Reason;
 

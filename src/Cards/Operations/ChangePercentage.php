@@ -5,6 +5,7 @@ namespace B24io\Loyalty\SDK\Cards\Operations;
 
 use B24io\Loyalty\SDK\Cards\DTO\Percentage;
 use B24io\Loyalty\SDK\Transport\DTO\Reason;
+use B24io\Loyalty\SDK\Transport\Operations\AbstractOperation;
 
 /**
  * Class ChangePercentage

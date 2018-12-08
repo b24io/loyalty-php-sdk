@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace B24io\Loyalty\SDK\Cards\Operations;
 
 use B24io\Loyalty\SDK\Transport\DTO\Reason;
+use B24io\Loyalty\SDK\Transport\Operations\AbstractOperation;
 
 /**
  * Class DeleteCard
