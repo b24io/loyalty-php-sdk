@@ -19,7 +19,7 @@ abstract class AbstractOperation
     /**
      * @var \DateTime
      */
-    protected $timestamp;
+    protected $created;
     /**
      * @var int
      */
@@ -40,9 +40,9 @@ abstract class AbstractOperation
     /**
      * @return \DateTime
      */
-    public function getTimestamp(): \DateTime
+    public function getCreated(): \DateTime
     {
-        return $this->timestamp;
+        return $this->created;
     }
 
     /**

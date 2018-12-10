@@ -56,9 +56,9 @@ class AddCard extends AbstractOperation
      *
      * @return AddCard
      */
-    public function setTimestamp(\DateTime $timestamp): AddCard
+    public function setCreated(\DateTime $timestamp): AddCard
     {
-        $this->timestamp = $timestamp;
+        $this->created = $timestamp;
 
         return $this;
     }

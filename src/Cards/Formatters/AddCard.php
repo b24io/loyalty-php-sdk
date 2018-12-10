@@ -20,7 +20,7 @@ class AddCard
     public static function toArray(SDK\Cards\Operations\AddCard $addCard): array
     {
         return [
-            'timestamp' => $addCard->getTimestamp()->format(\DATE_ATOM),
+            'timestamp' => $addCard->getCreated()->format(\DATE_ATOM),
             'operation_code' => $addCard->getOperationCode(),
             'card_number' => $addCard->getCardNumber(),
             'reason' => SDK\Transport\Formatters\Reason::toArray($addCard->getReason()),

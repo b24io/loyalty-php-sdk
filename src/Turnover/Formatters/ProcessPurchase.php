@@ -20,7 +20,7 @@ class ProcessPurchase
     public static function toArray(SDK\Turnover\Operations\ProcessPurchase $processPurchase): array
     {
         return [
-            'timestamp' => $processPurchase->getTimestamp()->format(\DATE_ATOM),
+            'timestamp' => $processPurchase->getCreated()->format(\DATE_ATOM),
             'operation_code' => $processPurchase->getOperationCode(),
             'card_number' => $processPurchase->getCardNumber(),
             'reason' => SDK\Transport\Formatters\Reason::toArray($processPurchase->getReason()),

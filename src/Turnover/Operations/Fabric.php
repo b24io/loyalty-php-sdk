@@ -3,9 +3,7 @@ declare(strict_types=1);
 
 namespace B24io\Loyalty\SDK\Turnover\Operations;
 
-use B24io\Loyalty\SDK\Cards\DTO\Percentage;
 use B24io\Loyalty\SDK\Transport\DTO\Reason;
-use B24io\Loyalty\SDK\Users\DTO\UserId;
 use Money\Currency;
 use Money\Money;
 

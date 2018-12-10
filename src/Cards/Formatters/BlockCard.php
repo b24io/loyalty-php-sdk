@@ -20,7 +20,7 @@ class BlockCard
     public static function toArray(SDK\Cards\Operations\BlockCard $blockCard):array
     {
         return [
-            'timestamp' => $blockCard->getTimestamp()->format(\DATE_ATOM),
+            'timestamp' => $blockCard->getCreated()->format(\DATE_ATOM),
             'operation_code' => $blockCard->getOperationCode(),
             'card_number' => $blockCard->getCardNumber(),
             'reason' => SDK\Transport\Formatters\Reason::toArray($blockCard->getReason())

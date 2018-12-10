@@ -38,7 +38,7 @@ class ProcessPurchase extends AbstractOperation
      */
     public function setTimestamp(\DateTime $timestamp): ProcessPurchase
     {
-        $this->timestamp = $timestamp;
+        $this->created = $timestamp;
 
         return $this;
     }

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace B24io\Loyalty\SDK\Turnover\Transport\Admin;
+namespace B24io\Loyalty\SDK\Transactions\Transport\Admin;
 
 use B24io\Loyalty\SDK\ApiClient;
 use Psr\Log\LoggerInterface;
@@ -9,7 +9,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Class Fabric
  *
- * @package B24io\Loyalty\SDK\Turnover\Transport\Admin
+ * @package B24io\Loyalty\SDK\Transactions\Transport\Admin
  */
 class Fabric
 {
@@ -19,7 +19,7 @@ class Fabric
      *
      * @return Transport
      */
-    public static function getTurnoverTransport(ApiClient $apiClient, LoggerInterface $logger): Transport
+    public static function getTransactionsTransport(ApiClient $apiClient, LoggerInterface $logger): Transport
     {
         return new Transport($apiClient, $logger);
     }

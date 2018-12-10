@@ -30,9 +30,9 @@ class BlockCard extends AbstractOperation
      *
      * @return BlockCard
      */
-    public function setTimestamp(\DateTime $timestamp): BlockCard
+    public function setCreated(\DateTime $timestamp): BlockCard
     {
-        $this->timestamp = $timestamp;
+        $this->created = $timestamp;
 
         return $this;
     }

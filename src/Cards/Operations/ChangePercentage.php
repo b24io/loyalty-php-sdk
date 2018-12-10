@@ -56,9 +56,9 @@ class ChangePercentage extends AbstractOperation
      *
      * @return ChangePercentage
      */
-    public function setTimestamp(\DateTime $timestamp): ChangePercentage
+    public function setCreated(\DateTime $timestamp): ChangePercentage
     {
-        $this->timestamp = $timestamp;
+        $this->created = $timestamp;
 
         return $this;
     }

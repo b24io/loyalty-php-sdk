@@ -24,7 +24,7 @@ class Fabric
     {
         $blockCardOperation = new BlockCard();
         $blockCardOperation
-            ->setTimestamp(new \DateTime($arBlockCardOperation['timestamp']))
+            ->setCreated(new \DateTime($arBlockCardOperation['timestamp']))
             ->setOperationCode($arBlockCardOperation['operation_code'])
             ->setCardNumber((int)$arBlockCardOperation['card_number'])
             ->setReason(Reason::initReasonFromArray($arBlockCardOperation['reason']));
@@ -42,7 +42,7 @@ class Fabric
     {
         $deleteCardOperation = new DeleteCard();
         $deleteCardOperation
-            ->setTimestamp(new \DateTime($arDeleteCardOperation['timestamp']))
+            ->setCreated(new \DateTime($arDeleteCardOperation['timestamp']))
             ->setOperationCode($arDeleteCardOperation['operation_code'])
             ->setCardNumber((int)$arDeleteCardOperation['card_number'])
             ->setReason(Reason::initReasonFromArray($arDeleteCardOperation['reason']));
@@ -60,7 +60,7 @@ class Fabric
     {
         $blockCardOperation = new UnblockCard();
         $blockCardOperation
-            ->setTimestamp(new \DateTime($arUnblockCardOperation['timestamp']))
+            ->setCreated(new \DateTime($arUnblockCardOperation['timestamp']))
             ->setOperationCode($arUnblockCardOperation['operation_code'])
             ->setCardNumber((int)$arUnblockCardOperation['card_number'])
             ->setReason(Reason::initReasonFromArray($arUnblockCardOperation['reason']));
@@ -79,7 +79,7 @@ class Fabric
         $changePercentageOperation = new ChangePercentage();
         $changePercentageOperation
             ->setPercentage(new Percentage((string)$arChangePercentageOperation['percentage']))
-            ->setTimestamp(new \DateTime($arChangePercentageOperation['timestamp']))
+            ->setCreated(new \DateTime($arChangePercentageOperation['timestamp']))
             ->setOperationCode($arChangePercentageOperation['operation_code'])
             ->setCardNumber((int)$arChangePercentageOperation['card_number'])
             ->setReason(Reason::initReasonFromArray($arChangePercentageOperation['reason']));
@@ -97,7 +97,7 @@ class Fabric
     {
         $addCardOperation = new AddCard();
         $addCardOperation
-            ->setTimestamp(new \DateTime($arAddCardOperation['timestamp']))
+            ->setCreated(new \DateTime($arAddCardOperation['timestamp']))
             ->setOperationCode($arAddCardOperation['operation_code'])
             ->setCardNumber((int)$arAddCardOperation['card_number'])
             ->setUserId(new UserId((int)$arAddCardOperation['user']['user_id']))
@@ -117,7 +117,7 @@ class Fabric
     {
         $blockCardOperation = new BlockCard();
         $blockCardOperation
-            ->setTimestamp(new \DateTime())
+            ->setCreated(new \DateTime())
             ->setOperationCode('block-card')
             ->setCardNumber($cardNumber)
             ->setReason($reason);
@@ -136,7 +136,7 @@ class Fabric
     {
         $unblockCardOperation = new UnblockCard();
         $unblockCardOperation
-            ->setTimestamp(new \DateTime())
+            ->setCreated(new \DateTime())
             ->setOperationCode('unblock-card')
             ->setCardNumber($cardNumber)
             ->setReason($reason);
@@ -155,7 +155,7 @@ class Fabric
     {
         $unblockCardOperation = new DeleteCard();
         $unblockCardOperation
-            ->setTimestamp(new \DateTime())
+            ->setCreated(new \DateTime())
             ->setOperationCode('delete-card')
             ->setCardNumber($cardNumber)
             ->setReason($reason);
@@ -175,7 +175,7 @@ class Fabric
     {
         $changePercentageOperation = new ChangePercentage();
         $changePercentageOperation
-            ->setTimestamp(new \DateTime())
+            ->setCreated(new \DateTime())
             ->setPercentage($percentage)
             ->setOperationCode('change-percentage')
             ->setCardNumber($cardNumber)
@@ -196,7 +196,7 @@ class Fabric
     {
         $addCardOperation = new AddCard();
         $addCardOperation
-            ->setTimestamp(new \DateTime())
+            ->setCreated(new \DateTime())
             ->setUserId($userId)
             ->setOperationCode('add-card')
             ->setCardNumber($cardNumber)

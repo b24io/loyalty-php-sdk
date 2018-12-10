@@ -20,7 +20,7 @@ class ChangePercentage
     public static function toArray(SDK\Cards\Operations\ChangePercentage $changePercentage): array
     {
         return [
-            'timestamp' => $changePercentage->getTimestamp()->format(\DATE_ATOM),
+            'timestamp' => $changePercentage->getCreated()->format(\DATE_ATOM),
             'operation_code' => $changePercentage->getOperationCode(),
             'card_number' => $changePercentage->getCardNumber(),
             'reason' => SDK\Transport\Formatters\Reason::toArray($changePercentage->getReason()),

@@ -12,7 +12,7 @@ use Money\Money;
 /**
  * Class Transport
  *
- * @package B24io\Loyalty\SDK\Transport\Admin
+ * @package B24io\Loyalty\SDK\Turnover\Transport\Admin
  */
 class Transport extends SDK\Transport\AbstractTransport
 {
@@ -38,9 +38,7 @@ class Transport extends SDK\Transport\AbstractTransport
 
         $turnoverResponse = new SDK\Turnover\Transport\DTO\TurnoverResponse(
             $this->initMetadata($requestResult['meta']),
-            SDK\Turnover\DTO\Fabric::initFromArray($requestResult['result'])
-
-        );
+            SDK\Turnover\DTO\Fabric::initFromArray($requestResult['result']));
 
         $this->log->debug('b24io.loyalty.sdk.turnover.transport.admin.getTurnoverByCardNumber.finish', [
             'cardNumber' => $cardNumber,

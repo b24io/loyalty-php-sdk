@@ -30,9 +30,9 @@ class DeleteCard extends AbstractOperation
      *
      * @return DeleteCard
      */
-    public function setTimestamp(\DateTime $timestamp): DeleteCard
+    public function setCreated(\DateTime $timestamp): DeleteCard
     {
-        $this->timestamp = $timestamp;
+        $this->created = $timestamp;
 
         return $this;
     }

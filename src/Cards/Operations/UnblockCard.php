@@ -30,9 +30,9 @@ class UnblockCard extends AbstractOperation
      *
      * @return UnblockCard
      */
-    public function setTimestamp(\DateTime $timestamp): UnblockCard
+    public function setCreated(\DateTime $timestamp): UnblockCard
     {
-        $this->timestamp = $timestamp;
+        $this->created = $timestamp;
 
         return $this;
     }
