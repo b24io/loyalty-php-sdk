@@ -34,4 +34,24 @@ class Fabric
 
         return $newTrx;
     }
+
+    /**
+     * @param array $transaction
+     *
+     * @return PaymentTransaction
+     * @throws \Exception
+     */
+    public static function initPaymentTransactionFromArray(array $transaction): PaymentTransaction
+    {
+        $newTrx = new PaymentTransaction();
+        $newTrx
+            ->setOperationId(new OperationId((string)$transaction['operation_id']))
+            ->setValue(new Money((string)$transaction['value']['amount'], new Currency($transaction['value']['currency'])))
+            ->setType($transaction['type'])
+            ->setReason(SDK\Transport\DTO\Reason::initReasonFromArray($transaction['reason']))
+            ->setCreated(new \DateTime($transaction['created']))
+            ->setCardNumber($transaction['card_number']);
+
+        return $newTrx;
+    }
 }
