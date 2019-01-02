@@ -8,6 +8,6 @@ namespace B24io\Loyalty\SDK\Exceptions;
  *
  * @package B24io\Loyalty\SDK\Exceptions
  */
-class UnknownException extends \Exception
+class UnknownException extends BaseLoyaltyException
 {
 }

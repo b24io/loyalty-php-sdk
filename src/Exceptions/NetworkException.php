@@ -8,6 +8,6 @@ namespace B24io\Loyalty\SDK\Exceptions;
  *
  * @package B24io\Loyalty\SDK\Exceptions
  */
-class NetworkException extends \Exception
+class NetworkException extends BaseLoyaltyException
 {
 }
