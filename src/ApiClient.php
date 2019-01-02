@@ -213,13 +213,9 @@ class ApiClient
             ]);
             if (array_key_exists('result', $result)) {
                 $problem = ApiProblem::fromJson(json_encode($result['result']));
-                throw new Exceptions\ApiClientException($problem->getTitle(), $exception->getCode(), $exception, $problem);
+                throw new Exceptions\ApiClientException($problem, $problem->getTitle(), $exception->getCode(), $exception);
             }
-            throw new Exceptions\ApiClientException(
-                'unknown api-server error',
-                $exception->getCode(),
-                $exception
-            );
+            throw new Exceptions\UnknownException('unknown api-server error', $exception->getCode(), $exception);
         } catch (GuzzleHttp\Exception\GuzzleException $exception) {
             // network error
             $this->log->error('b24io.loyalty.sdk.apiClient.network.error', [

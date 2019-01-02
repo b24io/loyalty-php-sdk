@@ -6,6 +6,7 @@ namespace B24io\Loyalty\SDK\Cards\Transport\Admin;
 use B24io\Loyalty\SDK;
 use B24io\Loyalty\SDK\Cards;
 
+use Fig\Http\Message\StatusCodeInterface;
 use GuzzleHttp\Client;
 use Fig\Http\Message\RequestMethodInterface;
 
@@ -31,23 +32,32 @@ class Transport extends SDK\Transport\AbstractTransport
             'cardNumber' => $cardNumber,
         ]);
 
-        $requestResult = $this->apiClient->executeApiRequest(
-            sprintf('admin/card/%s', $cardNumber),
-            RequestMethodInterface::METHOD_GET,
-            []
-        );
+        try {
+            $requestResult = $this->apiClient->executeApiRequest(
+                sprintf('admin/card/%s', $cardNumber),
+                RequestMethodInterface::METHOD_GET,
+                []
+            );
 
-        $cardResponse = new SDK\Cards\Transport\DTO\CardResponse(
-            Cards\DTO\Fabric::initFromArray($requestResult['result']),
-            $this->initMetadata($requestResult['meta'])
-        );
+            $cardResponse = new SDK\Cards\Transport\DTO\CardResponse(
+                Cards\DTO\Fabric::initFromArray($requestResult['result']),
+                $this->initMetadata($requestResult['meta'])
+            );
 
-        $this->log->debug('b24io.loyalty.sdk.cards.transport.admin.getCardByNumber.finish', [
-            'cardNumber' => $cardNumber,
-            'metadata' => SDK\Transport\Formatters\Metadata::toArray($cardResponse->getMeta()),
-        ]);
+            $this->log->debug('b24io.loyalty.sdk.cards.transport.admin.getCardByNumber.finish', [
+                'cardNumber' => $cardNumber,
+                'metadata' => SDK\Transport\Formatters\Metadata::toArray($cardResponse->getMeta()),
+            ]);
 
-        return $cardResponse;
+            return $cardResponse;
+        } catch (SDK\Exceptions\ApiClientException $exception) {
+            if (StatusCodeInterface::STATUS_NOT_FOUND === $exception->getApiProblem()->getStatus()) {
+                throw new Cards\Exceptions\CardNotFound($exception->getApiProblem(),
+                    sprintf('card with number %s not found', $cardNumber),
+                    $exception->getCode(), $exception);
+            }
+            throw $exception;
+        }
     }
 
     /**

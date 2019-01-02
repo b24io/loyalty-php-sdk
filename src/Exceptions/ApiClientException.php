@@ -14,28 +14,28 @@ use Throwable;
 class ApiClientException extends BaseLoyaltyException
 {
     /**
-     * @var ApiProblem|null
+     * @var ApiProblem
      */
     protected $apiProblem;
 
     /**
-     * ApiClientException constructor.
+     * ApiClientException constructor
      *
-     * @param string          $message
-     * @param int             $code
-     * @param Throwable|null  $previous
-     * @param ApiProblem|null $apiProblem
+     * @param ApiProblem     $apiProblem
+     * @param string         $message
+     * @param int            $code
+     * @param Throwable|null $previous
      */
-    public function __construct(string $message = '', int $code = 0, Throwable $previous = null, ?ApiProblem $apiProblem = null)
+    public function __construct(ApiProblem $apiProblem, string $message = '', int $code = 0, Throwable $previous = null)
     {
         $this->apiProblem = $apiProblem;
         parent::__construct($message, $code, $previous);
     }
 
     /**
-     * @return ApiProblem|null
+     * @return ApiProblem
      */
-    public function getApiProblem(): ?ApiProblem
+    public function getApiProblem(): ApiProblem
     {
         return $this->apiProblem;
     }
