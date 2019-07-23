@@ -23,11 +23,11 @@ class Contact
      */
     private $name;
     /**
-     * @var string
+     * @var string|null
      */
     private $secondName;
     /**
-     * @var string
+     * @var string|null
      */
     private $lastName;
     /**
@@ -35,7 +35,7 @@ class Contact
      */
     private $birthday;
     /**
-     * @var string
+     * @var string|null
      */
     private $comments;
     /**
@@ -55,7 +55,7 @@ class Contact
      */
     private $email;
     /**
-     * @var Address
+     * @var Address|null
      */
     private $address;
     /**
@@ -67,24 +67,24 @@ class Contact
      */
     private $originatorId;
     /**
-     * @var UTM
+     * @var UTM|null
      */
     private $utm;
 
     /**
-     * @return UTM
+     * @return UTM|null
      */
-    public function getUtm(): UTM
+    public function getUtm(): ?UTM
     {
         return $this->utm;
     }
 
     /**
-     * @param UTM $utm
+     * @param UTM|null $utm
      *
      * @return Contact
      */
-    public function setUtm(UTM $utm): Contact
+    public function setUtm(?UTM $utm): Contact
     {
         $this->utm = $utm;
 
@@ -132,19 +132,19 @@ class Contact
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getSecondName(): string
+    public function getSecondName(): ?string
     {
         return $this->secondName;
     }
 
     /**
-     * @param string $secondName
+     * @param string|null $secondName
      *
      * @return Contact
      */
-    public function setSecondName(string $secondName): Contact
+    public function setSecondName(?string $secondName): Contact
     {
         $this->secondName = $secondName;
 
@@ -152,19 +152,19 @@ class Contact
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getLastName(): string
+    public function getLastName(): ?string
     {
         return $this->lastName;
     }
 
     /**
-     * @param string $lastName
+     * @param string|null $lastName
      *
      * @return Contact
      */
-    public function setLastName(string $lastName): Contact
+    public function setLastName(?string $lastName): Contact
     {
         $this->lastName = $lastName;
 
@@ -192,19 +192,19 @@ class Contact
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getComments(): string
+    public function getComments(): ?string
     {
         return $this->comments;
     }
 
     /**
-     * @param string $comments
+     * @param string|null $comments
      *
      * @return Contact
      */
-    public function setComments(string $comments): Contact
+    public function setComments(?string $comments): Contact
     {
         $this->comments = $comments;
 
@@ -232,19 +232,19 @@ class Contact
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getModified(): \DateTime
+    public function getModified(): ?\DateTime
     {
         return $this->modified;
     }
 
     /**
-     * @param \DateTime $modified
+     * @param \DateTime|null $modified
      *
      * @return Contact
      */
-    public function setModified(\DateTime $modified): Contact
+    public function setModified(?\DateTime $modified): Contact
     {
         $this->modified = $modified;
 
@@ -292,9 +292,9 @@ class Contact
     }
 
     /**
-     * @return Address
+     * @return Address|null
      */
-    public function getAddress(): Address
+    public function getAddress(): ?Address
     {
         return $this->address;
     }

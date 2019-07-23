@@ -8,6 +8,7 @@ use B24io\Loyalty\SDK\Users\DTO\Email;
 use B24io\Loyalty\SDK\Bitrix24\Contacts\DTO\Address;
 use B24io\Loyalty\SDK\Bitrix24\Contacts\DTO\UTM;
 use libphonenumber\PhoneNumber;
+use B24io\Loyalty\SDK\Bitrix24\Contacts;
 
 /**
  * Class Contact
@@ -16,6 +17,11 @@ use libphonenumber\PhoneNumber;
  */
 class Contact
 {
+    /**
+     * @param Contacts\DTO\Contact $contact
+     *
+     * @return array
+     */
     public static function toArray(\B24io\Loyalty\SDK\Bitrix24\Contacts\DTO\Contact $contact): array
     {
         return [
@@ -26,27 +32,13 @@ class Contact
             'birthday' => $contact->getBirthday() !== null ? $contact->getBirthday()->format(\DATE_ATOM) : null,
             'comments' => $contact->getComments(),
             'created' => $contact->getCreated()->format(\DATE_ATOM),
-            'modified' => $contact->getModified()->format(\DATE_ATOM),
+            'modified' => $contact->getModified() !== null ? $contact->getModified()->format(\DATE_ATOM) : null,
             'mobile_phone' => $contact->getMobilePhone()->getNationalNumber(),
-            'email' => (string)$contact->getEmail()
-
-//    /**
-//     * @var Address
-//     */
-//    private $address;
-//    /**
-//     * @var string|null
-//     */
-//    private $originId;
-//    /**
-//     * @var string|null
-//     */
-//    private $originatorId;
-//    /**
-//     * @var UTM
-//     */
-//    private $utm;
-
+            'email' => (string)$contact->getEmail(),
+            'address' => $contact->getAddress() !== null ? $contact->getAddress()->toArray() : null,
+            'origin_id' => $contact->getOriginId(),
+            'originator_id' => $contact->getOriginatorId(),
+            'utm' => $contact->getUtm() !== null ? $contact->getUtm()->toArray() : null,
         ];
     }
 }

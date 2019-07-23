@@ -44,6 +44,46 @@ class Address
     private $countryCode;
 
     /**
+     * @param array $arAddress
+     *
+     * @return Address
+     */
+    public static function initFromArray(array $arAddress): self
+    {
+        $address = new self();
+
+        $address
+            ->setCountry($arAddress['country'])
+            ->setCountryCode($arAddress['country_code'])
+            ->setRegion($arAddress['region'])
+            ->setProvince($arAddress['province'])
+            ->setCity($arAddress['city'])
+            ->setPostalCode($arAddress['postal_code'])
+            ->setApartment($arAddress['apartment'])
+            ->setStreet($arAddress['street']);
+
+        return $address;
+    }
+
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'country' => $this->getCountry(),
+            'country_code' => $this->getCountryCode(),
+            'region' => $this->getRegion(),
+            'province' => $this->getProvince(),
+            'city' => $this->getCity(),
+            'postal_code' => $this->getPostalCode(),
+            'apartment' => $this->getApartment(),
+            'street' => $this->getStreet(),
+        ];
+    }
+
+    /**
      * @return string|null
      */
     public function getStreet(): ?string

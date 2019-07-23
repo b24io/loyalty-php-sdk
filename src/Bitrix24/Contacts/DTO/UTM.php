@@ -11,23 +11,23 @@ namespace B24io\Loyalty\SDK\Bitrix24\Contacts\DTO;
 class UTM
 {
     /**
-     * @var string
+     * @var string|null
      */
     protected $campaign;
     /**
-     * @var string
+     * @var string|null
      */
     protected $content;
     /**
-     * @var string
+     * @var string|null
      */
     protected $medium;
     /**
-     * @var string
+     * @var string|null
      */
     protected $source;
     /**
-     * @var string
+     * @var string|null
      */
     protected $term;
 
@@ -40,29 +40,21 @@ class UTM
      * @param string $source
      * @param string $term
      */
-    public function __construct(string $campaign, string $content, string $medium, string $source, string $term)
+    public function __construct(?string $source, ?string $medium, ?string $campaign, ?string $term, ?string $content)
     {
-        $this->setCampaign($campaign);
-        $this->setContent($content);
-        $this->setMedium($medium);
         $this->setSource($source);
+        $this->setMedium($medium);
+        $this->setCampaign($campaign);
         $this->setTerm($term);
+        $this->setContent($content);
     }
 
     /**
-     * @return string
-     */
-    public function getCampaign(): string
-    {
-        return $this->campaign;
-    }
-
-    /**
-     * @param string $campaign
+     * @param string|null $campaign
      *
      * @return UTM
      */
-    public function setCampaign(string $campaign): UTM
+    protected function setCampaign(?string $campaign): UTM
     {
         $this->campaign = $campaign;
 
@@ -70,19 +62,11 @@ class UTM
     }
 
     /**
-     * @return string
-     */
-    public function getContent(): string
-    {
-        return $this->content;
-    }
-
-    /**
-     * @param string $content
+     * @param string|null $content
      *
      * @return UTM
      */
-    public function setContent(string $content): UTM
+    protected function setContent(?string $content): UTM
     {
         $this->content = $content;
 
@@ -90,19 +74,11 @@ class UTM
     }
 
     /**
-     * @return string
-     */
-    public function getMedium(): string
-    {
-        return $this->medium;
-    }
-
-    /**
-     * @param string $medium
+     * @param string|null $medium
      *
      * @return UTM
      */
-    public function setMedium(string $medium): UTM
+    protected function setMedium(?string $medium): UTM
     {
         $this->medium = $medium;
 
@@ -110,19 +86,11 @@ class UTM
     }
 
     /**
-     * @return string
-     */
-    public function getSource(): string
-    {
-        return $this->source;
-    }
-
-    /**
-     * @param string $source
+     * @param string|null $source
      *
      * @return UTM
      */
-    public function setSource(string $source): UTM
+    protected function setSource(?string $source): UTM
     {
         $this->source = $source;
 
@@ -130,22 +98,83 @@ class UTM
     }
 
     /**
-     * @return string
-     */
-    public function getTerm(): string
-    {
-        return $this->term;
-    }
-
-    /**
-     * @param string $term
+     * @param string|null $term
      *
      * @return UTM
      */
-    public function setTerm(string $term): UTM
+    protected function setTerm(?string $term): UTM
     {
         $this->term = $term;
 
         return $this;
+    }
+
+    /**
+     * @param array $arUtm
+     *
+     * @return UTM
+     */
+    public static function initFromArray(array $arUtm): self
+    {
+        return new self(
+            $arUtm['utm_source'],
+            $arUtm['utm_medium'],
+            $arUtm['utm_campaign'],
+            $arUtm['utm_term'],
+            $arUtm['utm_content']);
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'utm_source' => $this->getSource(),
+            'utm_medium' => $this->getMedium(),
+            'utm_campaign' => $this->getCampaign(),
+            'utm_term' => $this->getTerm(),
+            'utm_content' => $this->getContent(),
+        ];
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCampaign(): ?string
+    {
+        return $this->campaign;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getContent(): ?string
+    {
+        return $this->content;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getMedium(): ?string
+    {
+        return $this->medium;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSource(): ?string
+    {
+        return $this->source;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTerm(): ?string
+    {
+        return $this->term;
     }
 }

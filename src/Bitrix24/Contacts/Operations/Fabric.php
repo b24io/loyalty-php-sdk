@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace B24io\Loyalty\SDK\Cards\Operations;
+namespace B24io\Loyalty\SDK\Bitrix24\Contacts\Operations;
 
-use B24io\Loyalty\SDK\Cards\DTO\Percentage;
+use B24io\Loyalty\SDK\Bitrix24\Contacts\DTO\Contact;
 use B24io\Loyalty\SDK\Transport\DTO\Reason;
-use B24io\Loyalty\SDK\Users\DTO\UserId;
+use B24io\Loyalty\SDK\Bitrix24\Contacts;
 
 /**
  * Class Fabric
@@ -15,39 +15,40 @@ use B24io\Loyalty\SDK\Users\DTO\UserId;
 class Fabric
 {
     /**
-     * @param array $arBlockCardOperation
+     * @param array $arOperation
      *
-     * @return BlockCard
+     * @return AddContact
+     * @throws \libphonenumber\NumberParseException
      * @throws \Exception
      */
-    public static function initBlockCardOperationFromArray(array $arBlockCardOperation): BlockCard
+    public static function initAddNewContactOperationFromArray(array $arOperation): AddContact
     {
-        $blockCardOperation = new BlockCard();
+        $blockCardOperation = new AddContact();
         $blockCardOperation
-            ->setCreated(new \DateTime($arBlockCardOperation['timestamp']))
-            ->setOperationCode($arBlockCardOperation['operation_code'])
-            ->setCardNumber((int)$arBlockCardOperation['card_number'])
-            ->setReason(Reason::initReasonFromArray($arBlockCardOperation['reason']));
+            ->setCreated(new \DateTime($arOperation['timestamp']))
+            ->setOperationCode($arOperation['add-contact'])
+            ->setContact(Contacts\DTO\Fabric::initContactFromArray($arOperation['contact']))
+            ->setReason(Reason::initReasonFromArray($arOperation['reason']));
 
         return $blockCardOperation;
     }
 
     /**
-     * @param int    $cardNumber
-     * @param Reason $reason
+     * @param Contact $contact
+     * @param Reason  $reason
      *
-     * @return BlockCard
+     * @return AddContact
      * @throws \Exception
      */
-    public static function createBlockCardOperation(int $cardNumber, Reason $reason): BlockCard
+    public static function createAddNewContactOperation(Contact $contact, Reason $reason): AddContact
     {
-        $blockCardOperation = new BlockCard();
-        $blockCardOperation
+        $operation = new AddContact();
+        $operation
             ->setCreated(new \DateTime())
-            ->setOperationCode('block-card')
-            ->setCardNumber($cardNumber)
+            ->setContact($contact)
+            ->setOperationCode('add-contact')
             ->setReason($reason);
 
-        return $blockCardOperation;
+        return $operation;
     }
 }
