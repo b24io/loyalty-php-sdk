@@ -78,7 +78,7 @@ class Transport extends SDK\Transport\AbstractTransport
         ]);
 
         $requestResult = $this->apiClient->executeApiRequest(
-            'admin/bitrix24/contacts/add',
+            'admin/bitrix24-contacts/add',
             RequestMethodInterface::METHOD_POST,
             SDK\Bitrix24\Contacts\Formatters\AddContact::toArray(
                 SDK\Bitrix24\Contacts\Operations\Fabric::createAddNewContactWithCardNumberOperation($newContact, $cardNumber, $reason))

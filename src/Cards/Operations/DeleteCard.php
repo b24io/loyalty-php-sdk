@@ -4,14 +4,14 @@ declare(strict_types=1);
 namespace B24io\Loyalty\SDK\Cards\Operations;
 
 use B24io\Loyalty\SDK\Transport\DTO\Reason;
-use B24io\Loyalty\SDK\Transport\Operations\AbstractOperation;
+use B24io\Loyalty\SDK\Transport\Operations\AbstractOperationWithCard;
 
 /**
  * Class DeleteCard
  *
  * @package B24io\Loyalty\SDK\Cards\Operations
  */
-class DeleteCard extends AbstractOperation
+class DeleteCard extends AbstractOperationWithCard
 {
     /**
      * @param string $operationCode

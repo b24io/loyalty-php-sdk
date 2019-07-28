@@ -4,15 +4,15 @@ declare(strict_types=1);
 namespace B24io\Loyalty\SDK\Cards\Operations;
 
 use B24io\Loyalty\SDK\Transport\DTO\Reason;
+use B24io\Loyalty\SDK\Transport\Operations\AbstractOperationWithCard;
 use B24io\Loyalty\SDK\Users\DTO\UserId;
-use B24io\Loyalty\SDK\Transport\Operations\AbstractOperation;
 
 /**
  * Class AddCard
  *
  * @package B24io\Loyalty\SDK\Cards\Operations
  */
-class AddCard extends AbstractOperation
+class AddCard extends AbstractOperationWithCard
 {
     /**
      * @var UserId

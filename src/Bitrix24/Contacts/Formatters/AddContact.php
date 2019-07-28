@@ -23,9 +23,6 @@ class AddContact
             'timestamp' => $addContact->getCreated()->format(\DATE_ATOM),
             'operation_code' => $addContact->getOperationCode(),
             'reason' => SDK\Transport\Formatters\Reason::toArray($addContact->getReason()),
-            'card' => [
-                'number' => $addContact->getCardNumber(),
-            ],
             'contact' => SDK\Bitrix24\Contacts\Formatters\Contact::toArray($addContact->getContact()),
         ];
     }
