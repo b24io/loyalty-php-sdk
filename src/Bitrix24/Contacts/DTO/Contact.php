@@ -17,7 +17,7 @@ class Contact
     /**
      * @var UserId|null
      */
-    private $userId;
+    private $contactId;
     /**
      * @var string
      */
@@ -94,19 +94,19 @@ class Contact
     /**
      * @return UserId|null
      */
-    public function getUserId(): ?UserId
+    public function getContactId(): ?UserId
     {
-        return $this->userId;
+        return $this->contactId;
     }
 
     /**
-     * @param UserId|null $userId
+     * @param UserId|null $contactId
      *
      * @return Contact
      */
-    public function setUserId(?UserId $userId): Contact
+    public function setContactId(?UserId $contactId): Contact
     {
-        $this->userId = $userId;
+        $this->contactId = $contactId;
 
         return $this;
     }

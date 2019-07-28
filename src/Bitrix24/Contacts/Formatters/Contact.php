@@ -3,11 +3,6 @@ declare(strict_types=1);
 
 namespace B24io\Loyalty\SDK\Bitrix24\Contacts\Formatters;
 
-use B24io\Loyalty\SDK\Users\DTO\UserId;
-use B24io\Loyalty\SDK\Users\DTO\Email;
-use B24io\Loyalty\SDK\Bitrix24\Contacts\DTO\Address;
-use B24io\Loyalty\SDK\Bitrix24\Contacts\DTO\UTM;
-use libphonenumber\PhoneNumber;
 use B24io\Loyalty\SDK\Bitrix24\Contacts;
 
 /**
@@ -22,10 +17,10 @@ class Contact
      *
      * @return array
      */
-    public static function toArray(\B24io\Loyalty\SDK\Bitrix24\Contacts\DTO\Contact $contact): array
+    public static function toArray(Contacts\DTO\Contact $contact): array
     {
         return [
-            'id' => $contact->getUserId() !== null ? $contact->getUserId()->getId() : null,
+            'id' => $contact->getContactId() !== null ? $contact->getContactId()->getId() : null,
             'name' => $contact->getName(),
             'second_name' => $contact->getSecondName(),
             'last_name' => $contact->getLastName(),

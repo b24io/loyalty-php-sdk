@@ -9,7 +9,6 @@ use B24io\Loyalty\SDK\Transactions\Transport\DTO\ContactResponse;
 
 use Fig\Http\Message\RequestMethodInterface;
 use libphonenumber\PhoneNumber;
-use Money\Money;
 
 /**
  * Class Transport
@@ -19,16 +18,17 @@ use Money\Money;
 class Transport extends SDK\Transport\AbstractTransport
 {
     /**
+     * add contact to bitrix24
+     *
      * @param SDK\Bitrix24\Contacts\DTO\Contact $newContact
      * @param SDK\Transport\DTO\Reason          $reason
      *
      * @return ContactResponse
      * @throws SDK\Exceptions\ApiClientException
-     * @throws SDK\Exceptions\BaseLoyaltyException
      * @throws SDK\Exceptions\NetworkException
+     * @throws SDK\Exceptions\ObjectInitializationException
+     * @throws SDK\Exceptions\TransportFormatException
      * @throws SDK\Exceptions\UnknownException
-     * @throws \libphonenumber\NumberParseException
-     * @throws \Exception
      */
     public function add(SDK\Bitrix24\Contacts\DTO\Contact $newContact, SDK\Transport\DTO\Reason $reason): ContactResponse
     {
@@ -38,18 +38,17 @@ class Transport extends SDK\Transport\AbstractTransport
         ]);
 
         $requestResult = $this->apiClient->executeApiRequest(
-            'admin/bitrix24/contacts/add',
+            'admin/bitrix24-contacts/add',
             RequestMethodInterface::METHOD_POST,
             SDK\Bitrix24\Contacts\Formatters\AddContact::toArray(
-                SDK\Bitrix24\Contacts\Operations\Fabric::createAddNewContactOperation($newContact, $reason))
-        );
-
-        $response = new ContactResponse($this->initMetadata($requestResult['meta']),
+                SDK\Bitrix24\Contacts\Operations\Fabric::createAddNewContactOperation($newContact, $reason)));
+        $response = new ContactResponse(
+            $this->initMetadata($requestResult['meta']),
             SDK\Bitrix24\Contacts\DTO\Fabric::initContactFromArray($requestResult['result']['contact']),
-            SDK\Cards\DTO\Fabric::initFromArray($requestResult['result']['card']));
-
+            null);
         $this->log->debug('b24io.loyalty.sdk.Bitrix24.Contacts.transport.admin.add.finish', [
-            'contactId' => $response->getContact()->getUserId()->getId(),
+            'contact' => SDK\Bitrix24\Contacts\Formatters\Contact::toArray($response->getContact()),
+            'card' => null,
             'metadata' => SDK\Transport\Formatters\Metadata::toArray($response->getMeta()),
         ]);
 
@@ -89,7 +88,7 @@ class Transport extends SDK\Transport\AbstractTransport
             SDK\Cards\DTO\Fabric::initFromArray($requestResult['result']['card']));
 
         $this->log->debug('b24io.loyalty.sdk.Bitrix24.Contacts.transport.admin.add.finish', [
-            'contactId' => $response->getContact()->getUserId()->getId(),
+            'contactId' => $response->getContact()->getContactId()->getId(),
             'metadata' => SDK\Transport\Formatters\Metadata::toArray($response->getMeta()),
         ]);
 
