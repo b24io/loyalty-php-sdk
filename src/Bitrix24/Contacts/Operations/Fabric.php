@@ -16,19 +16,20 @@ use B24io\Loyalty\SDK\Bitrix24\Contacts;
 class Fabric
 {
     /**
-     * @param array $arOperation
+     * @param array  $arOperation
+     * @param string $countryRegionCode An ISO 3166-1 two letter country code.
      *
      * @return AddContact
      * @throws ObjectInitializationException
      */
-    public static function initAddNewContactOperationFromArray(array $arOperation): AddContact
+    public static function initAddNewContactOperationFromArray(array $arOperation, string $countryRegionCode): AddContact
     {
         try {
             $operation = new AddContact();
             $operation
                 ->setCreated(new \DateTime($arOperation['timestamp']))
-                ->setOperationCode($arOperation['add-contact'])
-                ->setContact(Contacts\DTO\Fabric::initContactFromArray($arOperation['contact']))
+                ->setOperationCode($arOperation['operation_code'])
+                ->setContact(Contacts\DTO\Fabric::initContactFromArray($arOperation['contact'], $countryRegionCode))
                 ->setReason(Reason::initReasonFromArray($arOperation['reason']));
 
             return $operation;

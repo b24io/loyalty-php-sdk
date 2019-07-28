@@ -28,7 +28,10 @@ class Contact
             'comments' => $contact->getComments(),
             'created' => $contact->getCreated()->format(\DATE_ATOM),
             'modified' => $contact->getModified() !== null ? $contact->getModified()->format(\DATE_ATOM) : null,
-            'mobile_phone' => $contact->getMobilePhone()->getNationalNumber(),
+            'mobile_phone' => sprintf('%s%s',
+                $contact->getMobilePhone()->getCountryCode(),
+                $contact->getMobilePhone()->getNationalNumber()
+            ),
             'email' => (string)$contact->getEmail(),
             'address' => $contact->getAddress() !== null ? $contact->getAddress()->toArray() : null,
             'origin_id' => $contact->getOriginId(),

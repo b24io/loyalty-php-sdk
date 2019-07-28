@@ -15,12 +15,13 @@ use B24io\Loyalty\SDK\Users;
 class Fabric
 {
     /**
-     * @param array $arContact
+     * @param array       $arContact
+     * @param string $countryRegionCode An ISO 3166-1 two letter country code.
      *
      * @return Contact
      * @throws ObjectInitializationException
      */
-    public static function initContactFromArray(array $arContact): Contact
+    public static function initContactFromArray(array $arContact, string $countryRegionCode): Contact
     {
         try {
             $newContact = new Contact();
@@ -36,7 +37,7 @@ class Fabric
                 ->setComments($arContact['comments'])
                 ->setCreated(new \DateTime($arContact['created']))
                 ->setModified(new \DateTime($arContact['modified']))
-                ->setMobilePhone($phoneUtil->parse($arContact['mobile_phone']))
+                ->setMobilePhone($phoneUtil->parse($arContact['mobile_phone'], $countryRegionCode))
                 ->setOriginId($arContact['origin_id'])
                 ->setOriginatorId($arContact['originator_id']);
             if ($arContact['birthday'] !== null) {
