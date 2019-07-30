@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace B24io\Loyalty\SDK\Transactions\Transport\DTO;
+namespace B24io\Loyalty\SDK\Bitrix24\Contacts\Transport\DTO;
 
 use B24io\Loyalty\SDK\Bitrix24\Contacts\DTO\Contact;
 use B24io\Loyalty\SDK\Cards\DTO\Card;

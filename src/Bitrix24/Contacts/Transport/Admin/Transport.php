@@ -5,7 +5,7 @@ namespace B24io\Loyalty\SDK\Bitrix24\Contacts\Transport\Admin;
 
 use B24io\Loyalty\SDK;
 use B24io\Loyalty\SDK\Cards;
-use B24io\Loyalty\SDK\Transactions\Transport\DTO\ContactResponse;
+use B24io\Loyalty\SDK\Bitrix24\Contacts\Transport\DTO\ContactResponse;
 
 use Fig\Http\Message\RequestMethodInterface;
 use libphonenumber\PhoneNumber;
@@ -42,10 +42,12 @@ class Transport extends SDK\Transport\AbstractTransport
             RequestMethodInterface::METHOD_POST,
             SDK\Bitrix24\Contacts\Formatters\AddContact::toArray(
                 SDK\Bitrix24\Contacts\Operations\Fabric::createAddNewContactOperation($newContact, $reason)));
+
         $response = new ContactResponse(
             $this->initMetadata($requestResult['meta']),
             SDK\Bitrix24\Contacts\DTO\Fabric::initContactFromArray($requestResult['result']['contact'], $countryRegionCode),
             null);
+
         $this->log->debug('b24io.loyalty.sdk.Bitrix24.Contacts.transport.admin.add.finish', [
             'contact' => SDK\Bitrix24\Contacts\Formatters\Contact::toArray($response->getContact()),
             'card' => null,
