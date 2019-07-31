@@ -42,6 +42,33 @@ class Fabric
     }
 
     /**
+     * @param array  $arOperation
+     * @param string $countryRegionCode An ISO 3166-1 two letter country code.
+     *
+     * @return AddContactWithCardNumber
+     * @throws ObjectInitializationException
+     */
+    public static function initAddNewContactWithCardNumberOperationFromArray(array $arOperation, string $countryRegionCode): AddContactWithCardNumber
+    {
+        try {
+            $operation = new AddContactWithCardNumber();
+            $operation
+                ->setCreated(new \DateTime($arOperation['timestamp']))
+                ->setOperationCode($arOperation['operation_code'])
+                ->setCardNumber((int)$arOperation['card_number'])
+                ->setContact(Contacts\DTO\Fabric::initContactFromArray($arOperation['contact'], $countryRegionCode))
+                ->setReason(Reason::initReasonFromArray($arOperation['reason']));
+
+            return $operation;
+        } catch (\Throwable $exception) {
+            throw new ObjectInitializationException(
+                sprintf('AddNewContactWithCardNumberOperation initialization from array error «%s»', $exception->getMessage()),
+                $exception->getCode(),
+                $exception);
+        }
+    }
+
+    /**
      * @param Contact $contact
      * @param Reason  $reason
      *
@@ -62,6 +89,34 @@ class Fabric
         } catch (\Throwable $exception) {
             throw new ObjectInitializationException(
                 sprintf('AddNewContactOperation initialization error «%s»', $exception->getMessage()),
+                $exception->getCode(),
+                $exception);
+        }
+    }
+
+    /**
+     * @param Contact $contact
+     * @param Reason  $reason
+     * @param int     $cardNumber
+     *
+     * @return AddContactWithCardNumber
+     * @throws ObjectInitializationException
+     */
+    public static function createAddNewContactWithCardNumberOperation(Contact $contact, Reason $reason, int $cardNumber): AddContactWithCardNumber
+    {
+        try {
+            $operation = new AddContactWithCardNumber();
+            $operation
+                ->setCreated(new \DateTime())
+                ->setContact($contact)
+                ->setCardNumber($cardNumber)
+                ->setOperationCode('add-contact-with-card-number')
+                ->setReason($reason);
+
+            return $operation;
+        } catch (\Throwable $exception) {
+            throw new ObjectInitializationException(
+                sprintf('AddNewContactWithCardNumberOperation initialization error «%s»', $exception->getMessage()),
                 $exception->getCode(),
                 $exception);
         }

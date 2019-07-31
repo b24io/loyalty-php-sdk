@@ -32,6 +32,18 @@ class AddContactWithCardNumber extends AbstractOperationWithCard
     }
 
     /**
+     * @param int $cardNumber
+     *
+     * @return AddContactWithCardNumber
+     */
+    public function setCardNumber(int $cardNumber): AddContactWithCardNumber
+    {
+        $this->cardNumber = $cardNumber;
+
+        return $this;
+    }
+
+    /**
      * @param \DateTime $created
      *
      * @return AddContactWithCardNumber
