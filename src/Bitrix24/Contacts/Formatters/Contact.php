@@ -36,6 +36,7 @@ class Contact
             'address' => $contact->getAddress() !== null ? $contact->getAddress()->toArray() : null,
             'origin_id' => $contact->getOriginId(),
             'originator_id' => $contact->getOriginatorId(),
+            'source_description' => $contact->getSourceDescription(),
             'utm' => $contact->getUtm() !== null ? $contact->getUtm()->toArray() : null,
         ];
     }

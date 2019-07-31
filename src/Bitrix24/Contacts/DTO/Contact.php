@@ -70,6 +70,30 @@ class Contact
      * @var UTM|null
      */
     private $utm;
+    /**
+     * @var string|null
+     */
+    private $sourceDescription;
+
+    /**
+     * @return string|null
+     */
+    public function getSourceDescription(): ?string
+    {
+        return $this->sourceDescription;
+    }
+
+    /**
+     * @param string|null $sourceDescription
+     *
+     * @return Contact
+     */
+    public function setSourceDescription(?string $sourceDescription): Contact
+    {
+        $this->sourceDescription = $sourceDescription;
+
+        return $this;
+    }
 
     /**
      * @return UTM|null

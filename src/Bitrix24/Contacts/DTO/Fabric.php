@@ -15,7 +15,7 @@ use B24io\Loyalty\SDK\Users;
 class Fabric
 {
     /**
-     * @param array       $arContact
+     * @param array  $arContact
      * @param string $countryRegionCode An ISO 3166-1 two letter country code.
      *
      * @return Contact
@@ -39,7 +39,8 @@ class Fabric
                 ->setModified(new \DateTime($arContact['modified']))
                 ->setMobilePhone($phoneUtil->parse($arContact['mobile_phone'], $countryRegionCode))
                 ->setOriginId($arContact['origin_id'])
-                ->setOriginatorId($arContact['originator_id']);
+                ->setOriginatorId($arContact['originator_id'])
+                ->setSourceDescription($arContact['source_description']);
             if ($arContact['birthday'] !== null) {
                 $newContact->setBirthday(new \DateTime($arContact['birthday']));
             }
