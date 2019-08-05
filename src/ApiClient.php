@@ -113,6 +113,7 @@ class ApiClient
      * @return array
      * @throws Exceptions\ApiClientException
      * @throws Exceptions\NetworkException
+     * @throws Exceptions\TransportFormatException
      * @throws Exceptions\UnknownException
      */
     public function executeApiRequest($apiMethod, $requestType, array $arHttpRequestOptions = []): array
@@ -180,6 +181,7 @@ class ApiClient
      * @return \Psr\Http\Message\ResponseInterface
      * @throws Exceptions\ApiClientException
      * @throws Exceptions\NetworkException
+     * @throws Exceptions\TransportFormatException
      * @throws Exceptions\UnknownException
      */
     protected function executeRequest(string $requestType, string $url, array $requestOptions): \Psr\Http\Message\ResponseInterface
@@ -223,6 +225,13 @@ class ApiClient
                 'message' => $exception->getMessage(),
             ]);
             throw new Exceptions\NetworkException($exception->getMessage(), $exception->getCode());
+        } catch (Exceptions\TransportFormatException $exception) {
+            // json format error
+            $this->log->error('b24io.loyalty.sdk.apiClient.transportFormat.error', [
+                'code' => $exception->getCode(),
+                'message' => $exception->getMessage(),
+            ]);
+            throw $exception;
         } catch (\Throwable $unhandledException) {
             // unknown error
             $this->log->error('b24io.loyalty.sdk.apiClient.unknown.error', [
@@ -245,17 +254,20 @@ class ApiClient
     }
 
     /**
-     * @param $jsonApiResponse
+     * @param string $jsonApiResponse
      *
      * @return mixed
-     * @throws Exceptions\ApiClientException
+     * @throws Exceptions\TransportFormatException
      */
-    protected function decodeApiJsonResponse($jsonApiResponse)
+    protected function decodeApiJsonResponse(string $jsonApiResponse)
     {
+        $this->log->debug('b24io.loyalty.sdk.apiClient.decodeApiJsonResponse.start', [
+            'response' => $jsonApiResponse,
+        ]);
         if ($jsonApiResponse === '') {
             $errorMsg = \sprintf('empty response');
             $this->log->error($errorMsg);
-            throw new Exceptions\ApiClientException($errorMsg);
+            throw new Exceptions\TransportFormatException($errorMsg);
         }
         $jsonResult = \json_decode($jsonApiResponse, true);
         $jsonErrorCode = \json_last_error();
@@ -263,9 +275,14 @@ class ApiClient
             $errorMsg = sprintf('json_decode, error_code: %s, error_description: %s',
                 $jsonErrorCode,
                 \json_last_error_msg());
-            $this->log->error($errorMsg);
-            throw new Exceptions\ApiClientException($errorMsg);
+            $this->log->error('b24io.loyalty.sdk.apiClient.decodeApiJsonResponse.error', [
+                'message' => $errorMsg,
+                'responseBody' => $jsonApiResponse,
+            ]);
+
+            throw new Exceptions\TransportFormatException($errorMsg);
         }
+        $this->log->debug('b24io.loyalty.sdk.apiClient.decodeApiJsonResponse.finish');
 
         return $jsonResult;
     }
@@ -274,7 +291,7 @@ class ApiClient
      * @param array $response
      * @param int   $serverStatusCode
      *
-     * @throws Exceptions\ApiClientException
+     * @throws Exceptions\UnknownException
      */
     protected function handleApiLevelErrors(array $response, int $serverStatusCode): void
     {
@@ -287,7 +304,7 @@ class ApiClient
             case StatusCodeInterface::STATUS_ACCEPTED:
                 break;
             default:
-                throw new Exceptions\ApiClientException('api-level-error');
+                throw new Exceptions\UnknownException('api-level-error');
                 break;
         }
         $this->log->debug('b24io.loyalty.sdk.apiClient.handleApiLevelErrors.finish');

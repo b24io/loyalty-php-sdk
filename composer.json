@@ -29,7 +29,8 @@
     "moneyphp/money": "^3.0",
     "fig/http-message-util": "1.*",
     "eloquent/enumeration": "^5.1",
-    "crell/api-problem": "^3.0"
+    "crell/api-problem": "^3.0",
+    "giggsey/libphonenumber-for-php": "^8.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^7",

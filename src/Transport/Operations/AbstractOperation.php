@@ -21,10 +21,6 @@ abstract class AbstractOperation
      */
     protected $created;
     /**
-     * @var int
-     */
-    protected $cardNumber;
-    /**
      * @var Reason
      */
     protected $reason;
@@ -43,14 +39,6 @@ abstract class AbstractOperation
     public function getCreated(): \DateTime
     {
         return $this->created;
-    }
-
-    /**
-     * @return int
-     */
-    public function getCardNumber(): int
-    {
-        return $this->cardNumber;
     }
 
     /**

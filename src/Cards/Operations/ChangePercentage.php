@@ -5,14 +5,14 @@ namespace B24io\Loyalty\SDK\Cards\Operations;
 
 use B24io\Loyalty\SDK\Cards\DTO\Percentage;
 use B24io\Loyalty\SDK\Transport\DTO\Reason;
-use B24io\Loyalty\SDK\Transport\Operations\AbstractOperation;
+use B24io\Loyalty\SDK\Transport\Operations\AbstractOperationWithCard;
 
 /**
  * Class ChangePercentage
  *
  * @package B24io\Loyalty\SDK\Cards\Operations
  */
-class ChangePercentage extends AbstractOperation
+class ChangePercentage extends AbstractOperationWithCard
 {
     /**
      * @var Percentage

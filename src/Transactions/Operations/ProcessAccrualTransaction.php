@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace B24io\Loyalty\SDK\Transactions\Operations;
 
 use B24io\Loyalty\SDK\Transport\DTO\Reason;
-use B24io\Loyalty\SDK\Transport\Operations\AbstractOperation;
+use B24io\Loyalty\SDK\Transport\Operations\AbstractOperationWithCard;
 use Money\Money;
 
 /**
@@ -12,7 +12,7 @@ use Money\Money;
  *
  * @package B24io\Loyalty\SDK\Turnover\Operations
  */
-class ProcessAccrualTransaction extends AbstractOperation
+class ProcessAccrualTransaction extends AbstractOperationWithCard
 {
     /**
      * @var Money
