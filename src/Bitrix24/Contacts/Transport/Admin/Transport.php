@@ -8,7 +8,6 @@ use B24io\Loyalty\SDK\Cards;
 use B24io\Loyalty\SDK\Bitrix24\Contacts\Transport\DTO\ContactResponse;
 
 use Fig\Http\Message\RequestMethodInterface;
-use libphonenumber\PhoneNumber;
 
 /**
  * Class Transport
@@ -98,35 +97,5 @@ class Transport extends SDK\Transport\AbstractTransport
         ]);
 
         return $response;
-    }
-
-    /**
-     * @param SDK\Users\DTO\UserId $b24ContactId
-     *
-     * @return ContactResponse
-     */
-    public function getById(SDK\Users\DTO\UserId $b24ContactId): ContactResponse
-    {
-        return new ContactResponse(new SDK\Transport\DTO\Metadata(), new SDK\Bitrix24\Contacts\DTO\Contact());
-    }
-
-    /**
-     * @param string $cardNumber
-     *
-     * @return ContactResponse
-     */
-    public function getByCardNumber(string $cardNumber): ContactResponse
-    {
-        return new ContactResponse(new SDK\Transport\DTO\Metadata(), new SDK\Bitrix24\Contacts\DTO\Contact());
-    }
-
-    /**
-     * @param PhoneNumber $phoneNumber
-     *
-     * @return ContactResponse
-     */
-    public function findByPhone(PhoneNumber $phoneNumber): ContactResponse
-    {
-        return new ContactResponse(new SDK\Transport\DTO\Metadata(), new SDK\Bitrix24\Contacts\DTO\Contact());
     }
 }
