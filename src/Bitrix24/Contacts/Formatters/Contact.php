@@ -32,7 +32,7 @@ class Contact
                 $contact->getMobilePhone()->getCountryCode(),
                 $contact->getMobilePhone()->getNationalNumber()
             ),
-            'email' => (string)$contact->getEmail(),
+            'email' => $contact->getEmail() !== null ? (string)$contact->getEmail() : null,
             'address' => $contact->getAddress() !== null ? $contact->getAddress()->toArray() : null,
             'origin_id' => $contact->getOriginId(),
             'originator_id' => $contact->getOriginatorId(),

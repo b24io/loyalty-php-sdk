@@ -1,4 +1,7 @@
 # loyalty-php-sdk
+## 0.1.3 (6.08.2019)
+* fix contact formatter error
+
 ## 0.1.2 (5.08.2019)
 * add transport `Bitrix24\Contacts\Transport\Admin`
 
