@@ -1,4 +1,10 @@
 # loyalty-php-sdk
+## 0.1.4 (21.12.2019)
+* add OperationsJournal
+- AccrualTransaction
+- PaymentTransaction
+* add OperationUuid 
+
 ## 0.1.3 (6.08.2019)
 * fix contact formatter error
 
