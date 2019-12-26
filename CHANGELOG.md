@@ -1,10 +1,15 @@
 # loyalty-php-sdk
-## 0.1.4 (21.12.2019)
+## 0.2.0 (21.12.2019)
 * add OperationsJournal
-- AccrualTransaction
-- PaymentTransaction
-* add OperationUuid 
-
+* add operation type `AccrualTransaction`
+* add operation type `PaymentTransaction`
+* add field `OperationUuid` in Operation entity
+* add field `CardUuid` in Card entity
+* add method `filterContactsByEmail` in `\Bitrix24\Contacts\Transport\Admin` transport, return FiltrationResult with two items: CardDTO and ContactDTO  
+* change mobile phone data structure in Contact DTO in JSON API response
+* change mobile phone in ContactDTO can be nullable 
+* remove `countryRegionCode` argument in methods `add` and `addWithCardNumber` in `\Bitrix24\Contacts\Transport\Admin` transport
+ 
 ## 0.1.3 (6.08.2019)
 * fix contact formatter error
 

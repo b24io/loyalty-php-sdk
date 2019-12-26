@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace B24io\Loyalty\SDK\Bitrix24\Contacts\Operations;
@@ -22,14 +23,14 @@ class Fabric
      * @return AddContact
      * @throws ObjectInitializationException
      */
-    public static function initAddNewContactOperationFromArray(array $arOperation, string $countryRegionCode): AddContact
+    public static function initAddNewContactOperationFromArray(array $arOperation): AddContact
     {
         try {
             $operation = new AddContact();
             $operation
                 ->setCreated(new \DateTime($arOperation['timestamp']))
                 ->setOperationCode($arOperation['operation_code'])
-                ->setContact(Contacts\DTO\Fabric::initContactFromArray($arOperation['contact'], $countryRegionCode))
+                ->setContact(Contacts\DTO\Fabric::initContactFromArray($arOperation['contact']))
                 ->setReason(Reason::initReasonFromArray($arOperation['reason']));
 
             return $operation;
@@ -37,18 +38,18 @@ class Fabric
             throw new ObjectInitializationException(
                 sprintf('AddNewContactOperation initialization from array error «%s»', $exception->getMessage()),
                 $exception->getCode(),
-                $exception);
+                $exception
+            );
         }
     }
 
     /**
-     * @param array  $arOperation
-     * @param string $countryRegionCode An ISO 3166-1 two letter country code.
+     * @param array $arOperation
      *
      * @return AddContactWithCardNumber
      * @throws ObjectInitializationException
      */
-    public static function initAddNewContactWithCardNumberOperationFromArray(array $arOperation, string $countryRegionCode): AddContactWithCardNumber
+    public static function initAddNewContactWithCardNumberOperationFromArray(array $arOperation): AddContactWithCardNumber
     {
         try {
             $operation = new AddContactWithCardNumber();
@@ -56,7 +57,7 @@ class Fabric
                 ->setCreated(new \DateTime($arOperation['timestamp']))
                 ->setOperationCode($arOperation['operation_code'])
                 ->setCardNumber((int)$arOperation['card_number'])
-                ->setContact(Contacts\DTO\Fabric::initContactFromArray($arOperation['contact'], $countryRegionCode))
+                ->setContact(Contacts\DTO\Fabric::initContactFromArray($arOperation['contact']))
                 ->setReason(Reason::initReasonFromArray($arOperation['reason']));
 
             return $operation;
@@ -64,7 +65,8 @@ class Fabric
             throw new ObjectInitializationException(
                 sprintf('AddNewContactWithCardNumberOperation initialization from array error «%s»', $exception->getMessage()),
                 $exception->getCode(),
-                $exception);
+                $exception
+            );
         }
     }
 
@@ -90,7 +92,8 @@ class Fabric
             throw new ObjectInitializationException(
                 sprintf('AddNewContactOperation initialization error «%s»', $exception->getMessage()),
                 $exception->getCode(),
-                $exception);
+                $exception
+            );
         }
     }
 
@@ -102,8 +105,11 @@ class Fabric
      * @return AddContactWithCardNumber
      * @throws ObjectInitializationException
      */
-    public static function createAddNewContactWithCardNumberOperation(Contact $contact, Reason $reason, int $cardNumber): AddContactWithCardNumber
-    {
+    public static function createAddNewContactWithCardNumberOperation(
+        Contact $contact,
+        Reason $reason,
+        int $cardNumber
+    ): AddContactWithCardNumber {
         try {
             $operation = new AddContactWithCardNumber();
             $operation
@@ -118,7 +124,8 @@ class Fabric
             throw new ObjectInitializationException(
                 sprintf('AddNewContactWithCardNumberOperation initialization error «%s»', $exception->getMessage()),
                 $exception->getCode(),
-                $exception);
+                $exception
+            );
         }
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace B24io\Loyalty\SDK\Cards\DTO;
@@ -8,6 +9,8 @@ use B24io\Loyalty\SDK\Cards\DTO\Statuses\StatusInterface;
 use B24io\Loyalty\SDK\Users\DTO\User;
 
 use Money\Money;
+use Ramsey\Uuid\UuidInterface;
+
 /**
  * Class Card
  *
@@ -47,6 +50,30 @@ final class Card
      * @var \DateTime
      */
     private $modified;
+    /**
+     * @var UuidInterface
+     */
+    private $uuid;
+
+    /**
+     * @return UuidInterface
+     */
+    public function getUuid(): UuidInterface
+    {
+        return $this->uuid;
+    }
+
+    /**
+     * @param UuidInterface $uuid
+     *
+     * @return Card
+     */
+    public function setUuid(UuidInterface $uuid): Card
+    {
+        $this->uuid = $uuid;
+
+        return $this;
+    }
 
     /**
      * @return int

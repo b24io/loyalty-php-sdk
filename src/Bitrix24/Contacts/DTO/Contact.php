@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace B24io\Loyalty\SDK\Bitrix24\Contacts\DTO;
@@ -47,7 +48,7 @@ class Contact
      */
     private $modified;
     /**
-     * @var PhoneNumber
+     * @var PhoneNumber|null
      */
     private $mobilePhone;
     /**
@@ -276,9 +277,9 @@ class Contact
     }
 
     /**
-     * @return PhoneNumber
+     * @return PhoneNumber|null
      */
-    public function getMobilePhone(): PhoneNumber
+    public function getMobilePhone(): ?PhoneNumber
     {
         return $this->mobilePhone;
     }

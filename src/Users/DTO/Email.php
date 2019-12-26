@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace B24io\Loyalty\SDK\Users\DTO;
@@ -25,6 +26,7 @@ final class Email
      */
     public function __construct(string $email)
     {
+        $email = strtolower($email);
         $this->username = implode(explode('@', $email, -1), '@');
         $this->domain = str_replace($this->username . '@', '', $email);
     }
