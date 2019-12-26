@@ -93,10 +93,12 @@ class Fabric
      */
     public static function initFiltrationResultFromArray(array $filtrationResult): FiltrationResult
     {
-        return new FiltrationResult(
-            self::initContactFromArray($filtrationResult['contact']),
-            Cards\DTO\Fabric::initFromArray($filtrationResult['card'])
-        );
+        $cardDto = null;
+        if ($filtrationResult['card'] !== null) {
+            $cardDto = Cards\DTO\Fabric::initFromArray($filtrationResult['card']);
+        }
+
+        return new FiltrationResult(self::initContactFromArray($filtrationResult['contact']), $cardDto);
     }
 
     /**

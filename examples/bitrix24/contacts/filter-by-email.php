@@ -11,21 +11,24 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\MessageFormatter;
 
-$argv = getopt('', ['clientApiKey::', 'authApiKey::', 'apiEndpoint::']);
+$argv = getopt('', ['clientApiKey::', 'authApiKey::', 'apiEndpoint::', 'email::']);
 $fileName = basename(__FILE__);
-$example = '';
 
 $clientApiKey = $argv['clientApiKey'];
 if ($clientApiKey === null) {
-    throw new \InvalidArgumentException(sprintf('error: argument «clientApiKey»  not found, example:%s%s', PHP_EOL, $example));
+    throw new \InvalidArgumentException(sprintf('error: argument «clientApiKey»  not found') . PHP_EOL);
 }
 $authApiKey = $argv['authApiKey'];
 if ($authApiKey === null) {
-    throw new \InvalidArgumentException(sprintf('error: argument «authApiKey»  not found, example:%s%s', PHP_EOL, $example));
+    throw new \InvalidArgumentException(sprintf('error: argument «authApiKey»  not found') . PHP_EOL);
 }
 $apiEndpoint = $argv['apiEndpoint'];
 if ($apiEndpoint === null) {
-    throw new \InvalidArgumentException(sprintf('error: argument «apiEndpoint»  not found, example:%s%s', PHP_EOL, $example));
+    throw new \InvalidArgumentException(sprintf('error: argument «apiEndpoint»  not found') . PHP_EOL);
+}
+$email = $argv['email'];
+if ($email === null) {
+    throw new \InvalidArgumentException(sprintf('error: argument «email»  not found') . PHP_EOL);
 }
 
 // check connection to API
@@ -46,7 +49,7 @@ $apiClient = new SDK\ApiClient($apiEndpoint, $token, $httpClient, $log);
 $apiClient->setGuzzleHandlerStack($guzzleHandlerStack);
 
 $bitrix24Transport = SDK\Bitrix24\Contacts\Transport\Admin\Fabric::getTransactionsTransport($apiClient, $log);
-$result = $bitrix24Transport->filterContactsByEmail(new SDK\Users\DTO\Email('test1@gmail.com'));
+$result = $bitrix24Transport->filterContactsByEmail(new SDK\Users\DTO\Email($email));
 
 print(sprintf('query result:') . PHP_EOL);
 print(sprintf(' - message operation: %s', $result->getMeta()->getMessage()) . PHP_EOL);
@@ -82,5 +85,6 @@ foreach ($result->getFiltrationResultCollection() as $item) {
             $decimalMoneyFormatter->format($item->getCard()->getBalance()),
             $item->getCard()->getBalance()->getCurrency()->getCode() . PHP_EOL
         ));
+        print(sprintf('  percentage: %s', $item->getCard()->getPercentage()->format()) . PHP_EOL);
     }
 }
