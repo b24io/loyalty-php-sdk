@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace B24io\Loyalty\SDK;
@@ -24,7 +25,7 @@ class ApiClient
     /**
      * @var string SDK version
      */
-    protected const SDK_VERSION = '0.1.0';
+    protected const SDK_VERSION = '0.2.0';
     /**
      * @var string user agent
      */
@@ -62,8 +63,12 @@ class ApiClient
      * @param GuzzleHttp\ClientInterface $obHttpClient
      * @param LoggerInterface|null       $obLogger
      */
-    public function __construct(string $apiEndpointUrl, SDK\Auth\DTO\Token $authToken, GuzzleHttp\ClientInterface $obHttpClient, LoggerInterface $obLogger = null)
-    {
+    public function __construct(
+        string $apiEndpointUrl,
+        SDK\Auth\DTO\Token $authToken,
+        GuzzleHttp\ClientInterface $obHttpClient,
+        LoggerInterface $obLogger = null
+    ) {
         if ($obLogger !== null) {
             $this->log = $obLogger;
         } else {
@@ -74,10 +79,13 @@ class ApiClient
         $this->httpClient = $obHttpClient;
         $this->setConnectTimeout(2.0);
         $this->guzzleHandlerStack = GuzzleHttp\HandlerStack::create();
-        $this->log->debug('b24io.loyalty.sdk.apiClient.init', [
-            'url' => $apiEndpointUrl,
-            'connect_timeout' => $this->getConnectTimeout(),
-        ]);
+        $this->log->debug(
+            'b24io.loyalty.sdk.apiClient.init',
+            [
+                'url'             => $apiEndpointUrl,
+                'connect_timeout' => $this->getConnectTimeout(),
+            ]
+        );
     }
 
     /**
@@ -96,9 +104,12 @@ class ApiClient
      */
     public function setConnectTimeout(float $connectTimeout): ApiClient
     {
-        $this->log->debug('b24io.loyalty.sdk.apiClient.setConnectTimeout.start', [
-            'connectTimeout' => $connectTimeout,
-        ]);
+        $this->log->debug(
+            'b24io.loyalty.sdk.apiClient.setConnectTimeout.start',
+            [
+                'connectTimeout' => $connectTimeout,
+            ]
+        );
         $this->connectTimeout = $connectTimeout;
         $this->log->debug('b24io.loyalty.sdk.apiClient.setConnectTimeout.finish');
 
@@ -123,12 +134,15 @@ class ApiClient
         } else {
             $defaultHttpRequestOptions = $this->getHttpRequestOptions();
         }
-        $this->log->debug('b24io.loyalty.sdk.apiClient.executeApiRequest.start', [
-            'url' => $this->apiEndpoint . $apiMethod,
-            'method' => $apiMethod,
-            'request_type' => $requestType,
-            'options' => $defaultHttpRequestOptions,
-        ]);
+        $this->log->debug(
+            'b24io.loyalty.sdk.apiClient.executeApiRequest.start',
+            [
+                'url'          => $this->apiEndpoint . $apiMethod,
+                'method'       => $apiMethod,
+                'request_type' => $requestType,
+                'options'      => $defaultHttpRequestOptions,
+            ]
+        );
         $obResponse = $this->executeRequest($requestType, $this->apiEndpoint . $apiMethod, $defaultHttpRequestOptions);
         $obResponseBody = $obResponse->getBody();
         $obResponseBody->rewind();
@@ -137,9 +151,12 @@ class ApiClient
 
         $this->handleApiLevelErrors($result, $obResponse->getStatusCode());
 
-        $this->log->debug('b24io.loyalty.sdk.apiClient.executeApiRequest.finish', [
-            'result' => $result,
-        ]);
+        $this->log->debug(
+            'b24io.loyalty.sdk.apiClient.executeApiRequest.finish',
+            [
+                'result' => $result,
+            ]
+        );
 
         return $result;
     }
@@ -153,9 +170,9 @@ class ApiClient
     {
         $result = [
             'connect_timeout' => $this->getConnectTimeout(),
-            'headers' => [
-                'Cache-Control' => 'no-cache',
-                'Content-type' => 'application/json; charset=utf-8',
+            'headers'         => [
+                'Cache-Control'             => 'no-cache',
+                'Content-type'              => 'application/json; charset=utf-8',
                 'X-ENVIRONMENT-PHP-VERSION' => \PHP_VERSION,
                 'X-ENVIRONMENT-SDK-VERSION' => \strtolower(self::API_USER_AGENT . '.' . self::SDK_VERSION),
             ],
@@ -186,11 +203,14 @@ class ApiClient
      */
     protected function executeRequest(string $requestType, string $url, array $requestOptions): \Psr\Http\Message\ResponseInterface
     {
-        $this->log->debug('b24io.loyalty.sdk.apiClient.executeRequest.start', [
-            'request_type' => $requestType,
-            'url' => $url,
-            'request_options' => $requestOptions,
-        ]);
+        $this->log->debug(
+            'b24io.loyalty.sdk.apiClient.executeRequest.start',
+            [
+                'request_type'    => $requestType,
+                'url'             => $url,
+                'request_options' => $requestOptions,
+            ]
+        );
 
         try {
             $obResponse = $this->httpClient->request($requestType, $url, $requestOptions);
@@ -198,7 +218,6 @@ class ApiClient
             $obResponseBody->rewind();
 
             $result = $this->decodeApiJsonResponse($obResponseBody->getContents());
-
         } catch (GuzzleHttp\Exception\BadResponseException $exception) {
             // 4xx or 5xx http-status
             $response = $exception->getResponse();
@@ -207,12 +226,15 @@ class ApiClient
                 $responseBodyAsString = $response->getBody()->getContents();
             }
             $result = $this->decodeApiJsonResponse($responseBodyAsString);
-            $this->log->error('b24io.loyalty.sdk.apiClient.backend.error', [
-                'code' => $exception->getCode(),
-                'message' => $exception->getMessage(),
-                'server_response' => $responseBodyAsString,
-                'decodedResponse' => $result,
-            ]);
+            $this->log->error(
+                'b24io.loyalty.sdk.apiClient.backend.error',
+                [
+                    'code'            => $exception->getCode(),
+                    'message'         => $exception->getMessage(),
+                    'server_response' => $responseBodyAsString,
+                    'decodedResponse' => $result,
+                ]
+            );
             if (array_key_exists('result', $result)) {
                 $problem = ApiProblem::fromJson(json_encode($result['result']));
                 throw new Exceptions\ApiClientException($problem, $problem->getTitle(), $exception->getCode(), $exception);
@@ -220,35 +242,47 @@ class ApiClient
             throw new Exceptions\UnknownException('unknown api-server error', $exception->getCode(), $exception);
         } catch (GuzzleHttp\Exception\GuzzleException $exception) {
             // network error
-            $this->log->error('b24io.loyalty.sdk.apiClient.network.error', [
-                'code' => $exception->getCode(),
-                'message' => $exception->getMessage(),
-            ]);
+            $this->log->error(
+                'b24io.loyalty.sdk.apiClient.network.error',
+                [
+                    'code'    => $exception->getCode(),
+                    'message' => $exception->getMessage(),
+                ]
+            );
             throw new Exceptions\NetworkException($exception->getMessage(), $exception->getCode());
         } catch (Exceptions\TransportFormatException $exception) {
             // json format error
-            $this->log->error('b24io.loyalty.sdk.apiClient.transportFormat.error', [
-                'code' => $exception->getCode(),
-                'message' => $exception->getMessage(),
-            ]);
+            $this->log->error(
+                'b24io.loyalty.sdk.apiClient.transportFormat.error',
+                [
+                    'code'    => $exception->getCode(),
+                    'message' => $exception->getMessage(),
+                ]
+            );
             throw $exception;
         } catch (\Throwable $unhandledException) {
             // unknown error
-            $this->log->error('b24io.loyalty.sdk.apiClient.unknown.error', [
-                'type' => \get_class($unhandledException),
-                'code' => $unhandledException->getCode(),
-                'message' => $unhandledException->getMessage(),
-                'trace' => $unhandledException->getTrace(),
-            ]);
+            $this->log->error(
+                'b24io.loyalty.sdk.apiClient.unknown.error',
+                [
+                    'type'    => \get_class($unhandledException),
+                    'code'    => $unhandledException->getCode(),
+                    'message' => $unhandledException->getMessage(),
+                    'trace'   => $unhandledException->getTrace(),
+                ]
+            );
             throw new Exceptions\UnknownException('unknown error: ' . $unhandledException->getMessage(), $unhandledException->getCode());
         }
-        $this->log->debug('b24io.loyalty.sdk.apiClient.executeRequest.finish', [
-            'request_type' => $requestType,
-            'url' => $url,
-            'request_options' => $requestOptions,
-            'http_status' => $obResponse->getStatusCode(),
-            'result' => $result,
-        ]);
+        $this->log->debug(
+            'b24io.loyalty.sdk.apiClient.executeRequest.finish',
+            [
+                'request_type'    => $requestType,
+                'url'             => $url,
+                'request_options' => $requestOptions,
+                'http_status'     => $obResponse->getStatusCode(),
+                'result'          => $result,
+            ]
+        );
 
         return $obResponse;
     }
@@ -261,9 +295,12 @@ class ApiClient
      */
     protected function decodeApiJsonResponse(string $jsonApiResponse)
     {
-        $this->log->debug('b24io.loyalty.sdk.apiClient.decodeApiJsonResponse.start', [
-            'response' => $jsonApiResponse,
-        ]);
+        $this->log->debug(
+            'b24io.loyalty.sdk.apiClient.decodeApiJsonResponse.start',
+            [
+                'response' => $jsonApiResponse,
+            ]
+        );
         if ($jsonApiResponse === '') {
             $errorMsg = \sprintf('empty response');
             $this->log->error($errorMsg);
@@ -272,13 +309,18 @@ class ApiClient
         $jsonResult = \json_decode($jsonApiResponse, true);
         $jsonErrorCode = \json_last_error();
         if (null === $jsonResult && (JSON_ERROR_NONE !== $jsonErrorCode)) {
-            $errorMsg = sprintf('json_decode, error_code: %s, error_description: %s',
+            $errorMsg = sprintf(
+                'json_decode, error_code: %s, error_description: %s',
                 $jsonErrorCode,
-                \json_last_error_msg());
-            $this->log->error('b24io.loyalty.sdk.apiClient.decodeApiJsonResponse.error', [
-                'message' => $errorMsg,
-                'responseBody' => $jsonApiResponse,
-            ]);
+                \json_last_error_msg()
+            );
+            $this->log->error(
+                'b24io.loyalty.sdk.apiClient.decodeApiJsonResponse.error',
+                [
+                    'message'      => $errorMsg,
+                    'responseBody' => $jsonApiResponse,
+                ]
+            );
 
             throw new Exceptions\TransportFormatException($errorMsg);
         }
@@ -295,10 +337,13 @@ class ApiClient
      */
     protected function handleApiLevelErrors(array $response, int $serverStatusCode): void
     {
-        $this->log->debug('b24io.loyalty.sdk.apiClient.handleApiLevelErrors.start', [
-            'response' => $response,
-            'serverStatus' => $serverStatusCode,
-        ]);
+        $this->log->debug(
+            'b24io.loyalty.sdk.apiClient.handleApiLevelErrors.start',
+            [
+                'response'     => $response,
+                'serverStatus' => $serverStatusCode,
+            ]
+        );
         switch ($serverStatusCode) {
             case StatusCodeInterface::STATUS_OK:
             case StatusCodeInterface::STATUS_ACCEPTED:

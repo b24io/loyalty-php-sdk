@@ -9,6 +9,7 @@ use B24io\Loyalty\SDK\Cards;
 use B24io\Loyalty\SDK\Bitrix24\Contacts\Transport\DTO\ContactResponse;
 use B24io\Loyalty\SDK\Bitrix24\Contacts\Transport\DTO\FiltrationResultResponse;
 use Fig\Http\Message\RequestMethodInterface;
+use libphonenumber\PhoneNumber;
 
 /**
  * Class Transport
@@ -153,6 +154,57 @@ class Transport extends SDK\Transport\AbstractTransport
         );
         $this->log->debug(
             'b24io.loyalty.sdk.bitrix24.contacts.transport.admin.filterContactsByEmail.finish',
+            [
+                'metadata' => SDK\Transport\Formatters\Metadata::toArray($response->getMeta()),
+            ]
+        );
+
+        return $response;
+    }
+
+    /**
+     * @param PhoneNumber $phoneNumber
+     *
+     * @return FiltrationResultResponse
+     * @throws SDK\Exceptions\ApiClientException
+     * @throws SDK\Exceptions\BaseLoyaltyException
+     * @throws SDK\Exceptions\NetworkException
+     * @throws SDK\Exceptions\ObjectInitializationException
+     * @throws SDK\Exceptions\TransportFormatException
+     * @throws SDK\Exceptions\UnknownException
+     */
+    public function filterContactsByPhone(PhoneNumber $phoneNumber): FiltrationResultResponse
+    {
+        $this->log->debug(
+            'b24io.loyalty.sdk.bitrix24.contacts.transport.admin.filterContactsByPhone.start',
+            [
+                'phoneNumberRawInput'       => $phoneNumber->getRawInput(),
+                'phoneNumberCountryCode'    => $phoneNumber->getCountryCode(),
+                'phoneNumberNationalNumber' => $phoneNumber->getNationalNumber(),
+            ]
+        );
+
+        $requestResult = $this->apiClient->executeApiRequest(
+            sprintf(
+                'admin/bitrix24-contacts/filter-by-phone/?phone=%s',
+                urlencode(
+                    sprintf(
+                        '%s%s',
+                        $phoneNumber->getCountryCode() !== null ? sprintf('+%s', $phoneNumber->getCountryCode()) : '',
+                        $phoneNumber->getNationalNumber()
+                    )
+                )
+            ),
+            RequestMethodInterface::METHOD_GET,
+            []
+        );
+
+        $response = new FiltrationResultResponse(
+            SDK\Bitrix24\Contacts\DTO\Fabric::initFiltrationResultCollectionFromArray($requestResult['result']),
+            $this->initMetadata($requestResult['meta'])
+        );
+        $this->log->debug(
+            'b24io.loyalty.sdk.bitrix24.contacts.transport.admin.filterContactsByPhone.finish',
             [
                 'metadata' => SDK\Transport\Formatters\Metadata::toArray($response->getMeta()),
             ]

@@ -11,7 +11,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\MessageFormatter;
 
-$argv = getopt('', ['clientApiKey::', 'authApiKey::', 'apiEndpoint::', 'email::']);
+$argv = getopt('', ['clientApiKey::', 'authApiKey::', 'apiEndpoint::', 'phone::']);
 $fileName = basename(__FILE__);
 
 $clientApiKey = $argv['clientApiKey'];
@@ -26,9 +26,9 @@ $apiEndpoint = $argv['apiEndpoint'];
 if ($apiEndpoint === null) {
     throw new \InvalidArgumentException(sprintf('error: argument «apiEndpoint»  not found') . PHP_EOL);
 }
-$email = $argv['email'];
-if ($email === null) {
-    throw new \InvalidArgumentException(sprintf('error: argument «email»  not found') . PHP_EOL);
+$rawPhone = $argv['phone'];
+if ($rawPhone === null) {
+    throw new \InvalidArgumentException(sprintf('error: argument «phone»  not found') . PHP_EOL);
 }
 
 // check connection to API
@@ -50,8 +50,24 @@ $apiClient->setGuzzleHandlerStack($guzzleHandlerStack);
 
 $bitrix24Transport = SDK\Bitrix24\Contacts\Transport\Admin\Fabric::getTransactionsTransport($apiClient, $log);
 
+$phoneNumberUtil = \libphonenumber\PhoneNumberUtil::getInstance();
+
+if (strpos($rawPhone, '+') !== false) {
+    $phone = $phoneNumberUtil->parseAndKeepRawInput($rawPhone, null);
+} else {
+    $phone = $phoneNumberUtil->parseAndKeepRawInput($rawPhone, 'RU');
+}
+
+print(sprintf('raw input: %s', $phone->getRawInput()) . PHP_EOL);
+print(sprintf(
+        'country code: %s - %s',
+        $phone->getCountryCode(),
+        $phoneNumberUtil->getRegionCodeForCountryCode($phone->getCountryCode())
+    ) . PHP_EOL);
+print(sprintf('national number: %s', $phone->getNationalNumber()) . PHP_EOL);
+
 try {
-    $result = $bitrix24Transport->filterContactsByEmail(new SDK\Users\DTO\Email($email));
+    $result = $bitrix24Transport->filterContactsByPhone($phone);
 
     print(sprintf('query result:') . PHP_EOL);
     print(sprintf(' - message operation: %s', $result->getMeta()->getMessage()) . PHP_EOL);
