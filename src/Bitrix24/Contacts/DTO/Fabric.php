@@ -80,6 +80,7 @@ class Fabric
         foreach ($filtrationResultCollection as $item) {
             $result->attach(self::initFiltrationResultFromArray($item));
         }
+        $result->rewind();
 
         return $result;
     }
