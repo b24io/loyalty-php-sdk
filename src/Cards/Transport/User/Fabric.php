@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace B24io\Loyalty\SDK\Cards\Transport\Admin;
+namespace B24io\Loyalty\SDK\Cards\Transport\User;
 
 use B24io\Loyalty\SDK\ApiClient;
 use Psr\Log\LoggerInterface;
@@ -10,7 +10,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Class Fabric
  *
- * @package B24io\Loyalty\SDK\Cards\Transport\Admin
+ * @package B24io\Loyalty\SDK\Cards\Transport\User
  */
 class Fabric
 {
