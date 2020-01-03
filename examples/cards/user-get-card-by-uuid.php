@@ -10,6 +10,7 @@ use \B24io\Loyalty\SDK\OperationsJournal\DTO\OperationType;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\MessageFormatter;
+use Ramsey\Uuid\Uuid;
 
 $argv = getopt('', ['clientApiKey::', 'authApiKey::', 'apiEndpoint::', 'uuid::']);
 $fileName = basename(__FILE__);
@@ -45,7 +46,11 @@ $guzzleHandlerStack->push(
 $httpClient = new \GuzzleHttp\Client();
 
 $log->info('loyalty.apiClient.start');
-$token = new SDK\Auth\DTO\Token(SDK\Transport\DTO\Role::initializeByCode('admin'), $clientApiKey, $authApiKey);
+$token = new SDK\Auth\DTO\Token(
+    SDK\Transport\DTO\Role::initializeByCode('admin'),
+    Uuid::fromString($clientApiKey),
+    Uuid::fromString($authApiKey)
+);
 $apiClient = new SDK\ApiClient($apiEndpoint, $token, $httpClient, $log);
 $apiClient->setGuzzleHandlerStack($guzzleHandlerStack);
 

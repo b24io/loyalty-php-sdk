@@ -6,6 +6,7 @@ require_once 'vendor/autoload.php';
 use \Monolog\Logger;
 use \B24io\Loyalty\SDK;
 use \B24io\Loyalty\SDK\OperationsJournal\DTO\OperationType;
+use Ramsey\Uuid\Uuid;
 
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
@@ -44,7 +45,11 @@ $guzzleHandlerStack->push(
 $httpClient = new \GuzzleHttp\Client();
 
 $log->info('loyalty.apiClient.start');
-$token = new SDK\Auth\DTO\Token(SDK\Transport\DTO\Role::initializeByCode('admin'), $clientApiKey, $authApiKey);
+$token = new SDK\Auth\DTO\Token(
+    SDK\Transport\DTO\Role::initializeByCode('admin'),
+    Uuid::fromString($clientApiKey),
+    Uuid::fromString($authApiKey)
+);
 $apiClient = new SDK\ApiClient($apiEndpoint, $token, $httpClient, $log);
 $apiClient->setGuzzleHandlerStack($guzzleHandlerStack);
 

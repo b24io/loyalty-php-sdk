@@ -134,16 +134,26 @@ class ApiClient
         } else {
             $defaultHttpRequestOptions = $this->getHttpRequestOptions();
         }
+        if ($this->authToken->getRole()->isUser()) {
+            $url = sprintf(
+                '%s?loyalty_client_api_key=%s',
+                $this->apiEndpoint . $apiMethod,
+                $this->authToken->getClientApiKey()->toString()
+            );
+        } else {
+            $url = $this->apiEndpoint . $apiMethod;
+        }
+
         $this->log->debug(
             'b24io.loyalty.sdk.apiClient.executeApiRequest.start',
             [
-                'url'          => $this->apiEndpoint . $apiMethod,
+                'url'          => $url,
                 'method'       => $apiMethod,
                 'request_type' => $requestType,
                 'options'      => $defaultHttpRequestOptions,
             ]
         );
-        $obResponse = $this->executeRequest($requestType, $this->apiEndpoint . $apiMethod, $defaultHttpRequestOptions);
+        $obResponse = $this->executeRequest($requestType, $url, $defaultHttpRequestOptions);
         $obResponseBody = $obResponse->getBody();
         $obResponseBody->rewind();
 

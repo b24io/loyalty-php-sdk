@@ -40,7 +40,7 @@ class Transport extends SDK\Transport\AbstractTransport
 
         try {
             $requestResult = $this->apiClient->executeApiRequest(
-                sprintf('admin/card/get-by-uuid/%s', $cardUuid->toString()),
+                sprintf('user/card/get-by-uuid/%s/', $cardUuid->toString()),
                 RequestMethodInterface::METHOD_GET,
                 []
             );
