@@ -22,9 +22,10 @@ use B24io\Loyalty\SDK;
 class Fabric
 {
     /**
-     * @param array $arOperationsJournal
+     * @param array           $arOperationsJournal
+     * @param LoggerInterface $logger
      *
-     * @return OperationsJournal
+     * @return \B24io\Loyalty\SDK\OperationsJournal\DTO\OperationsJournal
      * @throws \Exception
      */
     public static function initOperationsJournalFromArray(array $arOperationsJournal, LoggerInterface $logger): OperationsJournal
@@ -43,8 +44,27 @@ class Fabric
                         SDK\OperationsJournal\DTO\Transactions\Fabric::initPaymentTransactionFromArray($operation)
                     );
                     break;
+                case OperationType::CREATE_CARD:
+                    $operationCollection->attach(
+                        SDK\OperationsJournal\DTO\CardManagement\Fabric::initCreateCardFromArray($operation)
+                    );
+                    break;
+                case OperationType::DELETE_CARD:
+                    $operationCollection->attach(
+                        SDK\OperationsJournal\DTO\CardManagement\Fabric::initDeleteCardFromArray($operation)
+                    );
+                    break;
+                case OperationType::BLOCK_CARD:
+                    $operationCollection->attach(
+                        SDK\OperationsJournal\DTO\CardManagement\Fabric::initBlockCardFromArray($operation)
+                    );
+                    break;
+                case OperationType::UNBLOCK_CARD:
+                    $operationCollection->attach(
+                        SDK\OperationsJournal\DTO\CardManagement\Fabric::initUnblockCardFromArray($operation)
+                    );
+                    break;
                 default:
-                    var_dump($operation);
                     $logger->warning(
                         'B24io.Loyalty.SDK.OperationsJournal.DTO.Fabric.initOperationsJournalFromArray.unknownOperationType',
                         [

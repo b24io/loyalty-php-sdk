@@ -1,8 +1,12 @@
 # loyalty-php-sdk
-## 0.2.0 (8.01.2020)
+## 1.0.0 (8.01.2020)
 * add OperationsJournal
 * add operation type `AccrualTransaction`
 * add operation type `PaymentTransaction`
+* add operation type `BlockCard`
+* add operation type `CreateCard`
+* add operation type `DeleteCard`
+* add operation type `UnblockCard`
 * add field `OperationUuid` in Operation entity
 * add field `CardUuid` in Card entity
 * add method `filterContactsByEmail` in `\Bitrix24\Contacts\Transport\Admin` transport, return FiltrationResult with two items: CardDTO and ContactDTO  
