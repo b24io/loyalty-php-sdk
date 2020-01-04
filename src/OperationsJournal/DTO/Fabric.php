@@ -82,6 +82,17 @@ class Fabric
                         SDK\OperationsJournal\DTO\Purchases\Fabric::initPurchaseFromArray($operation)
                     );
                     break;
+                // bitrix24 deals partial payment
+                case OperationType::BITRIX24_DEAL_MONETARY_DISCOUNT_PAYMENT_TRANSACTION:
+                    $operationCollection->attach(
+                        SDK\OperationsJournal\DTO\Bitrix24\Fabric::initDealMonetaryDiscountFromArray($operation)
+                    );
+                    break;
+                case OperationType::BITRIX24_DEAL_PERCENTAGE_DISCOUNT_PAYMENT_TRANSACTION:
+                    $operationCollection->attach(
+                        SDK\OperationsJournal\DTO\Bitrix24\Fabric::initDealPercentageDiscountFromArray($operation)
+                    );
+                    break;
                 default:
                     $logger->warning(
                         'B24io.Loyalty.SDK.OperationsJournal.DTO.Fabric.initOperationsJournalFromArray.unknownOperationType',

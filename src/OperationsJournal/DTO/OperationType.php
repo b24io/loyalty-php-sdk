@@ -18,6 +18,8 @@ use Eloquent\Enumeration\AbstractEnumeration;
  * @method DECREMENT_PERCENT();
  * @method INCREMENT_PERCENT();
  * @method PURCHASE();
+ * @method BITRIX24_DEAL_MONETARY_DISCOUNT_PAYMENT_TRANSACTION();
+ * @method BITRIX24_DEAL_PERCENTAGE_DISCOUNT_PAYMENT_TRANSACTION();
  *
  * @package B24io\Loyalty\SDK\Transport\Operations
  */

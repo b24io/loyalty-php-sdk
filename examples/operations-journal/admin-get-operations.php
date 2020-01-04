@@ -67,45 +67,76 @@ try {
     $decimalMoneyFormatter = new \Money\Formatter\DecimalMoneyFormatter(new \Money\Currencies\ISOCurrencies());
     foreach ($operationsResponse->getOperationsJournal()->getOperations() as $cnt => $op) {
         switch ($op->getOperationType()) {
+            case OperationType::BITRIX24_DEAL_PERCENTAGE_DISCOUNT_PAYMENT_TRANSACTION():
+                /**
+                 * @var SDK\OperationsJournal\DTO\Bitrix24\DealPercentageDiscount $op
+                 */
+                print(sprintf(
+                        '%s | %s | user - %s |b24Deal - %s |card uuid - %s | percent %s --- %s',
+                        $cnt,
+                        $op->getOperationType()->key(),
+                        $op->getUserId()->getId(),
+                        $op->getDealId(),
+                        $op->getCardUuid()->toString(),
+                        $op->getPercentage()->format(),
+                        $op->getReason()->getComment()
+                    ) . PHP_EOL);
+                break;
+            case OperationType::BITRIX24_DEAL_MONETARY_DISCOUNT_PAYMENT_TRANSACTION():
+                /**
+                 * @var SDK\OperationsJournal\DTO\Bitrix24\DealMonetaryDiscount $op
+                 */
+                print(sprintf(
+                        '%s | %s | user - %s |b24Deal - %s |card uuid - %s | %s %s --- %s',
+                        $cnt,
+                        $op->getOperationType()->key(),
+                        $op->getUserId()->getId(),
+                        $op->getDealId(),
+                        $op->getCardUuid()->toString(),
+                        $decimalMoneyFormatter->format($op->getValue()),
+                        $op->getValue()->getCurrency()->getCode(),
+                        $op->getReason()->getComment()
+                    ) . PHP_EOL);
+                break;
             case OperationType::ACCRUAL_TRANSACTION():
             case OperationType::PAYMENT_TRANSACTION():
                 /**
                  * @var SDK\Transactions\DTO\TransactionInterface $op
                  */
                 print(sprintf(
-                    '%s | %s | user - %s |card uuid - %s | %s %s --- %s' . PHP_EOL,
-                    $cnt,
-                    $op->getOperationType()->key(),
-                    $op->getUserId()->getId(),
-                    $op->getCardUuid()->toString(),
-                    $decimalMoneyFormatter->format($op->getValue()),
-                    $op->getValue()->getCurrency()->getCode(),
-                    $op->getReason()->getComment()
-                ));
+                        '%s | %s | user - %s |card uuid - %s | %s %s --- %s',
+                        $cnt,
+                        $op->getOperationType()->key(),
+                        $op->getUserId()->getId(),
+                        $op->getCardUuid()->toString(),
+                        $decimalMoneyFormatter->format($op->getValue()),
+                        $op->getValue()->getCurrency()->getCode(),
+                        $op->getReason()->getComment()
+                    ) . PHP_EOL);
                 break;
             case OperationType::PURCHASE():
                 /**
                  * @var SDK\OperationsJournal\DTO\Purchases\Purchase $op
                  */
                 print(sprintf(
-                    '%s | %s | user - %s |card uuid - %s | purchase id - %s | %s' . PHP_EOL,
-                    $cnt,
-                    $op->getOperationType()->key(),
-                    $op->getUserId()->getId(),
-                    $op->getCardUuid()->toString(),
-                    $op->getPurchaseId()->getId(),
-                    $op->getReason()->getComment()
-                ));
+                        '%s | %s | user - %s |card uuid - %s | purchase id - %s | %s',
+                        $cnt,
+                        $op->getOperationType()->key(),
+                        $op->getUserId()->getId(),
+                        $op->getCardUuid()->toString(),
+                        $op->getPurchaseId()->getId(),
+                        $op->getReason()->getComment()
+                    ) . PHP_EOL);
                 break;
             default:
                 print(sprintf(
-                    '%s | %s | user - %s |card uuid - %s | %s' . PHP_EOL,
-                    $cnt,
-                    $op->getOperationType()->key(),
-                    $op->getUserId()->getId(),
-                    $op->getCardUuid()->toString(),
-                    $op->getReason()->getComment()
-                ));
+                        '%s | %s | user - %s |card uuid - %s | %s',
+                        $cnt,
+                        $op->getOperationType()->key(),
+                        $op->getUserId()->getId(),
+                        $op->getCardUuid()->toString(),
+                        $op->getReason()->getComment()
+                    ) . PHP_EOL);
                 break;
         }
     }

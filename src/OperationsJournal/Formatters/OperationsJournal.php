@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace B24io\Loyalty\SDK\OperationsJournal\Formatters;
 
+use B24io\Loyalty\SDK\OperationsJournal\Formatters\Bitrix24\DealMonetaryDiscount;
+use B24io\Loyalty\SDK\OperationsJournal\Formatters\Bitrix24\DealPercentageDiscount;
 use B24io\Loyalty\SDK\OperationsJournal\Formatters\CardManagement\BlockCard;
 use B24io\Loyalty\SDK\OperationsJournal\Formatters\CardManagement\CreateCard;
 use B24io\Loyalty\SDK\OperationsJournal\Formatters\CardManagement\DeleteCard;
@@ -92,6 +94,18 @@ class OperationsJournal
                      * @var $operation \B24io\Loyalty\SDK\OperationsJournal\DTO\Purchases\Purchase
                      */
                     $arOperations[] = Purchase::toArray($operation);
+                    break;
+                case OperationType::BITRIX24_DEAL_MONETARY_DISCOUNT_PAYMENT_TRANSACTION:
+                    /**
+                     * @var $operation \B24io\Loyalty\SDK\OperationsJournal\DTO\Bitrix24\DealMonetaryDiscount
+                     */
+                    $arOperations[] = DealMonetaryDiscount::toArray($operation);
+                    break;
+                case OperationType::BITRIX24_DEAL_PERCENTAGE_DISCOUNT_PAYMENT_TRANSACTION:
+                    /**
+                     * @var $operation \B24io\Loyalty\SDK\OperationsJournal\DTO\Bitrix24\DealPercentageDiscount
+                     */
+                    $arOperations[] = DealPercentageDiscount::toArray($operation);
                     break;
                 default:
                     $logger->warning(

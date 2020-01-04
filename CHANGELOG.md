@@ -10,6 +10,8 @@
 * add operation type `IncrementPercentage`
 * add operation type `DecrementPercentage`
 * add operation type `Purchase`
+* add operation type `DealMonetaryDiscount` for Bitrix24 deal
+* add operation type `DealPercentageDiscount` for Bitrix24 deal
 * add field `OperationUuid` in Operation entity
 * add field `CardUuid` in Card entity
 * add method `filterContactsByEmail` in `\Bitrix24\Contacts\Transport\Admin` transport, return FiltrationResult with two items: CardDTO and ContactDTO  
