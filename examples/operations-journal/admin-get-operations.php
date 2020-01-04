@@ -83,6 +83,20 @@ try {
                     $op->getReason()->getComment()
                 ));
                 break;
+            case OperationType::PURCHASE():
+                /**
+                 * @var SDK\OperationsJournal\DTO\Purchases\Purchase $op
+                 */
+                print(sprintf(
+                    '%s | %s | user - %s |card uuid - %s | purchase id - %s | %s' . PHP_EOL,
+                    $cnt,
+                    $op->getOperationType()->key(),
+                    $op->getUserId()->getId(),
+                    $op->getCardUuid()->toString(),
+                    $op->getPurchaseId()->getId(),
+                    $op->getReason()->getComment()
+                ));
+                break;
             default:
                 print(sprintf(
                     '%s | %s | user - %s |card uuid - %s | %s' . PHP_EOL,

@@ -9,6 +9,7 @@
 * add operation type `UnblockCard`
 * add operation type `IncrementPercentage`
 * add operation type `DecrementPercentage`
+* add operation type `Purchase`
 * add field `OperationUuid` in Operation entity
 * add field `CardUuid` in Card entity
 * add method `filterContactsByEmail` in `\Bitrix24\Contacts\Transport\Admin` transport, return FiltrationResult with two items: CardDTO and ContactDTO  

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace B24io\Loyalty\SDK\OperationsJournal\DTO\Transactions;
 
-use B24\Loyalty;
 use B24io\Loyalty\SDK\OperationsJournal\DTO\OperationType;
 use B24io\Loyalty\SDK\Transport\DTO\Reason;
 use B24io\Loyalty\SDK\Users\DTO\UserId;

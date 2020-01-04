@@ -77,6 +77,11 @@ class Fabric
                         SDK\OperationsJournal\DTO\PercentRateChanges\Fabric::initIncrementPercentFromArray($operation)
                     );
                     break;
+                case OperationType::PURCHASE:
+                    $operationCollection->attach(
+                        SDK\OperationsJournal\DTO\Purchases\Fabric::initPurchaseFromArray($operation)
+                    );
+                    break;
                 default:
                     $logger->warning(
                         'B24io.Loyalty.SDK.OperationsJournal.DTO.Fabric.initOperationsJournalFromArray.unknownOperationType',

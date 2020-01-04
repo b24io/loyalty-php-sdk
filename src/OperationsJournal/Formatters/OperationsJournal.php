@@ -10,6 +10,7 @@ use B24io\Loyalty\SDK\OperationsJournal\Formatters\CardManagement\DeleteCard;
 use B24io\Loyalty\SDK\OperationsJournal\Formatters\CardManagement\UnblockCard;
 use B24io\Loyalty\SDK\OperationsJournal\Formatters\PercentRateChanges\DecrementPercent;
 use B24io\Loyalty\SDK\OperationsJournal\Formatters\PercentRateChanges\IncrementPercent;
+use B24io\Loyalty\SDK\OperationsJournal\Formatters\Purchases\Purchase;
 use B24io\Loyalty\SDK\OperationsJournal\Formatters\Transactions\AccrualTransaction;
 use B24io\Loyalty\SDK\OperationsJournal\Formatters\Transactions\PaymentTransaction;
 use B24io\Loyalty\SDK\OperationsJournal\DTO\OperationsJournal as OperationsJournalDto;
@@ -84,6 +85,13 @@ class OperationsJournal
                      * @var $operation \B24io\Loyalty\SDK\OperationsJournal\DTO\PercentRateChanges\IncrementPercent
                      */
                     $arOperations[] = IncrementPercent::toArray($operation);
+                    break;
+                // purchase registration
+                case OperationType::PURCHASE:
+                    /**
+                     * @var $operation \B24io\Loyalty\SDK\OperationsJournal\DTO\Purchases\Purchase
+                     */
+                    $arOperations[] = Purchase::toArray($operation);
                     break;
                 default:
                     $logger->warning(
