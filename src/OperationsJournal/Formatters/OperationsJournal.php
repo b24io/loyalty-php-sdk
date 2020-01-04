@@ -8,6 +8,8 @@ use B24io\Loyalty\SDK\OperationsJournal\Formatters\CardManagement\BlockCard;
 use B24io\Loyalty\SDK\OperationsJournal\Formatters\CardManagement\CreateCard;
 use B24io\Loyalty\SDK\OperationsJournal\Formatters\CardManagement\DeleteCard;
 use B24io\Loyalty\SDK\OperationsJournal\Formatters\CardManagement\UnblockCard;
+use B24io\Loyalty\SDK\OperationsJournal\Formatters\PercentRateChanges\DecrementPercent;
+use B24io\Loyalty\SDK\OperationsJournal\Formatters\PercentRateChanges\IncrementPercent;
 use B24io\Loyalty\SDK\OperationsJournal\Formatters\Transactions\AccrualTransaction;
 use B24io\Loyalty\SDK\OperationsJournal\Formatters\Transactions\PaymentTransaction;
 use B24io\Loyalty\SDK\OperationsJournal\DTO\OperationsJournal as OperationsJournalDto;
@@ -32,6 +34,7 @@ class OperationsJournal
         $arOperations = [];
         foreach ($journal->getOperations() as $operation) {
             switch ((string)$operation->getOperationType()->value()) {
+                // transactions
                 case OperationType::ACCRUAL_TRANSACTION:
                     /**
                      * @var $operation \B24io\Loyalty\SDK\OperationsJournal\DTO\Transactions\AccrualTransaction
@@ -44,6 +47,7 @@ class OperationsJournal
                      */
                     $arOperations[] = PaymentTransaction::toArray($operation);
                     break;
+                // card management
                 case OperationType::CREATE_CARD:
                     /**
                      * @var $operation \B24io\Loyalty\SDK\OperationsJournal\DTO\CardManagement\CreateCard
@@ -67,6 +71,19 @@ class OperationsJournal
                      * @var $operation \B24io\Loyalty\SDK\OperationsJournal\DTO\CardManagement\UnblockCard
                      */
                     $arOperations[] = UnblockCard::toArray($operation);
+                    break;
+                // card percent rate changes
+                case OperationType::DECREMENT_PERCENT:
+                    /**
+                     * @var $operation \B24io\Loyalty\SDK\OperationsJournal\DTO\PercentRateChanges\DecrementPercent
+                     */
+                    $arOperations[] = DecrementPercent::toArray($operation);
+                    break;
+                case OperationType::INCREMENT_PERCENT:
+                    /**
+                     * @var $operation \B24io\Loyalty\SDK\OperationsJournal\DTO\PercentRateChanges\IncrementPercent
+                     */
+                    $arOperations[] = IncrementPercent::toArray($operation);
                     break;
                 default:
                     $logger->warning(

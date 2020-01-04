@@ -32,4 +32,6 @@ class OperationType extends AbstractEnumeration
     public const DECREMENT_PERCENT = 'decrement_percent';
     public const INCREMENT_PERCENT = 'increment_percent';
     public const PURCHASE = 'purchase';
+    public const BITRIX24_DEAL_MONETARY_DISCOUNT_PAYMENT_TRANSACTION = 'b24_deal_monetary_discount_payment_trx';
+    public const BITRIX24_DEAL_PERCENTAGE_DISCOUNT_PAYMENT_TRANSACTION = 'b24_deal_percentage_discount_payment_trx';
 }

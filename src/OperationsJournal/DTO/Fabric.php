@@ -34,6 +34,7 @@ class Fabric
 
         foreach ($arOperationsJournal['operations'] as $cnt => $operation) {
             switch ($operation['operation_type']) {
+                // transactions
                 case OperationType::ACCRUAL_TRANSACTION:
                     $operationCollection->attach(
                         SDK\OperationsJournal\DTO\Transactions\Fabric::initAccrualTransactionFromArray($operation)
@@ -44,6 +45,7 @@ class Fabric
                         SDK\OperationsJournal\DTO\Transactions\Fabric::initPaymentTransactionFromArray($operation)
                     );
                     break;
+                // card management
                 case OperationType::CREATE_CARD:
                     $operationCollection->attach(
                         SDK\OperationsJournal\DTO\CardManagement\Fabric::initCreateCardFromArray($operation)
@@ -62,6 +64,17 @@ class Fabric
                 case OperationType::UNBLOCK_CARD:
                     $operationCollection->attach(
                         SDK\OperationsJournal\DTO\CardManagement\Fabric::initUnblockCardFromArray($operation)
+                    );
+                    break;
+                // card percent rate changes
+                case OperationType::DECREMENT_PERCENT:
+                    $operationCollection->attach(
+                        SDK\OperationsJournal\DTO\PercentRateChanges\Fabric::initDecrementPercentFromArray($operation)
+                    );
+                    break;
+                case OperationType::INCREMENT_PERCENT:
+                    $operationCollection->attach(
+                        SDK\OperationsJournal\DTO\PercentRateChanges\Fabric::initIncrementPercentFromArray($operation)
                     );
                     break;
                 default:
