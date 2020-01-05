@@ -49,7 +49,7 @@ $apiClient->setGuzzleHandlerStack($guzzleHandlerStack);
 
 // connect to application and read settings
 $settingsTransport = SDK\Settings\Transport\Admin\Fabric::getSettingsTransport($apiClient, $log);
-$operationsTransport = SDK\OperationsJournal\Transport\Admin\Fabric::getTransactionsTransport($apiClient, $log);
+$operationsTransport = SDK\OperationsJournal\Transport\Admin\Fabric::getOperationsJournalTransport($apiClient, $log);
 
 $decimalMoneyFormatter = new \Money\Formatter\DecimalMoneyFormatter(new \Money\Currencies\ISOCurrencies());
 

@@ -20,7 +20,7 @@ class Fabric
      *
      * @return Transport
      */
-    public static function getTransactionsTransport(ApiClient $apiClient, LoggerInterface $logger): Transport
+    public static function getOperationsJournalTransport(ApiClient $apiClient, LoggerInterface $logger): Transport
     {
         return new Transport($apiClient, $logger);
     }
