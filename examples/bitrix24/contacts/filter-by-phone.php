@@ -53,7 +53,7 @@ $token = new SDK\Auth\DTO\Token(
 $apiClient = new SDK\ApiClient($apiEndpoint, $token, $httpClient, $log);
 $apiClient->setGuzzleHandlerStack($guzzleHandlerStack);
 
-$bitrix24Transport = SDK\Bitrix24\Contacts\Transport\Admin\Fabric::getTransactionsTransport($apiClient, $log);
+$bitrix24Transport = SDK\Bitrix24\Contacts\Transport\Admin\Fabric::getBitrix24ContactsTransport($apiClient, $log);
 
 $phoneNumberUtil = \libphonenumber\PhoneNumberUtil::getInstance();
 
