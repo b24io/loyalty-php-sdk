@@ -25,18 +25,16 @@ class Fabric
      */
     public static function initFromArray(array $card): Card
     {
-        $newCard = new Card();
-        $newCard
-            ->setNumber((int)$card['number'])
-            ->setUuid(Uuid::fromString($card['uuid']))
-            ->setBarcode((string)$card['barcode'])
-            ->setStatus(Cards\DTO\Statuses\Fabric::initByStatusCode($card['status']))
-            ->setUser(Users\DTO\Fabric::initFromArray($card['user']))
-            ->setBalance(new Money((string)$card['balance']['amount'], new Currency($card['balance']['currency'])))
-            ->setPercentage(new Percentage((string)$card['percentage']))
-            ->setCreated(new \DateTime($card['created']))
-            ->setModified(new \DateTime($card['modified']));
-
-        return $newCard;
+        return new Card(
+            (int)$card['number'],
+            (string)$card['barcode'],
+            Cards\DTO\Statuses\Fabric::initByStatusCode($card['status']),
+            Users\DTO\Fabric::initFromArray($card['user']),
+            new Money((string)$card['balance']['amount'], new Currency($card['balance']['currency'])),
+            new Percentage((string)$card['percentage']),
+            new \DateTime($card['created']),
+            new \DateTime($card['modified']),
+            Uuid::fromString($card['uuid'])
+        );
     }
 }

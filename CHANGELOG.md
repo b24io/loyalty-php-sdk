@@ -24,6 +24,7 @@
 * change mobile phone in ContactDTO can be nullable
 * change `authKey` and `clientKey` in `TokenDTO` string values to `UuidInterface` 
 * remove `countryRegionCode` argument in methods `add` and `addWithCardNumber` in `\Bitrix24\Contacts\Transport\Admin` transport
+* remove setters in CardDTO object
  
 ## 0.1.3 (6.08.2019)
 * fix contact formatter error
