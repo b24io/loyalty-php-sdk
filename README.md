@@ -36,7 +36,45 @@ Loyalty PHP SDK is a tool for work with REST-API Bitrix24 Application [Loyalty P
 Loyalty PHP SDK works with PHP 7.1 or above, need ext-json and ext-curl support
 
 ## Basic Usage
+```php
+use \Monolog\Logger;
+use \B24io\Loyalty\SDK;
+use Ramsey\Uuid\Uuid;
 
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
+use GuzzleHttp\MessageFormatter;
+
+$log = new Logger('loyalty-php-sdk');
+$log->pushHandler(new \Monolog\Handler\StreamHandler('loyalty-php-sdk-example.log', Logger::DEBUG));
+$guzzleHandlerStack = HandlerStack::create();
+$guzzleHandlerStack->push(
+    Middleware::log(
+        $log,
+        new MessageFormatter(MessageFormatter::SHORT)
+    )
+);
+$httpClient = new \GuzzleHttp\Client();
+
+$log->info('loyalty.apiClient.start');
+$token = new SDK\Auth\DTO\Token(
+    SDK\Transport\DTO\Role::initializeByCode('admin'),
+    Uuid::fromString('CLIENT_API_KEY'),
+    Uuid::fromString('ADMIN_API_KEY')
+);
+$apiClient = new SDK\ApiClient($apiEndpoint, $token, $httpClient, $log);
+$apiClient->setGuzzleHandlerStack($guzzleHandlerStack);
+
+$cardsTransport = SDK\Cards\Transport\Admin\Fabric::getCardTransport($apiClient, $log);
+
+$cardResponse = $cardsTransport->getCardByNumber(22222);
+
+$decimalMoneyFormatter = new \Money\Formatter\DecimalMoneyFormatter(new \Money\Currencies\ISOCurrencies());
+var_dump($cardResponse->getCard()->getNumber());
+var_dump($cardResponse->getCard()->getStatus()->getCode());
+var_dump($decimalMoneyFormatter->format($cardResponse->getCard()->getBalance()));
+var_dump($cardResponse->getCard()->getPercentage()->format());
+```
 ### admin and user mode
 
 ## Documentation
