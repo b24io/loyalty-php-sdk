@@ -60,7 +60,7 @@ try {
 
     print(sprintf('query result:') . PHP_EOL);
     print(sprintf(' - message operation: %s', $result->getMeta()->getMessage()) . PHP_EOL);
-    print(sprintf(' - role: %s', $result->getMeta()->getRole()->getCode()) . PHP_EOL);
+    print(sprintf(' - role: %s', $result->getMeta()->getRole()->key()) . PHP_EOL);
     print(sprintf(' - duration: %s', $result->getMeta()->getDuration()) . PHP_EOL);
     print(sprintf('items count: %s', $result->getFiltrationResultCollection()->count()) . PHP_EOL);
 
