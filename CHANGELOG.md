@@ -19,7 +19,8 @@
 * add method `getByCardUuid` in `\Bitrix24\Contacts\Transport\Admin` transport, return ContactResponse with two items: CardDTO and ContactDTO
 * add method `getByCardUuid` in `\Bitrix24\Contacts\Transport\User` transport, return ContactResponse with two items: CardDTO and ContactDTO
 * add method `getCardByUuid` in `\Cards\Transport\Admin` transport, return CardDTO or throw exception `CardNotFound`
-* add method `getCardByUuid` in `\Cards\Transport\User` transport, return CardDTO or throw exception `CardNotFound` 
+* add method `getCardByUuid` in `\Cards\Transport\User` transport, return CardDTO or throw exception `CardNotFound`
+* add MetricDTO and transport 
 * change mobile phone data structure in Contact DTO in JSON API response
 * change mobile phone in ContactDTO can be nullable
 * change `authKey` and `clientKey` in `TokenDTO` string values to `UuidInterface` 
