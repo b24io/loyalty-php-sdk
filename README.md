@@ -11,16 +11,34 @@ Loyalty PHP SDK is a tool for work with REST-API Bitrix24 Application [Loyalty P
 * HoReCa companies such us fast food or restaurants
 
 ## How it works
-
 <p align="center">
   <img src="./docs/img/loyalty-php-sdk-base-schema.jpg" alt="Loyalty Program and bonus cards for Bitrix24 CRM" width="1333">
 </p>
 
 ## Domain entities
+In loyalty-php-sdk available domain entities from application with DTO (data transfer objects).  
 
 ### Cards
+Loyalty card object:
+* `number` - card number
+* `barcode` - card barcode
+* `status` - card status enumeration (active, blocked or deleted)
+* `user` - card owner user id 
+* `balance` - card balance with php-money object
+* `percentage` - card percentage
+* `created` - card date create
+* `modified` - card date modified
+* `uuid` - card [universally unique identifier](https://en.wikipedia.org/wiki/Universally_unique_identifier)
 
 ### Transactions
+Transactions - accrual or payment operation with card balance
+Transaction object:
+* `value` - transaction amount with php-money object
+* `operationId` - internal operation id, read only
+* `type` - payment or accrual transaction
+* `cardNumber` - card number
+* `created` - transaction date create
+* `reason` - transaction reason with comment  
 
 ### Turnovers
 
