@@ -136,7 +136,7 @@ class ApiClient
         }
         if ($this->authToken->getRole()->isUser()) {
             $url = sprintf(
-                '%s?loyalty_client_api_key=%s',
+                '%s&loyalty_client_api_key=%s',
                 $this->apiEndpoint . $apiMethod,
                 $this->authToken->getClientApiKey()->toString()
             );

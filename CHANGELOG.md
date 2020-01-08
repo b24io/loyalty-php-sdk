@@ -20,6 +20,8 @@
 * add method `getByCardUuid` in `\Bitrix24\Contacts\Transport\User` transport, return ContactResponse with two items: CardDTO and ContactDTO
 * add method `getCardByUuid` in `\Cards\Transport\Admin` transport, return CardDTO or throw exception `CardNotFound`
 * add method `getCardByUuid` in `\Cards\Transport\User` transport, return CardDTO or throw exception `CardNotFound`
+* add method `getOperationsByPeriod` in `\OperationsJournal\Transport\Admin` transport, return `OperationsJournalResponse`
+* add method `getOperationsByPeriod` in `\OperationsJournal\Transport\User` transport, return `OperationsJournalResponse`
 * add MetricDTO and transport 
 * change mobile phone data structure in Contact DTO in JSON API response
 * change mobile phone in ContactDTO can be nullable

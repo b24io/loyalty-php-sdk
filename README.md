@@ -117,7 +117,7 @@ Loyalty PHP SDK works with PHP 7.1 or above, need `ext-json` and `ext-curl` supp
 
 ## Authentication with admin and user roles
 SDK can work with two roles: 
-* `admin` - can work with all cards in his bitrix24 account and loyalty application instance 
+* `admin` - can work with all cards in his Bitrix24 account and loyalty application instance 
 * `user` - can work only with his card 
 
 Bitrix24 Application Loyalty Program and bonus cards work with many Bitrix24 accounts, each account has a `CLIENT_API_KEY` 
