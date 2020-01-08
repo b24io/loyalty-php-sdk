@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace B24io\Loyalty\SDK\Bitrix24\Contacts\DTO;
@@ -6,6 +7,7 @@ namespace B24io\Loyalty\SDK\Bitrix24\Contacts\DTO;
 use B24io\Loyalty\SDK\Cards;
 use B24io\Loyalty\SDK\Exceptions\ObjectInitializationException;
 use B24io\Loyalty\SDK\Users;
+use libphonenumber\PhoneNumber;
 
 /**
  * Class Fabric
@@ -15,13 +17,12 @@ use B24io\Loyalty\SDK\Users;
 class Fabric
 {
     /**
-     * @param array  $arContact
-     * @param string $countryRegionCode An ISO 3166-1 two letter country code.
+     * @param array $arContact
      *
      * @return Contact
      * @throws ObjectInitializationException
      */
-    public static function initContactFromArray(array $arContact, string $countryRegionCode): Contact
+    public static function initContactFromArray(array $arContact): Contact
     {
         try {
             $newContact = new Contact();
@@ -29,7 +30,6 @@ class Fabric
                 $newContact->setContactId(new Users\DTO\UserId((int)$arContact['id']));
             }
 
-            $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
             $newContact
                 ->setName($arContact['name'])
                 ->setSecondName($arContact['second_name'])
@@ -37,10 +37,12 @@ class Fabric
                 ->setComments($arContact['comments'])
                 ->setCreated(new \DateTime($arContact['created']))
                 ->setModified(new \DateTime($arContact['modified']))
-                ->setMobilePhone($phoneUtil->parse($arContact['mobile_phone'], $countryRegionCode))
                 ->setOriginId($arContact['origin_id'])
                 ->setOriginatorId($arContact['originator_id'])
                 ->setSourceDescription($arContact['source_description']);
+            if ($arContact['mobile_phone'] !== null) {
+                $newContact->setMobilePhone(self::initMobilePhoneFromArray($arContact['mobile_phone']));
+            }
             if ($arContact['birthday'] !== null) {
                 $newContact->setBirthday(new \DateTime($arContact['birthday']));
             }
@@ -59,7 +61,60 @@ class Fabric
             throw new ObjectInitializationException(
                 sprintf('contact initialization error «%s»', $exception->getMessage()),
                 $exception->getCode(),
-                $exception);
+                $exception
+            );
         }
+    }
+
+    /**
+     * @param array $filtrationResultCollection
+     *
+     * @return FiltrationResultCollection
+     * @throws ObjectInitializationException
+     * @throws \B24io\Loyalty\SDK\Exceptions\BaseLoyaltyException
+     */
+    public static function initFiltrationResultCollectionFromArray(array $filtrationResultCollection): FiltrationResultCollection
+    {
+        $result = new FiltrationResultCollection();
+
+        foreach ($filtrationResultCollection as $item) {
+            $result->attach(self::initFiltrationResultFromArray($item));
+        }
+        $result->rewind();
+
+        return $result;
+    }
+
+    /**
+     * @param array $filtrationResult
+     *
+     * @return FiltrationResult
+     * @throws ObjectInitializationException
+     * @throws \B24io\Loyalty\SDK\Exceptions\BaseLoyaltyException
+     */
+    public static function initFiltrationResultFromArray(array $filtrationResult): FiltrationResult
+    {
+        $cardDto = null;
+        if ($filtrationResult['card'] !== null) {
+            $cardDto = Cards\DTO\Fabric::initFromArray($filtrationResult['card']);
+        }
+
+        return new FiltrationResult(self::initContactFromArray($filtrationResult['contact']), $cardDto);
+    }
+
+    /**
+     * @param array $mobilePhone
+     *
+     * @return PhoneNumber
+     * @throws \libphonenumber\NumberParseException
+     */
+    public static function initMobilePhoneFromArray(array $mobilePhone): PhoneNumber
+    {
+        $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
+
+        return $phoneUtil->parse(
+            $mobilePhone['national_number'],
+            $phoneUtil->getRegionCodeForCountryCode($mobilePhone['country_code'])
+        );
     }
 }

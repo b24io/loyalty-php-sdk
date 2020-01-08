@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace B24io\Loyalty\SDK\Transport\Formatters;
@@ -21,8 +22,8 @@ class Metadata
     {
         return [
             'duration' => $metadata->getDuration(),
-            'message' => $metadata->getMessage(),
-            'role' => $metadata->getRole()->getCode(),
+            'message'  => $metadata->getMessage(),
+            'role'     => $metadata->getRole()->key(),
         ];
     }
 }

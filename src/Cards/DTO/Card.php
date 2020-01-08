@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace B24io\Loyalty\SDK\Cards\DTO;
@@ -8,6 +9,8 @@ use B24io\Loyalty\SDK\Cards\DTO\Statuses\StatusInterface;
 use B24io\Loyalty\SDK\Users\DTO\User;
 
 use Money\Money;
+use Ramsey\Uuid\UuidInterface;
+
 /**
  * Class Card
  *
@@ -47,6 +50,45 @@ final class Card
      * @var \DateTime
      */
     private $modified;
+    /**
+     * @var UuidInterface
+     */
+    private $uuid;
+
+    /**
+     * Card constructor.
+     *
+     * @param int             $number
+     * @param string          $barcode
+     * @param StatusInterface $status
+     * @param User            $user
+     * @param Money           $balance
+     * @param Percentage      $percentage
+     * @param \DateTime       $created
+     * @param \DateTime       $modified
+     * @param UuidInterface   $uuid
+     */
+    public function __construct(
+        int $number,
+        string $barcode,
+        StatusInterface $status,
+        User $user,
+        Money $balance,
+        Percentage $percentage,
+        \DateTime $created,
+        \DateTime $modified,
+        UuidInterface $uuid
+    ) {
+        $this->number = $number;
+        $this->barcode = $barcode;
+        $this->status = $status;
+        $this->user = $user;
+        $this->balance = $balance;
+        $this->percentage = $percentage;
+        $this->created = $created;
+        $this->modified = $modified;
+        $this->uuid = $uuid;
+    }
 
     /**
      * @return int
@@ -54,18 +96,6 @@ final class Card
     public function getNumber(): int
     {
         return $this->number;
-    }
-
-    /**
-     * @param int $number
-     *
-     * @return Card
-     */
-    public function setNumber(int $number): Card
-    {
-        $this->number = $number;
-
-        return $this;
     }
 
     /**
@@ -77,35 +107,11 @@ final class Card
     }
 
     /**
-     * @param string $barcode
-     *
-     * @return Card
-     */
-    public function setBarcode(string $barcode): Card
-    {
-        $this->barcode = $barcode;
-
-        return $this;
-    }
-
-    /**
      * @return StatusInterface
      */
     public function getStatus(): StatusInterface
     {
         return $this->status;
-    }
-
-    /**
-     * @param StatusInterface $status
-     *
-     * @return Card
-     */
-    public function setStatus(StatusInterface $status): Card
-    {
-        $this->status = $status;
-
-        return $this;
     }
 
     /**
@@ -117,35 +123,11 @@ final class Card
     }
 
     /**
-     * @param User $user
-     *
-     * @return Card
-     */
-    public function setUser(User $user): Card
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
      * @return Money
      */
     public function getBalance(): Money
     {
         return $this->balance;
-    }
-
-    /**
-     * @param Money $balance
-     *
-     * @return Card
-     */
-    public function setBalance(Money $balance): Card
-    {
-        $this->balance = $balance;
-
-        return $this;
     }
 
     /**
@@ -157,35 +139,11 @@ final class Card
     }
 
     /**
-     * @param Percentage $percentage
-     *
-     * @return Card
-     */
-    public function setPercentage(Percentage $percentage): Card
-    {
-        $this->percentage = $percentage;
-
-        return $this;
-    }
-
-    /**
      * @return \DateTime
      */
     public function getCreated(): \DateTime
     {
         return $this->created;
-    }
-
-    /**
-     * @param \DateTime $created
-     *
-     * @return Card
-     */
-    public function setCreated(\DateTime $created): Card
-    {
-        $this->created = $created;
-
-        return $this;
     }
 
     /**
@@ -197,14 +155,10 @@ final class Card
     }
 
     /**
-     * @param \DateTime $modified
-     *
-     * @return Card
+     * @return UuidInterface
      */
-    public function setModified(\DateTime $modified): Card
+    public function getUuid(): UuidInterface
     {
-        $this->modified = $modified;
-
-        return $this;
+        return $this->uuid;
     }
 }

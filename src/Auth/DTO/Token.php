@@ -1,9 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace B24io\Loyalty\SDK\Auth\DTO;
 
 use B24io\Loyalty\SDK\Transport\DTO\Role;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * Class Token
@@ -17,22 +19,22 @@ final class Token
      */
     private $role;
     /**
-     * @var string
+     * @var UuidInterface
      */
     private $clientApiKey;
     /**
-     * @var string
+     * @var UuidInterface
      */
     private $authApiKey;
 
     /**
      * Token constructor.
      *
-     * @param Role   $role
-     * @param string $clientApiKey
-     * @param string $authApiKey
+     * @param Role          $role
+     * @param UuidInterface $clientApiKey
+     * @param UuidInterface $authApiKey
      */
-    public function __construct(Role $role, string $clientApiKey, string $authApiKey)
+    public function __construct(Role $role, UuidInterface $clientApiKey, UuidInterface $authApiKey)
     {
         $this->role = $role;
         $this->clientApiKey = $clientApiKey;
@@ -48,17 +50,17 @@ final class Token
     }
 
     /**
-     * @return string
+     * @return UuidInterface
      */
-    public function getClientApiKey(): string
+    public function getClientApiKey(): UuidInterface
     {
         return $this->clientApiKey;
     }
 
     /**
-     * @return string
+     * @return UuidInterface
      */
-    public function getAuthApiKey(): string
+    public function getAuthApiKey(): UuidInterface
     {
         return $this->authApiKey;
     }
