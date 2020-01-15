@@ -5,6 +5,10 @@ Loyalty PHP SDK is a tool for work with REST-API Bitrix24 Application [Loyalty P
 * Loyalty app support transactions for payment and accrual operations
 * store percentage of discount
 * operations with cards: create, read, delete, block
+
+## Documentation
+* [REST-API documentation on swaggerhub](https://app.swaggerhub.com/apis-docs/b24io/b24loyalty/)
+* [Instruction and FAQ in russian](https://loyalty.click/ru/loyalty-program-in-bitrix24-step-by-step-guide/)
  
 ## Who uses loyalty PHP SDK
 * B2C companies who works with customers and grow they LTV
