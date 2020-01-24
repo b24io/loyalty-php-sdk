@@ -26,7 +26,7 @@ final class Metric
      */
     private $description;
     /**
-     * @var string
+     * @var MetricCode
      */
     private $code;
     /**
@@ -44,12 +44,18 @@ final class Metric
      * @param UuidInterface $uuid
      * @param string        $name
      * @param string        $description
-     * @param string        $code
+     * @param MetricCode    $code
      * @param MetricType    $type
      * @param \DateTime     $created
      */
-    public function __construct(UuidInterface $uuid, string $name, string $description, string $code, MetricType $type, \DateTime $created)
-    {
+    public function __construct(
+        UuidInterface $uuid,
+        string $name,
+        string $description,
+        MetricCode $code,
+        MetricType $type,
+        \DateTime $created
+    ) {
         $this->uuid = $uuid;
         $this->name = $name;
         $this->description = $description;
@@ -83,9 +89,9 @@ final class Metric
     }
 
     /**
-     * @return string
+     * @return MetricCode
      */
-    public function getCode(): string
+    public function getCode(): MetricCode
     {
         return $this->code;
     }
