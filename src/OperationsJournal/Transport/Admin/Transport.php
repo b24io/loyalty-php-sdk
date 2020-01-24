@@ -8,7 +8,6 @@ use B24io\Loyalty\SDK;
 use B24io\Loyalty\SDK\Cards;
 
 use Fig\Http\Message\RequestMethodInterface;
-use Money\Money;
 
 /**
  * Class Transport
@@ -41,9 +40,13 @@ class Transport extends SDK\Transport\AbstractTransport
 
         $requestResult = $this->apiClient->executeApiRequest(
             sprintf(
-                'admin/operations-journal/?dateFrom=%s&dateTo=%s',
-                urlencode($dateFrom->format(\DATE_RFC3339)),
-                urlencode($dateTo->format(\DATE_RFC3339))
+                'admin/operations-journal/?%s',
+                http_build_query(
+                    [
+                        self::DATE_FROM => $dateFrom->format(\DATE_RFC3339),
+                        self::DATE_TO   => $dateTo->format(\DATE_RFC3339),
+                    ]
+                )
             ),
             RequestMethodInterface::METHOD_GET,
             []
