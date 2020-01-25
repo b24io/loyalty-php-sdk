@@ -2,6 +2,7 @@
 ## 1.1.0 (26.01.2020)
 * add method `getReportByMetricCode` in `\Metrics\Transport\Admin` transport, return `MetricReportResponse` with `Report` DTO
 * add interface `DefaultRequestArgumentsInterface` with default request argument fields
+* add SystemJournal transport for role admin 
 
 ## 1.0.0 (8.01.2020)
 * add OperationsJournal
