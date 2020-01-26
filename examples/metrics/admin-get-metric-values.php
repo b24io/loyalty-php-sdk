@@ -12,7 +12,7 @@ use GuzzleHttp\Middleware;
 use GuzzleHttp\MessageFormatter;
 use Ramsey\Uuid\Uuid;
 
-$argv = getopt('', ['clientApiKey::', 'authApiKey::', 'apiEndpoint::']);
+$argv = getopt('', ['clientApiKey::', 'authApiKey::', 'apiEndpoint::', 'dateFrom::', 'dateTo::']);
 $fileName = basename(__FILE__);
 
 $clientApiKey = $argv['clientApiKey'];
@@ -27,6 +27,8 @@ $apiEndpoint = $argv['apiEndpoint'];
 if ($apiEndpoint === null) {
     throw new \InvalidArgumentException(sprintf('error: argument «apiEndpoint»  not found') . PHP_EOL);
 }
+$dateFrom = new \DateTime($argv['dateFrom']);
+$dateTo = new \DateTime($argv['dateTo']);
 
 
 // check connection to API
@@ -40,7 +42,6 @@ $guzzleHandlerStack->push(
     )
 );
 $httpClient = new \GuzzleHttp\Client();
-
 $log->info('loyalty.apiClient.start');
 $token = new SDK\Auth\DTO\Token(
     SDK\Transport\DTO\Role::initializeByCode('admin'),
@@ -52,7 +53,7 @@ $apiClient->setGuzzleHandlerStack($guzzleHandlerStack);
 
 // connect to application and read settings
 $metricTransport = SDK\Metrics\Transport\Admin\Fabric::getMetricTransport($apiClient, $log);
-
+$decimalMoneyFormatter = new \Money\Formatter\DecimalMoneyFormatter(new \Money\Currencies\ISOCurrencies());
 try {
     $metricResponse = $metricTransport->getMetricCollection();
     foreach ($metricResponse->getMetricCollection() as $metric) {
@@ -63,6 +64,47 @@ try {
                 $metric->getName()
             ) . PHP_EOL);
         print(sprintf('%s', $metric->getDescription()) . PHP_EOL);
+
+        // get metric values
+        $reportResponse = $metricTransport->getReportByMetricCode($metric->getCode(), $dateFrom, $dateTo);
+        foreach ($reportResponse->getReport()->getValues() as $cnt => $value) {
+            /**
+             * @var SDK\Metrics\DTO\Values\AbstractValue $value
+             */
+            switch ($reportResponse->getReport()->getMetric()->getType()) {
+                case SDK\Metrics\DTO\MetricType::FLOAT():
+                case SDK\Metrics\DTO\MetricType::INTEGER():
+                    print(sprintf(
+                            '     %s | %s  | %s',
+                            $cnt,
+                            $value->getTimestamp()->format(\DATE_ATOM),
+                            $value->getValue()
+                        ) . PHP_EOL);
+                    break;
+                case SDK\Metrics\DTO\MetricType::MONEY():
+                    /**
+                     * @var SDK\Metrics\DTO\Values\MoneyValue $value
+                     */
+                    print(sprintf(
+                            '     %s | %s | %s',
+                            $cnt,
+                            $value->getTimestamp()->format(\DATE_ATOM),
+                            $decimalMoneyFormatter->format($value->getValue())
+                        ) . PHP_EOL);
+                    break;
+                case SDK\Metrics\DTO\MetricType::PERCENTAGE():
+                    /**
+                     * @var SDK\Metrics\DTO\Values\PercentageValue $value
+                     */
+                    print(sprintf(
+                            '     %s | %s | %s',
+                            $cnt,
+                            $value->getTimestamp()->format(\DATE_ATOM),
+                            $value->getValue()->format()
+                        ) . PHP_EOL);
+                    break;
+            }
+        }
         print('-----------' . PHP_EOL);
     }
 } catch (SDK\Exceptions\ApiClientException $exception) {

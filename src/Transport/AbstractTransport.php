@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace B24io\Loyalty\SDK\Transport;
@@ -11,7 +12,7 @@ use Psr\Log\LoggerInterface;
  *
  * @package B24io\Loyalty\SDK\Transport
  */
-abstract class AbstractTransport
+abstract class AbstractTransport implements DefaultRequestArgumentsInterface
 {
     /**
      * @var SDK\ApiClient

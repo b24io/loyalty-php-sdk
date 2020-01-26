@@ -60,21 +60,21 @@ class GetOperationsByPeriod
      */
     public static function initFromRequest(HttpFoundation\Request $request): self
     {
-        $dateFrom = $request->get('dateFrom', null);
-        $dateTo = $request->get('dateTo', null);
+        $dateFrom = $request->get('date_from', null);
+        $dateTo = $request->get('date_to', null);
         if ($dateFrom === null) {
-            throw new ObjectInitializationException(sprintf('argument dateFrom not found'));
+            throw new ObjectInitializationException(sprintf('argument date_from not found'));
         }
         if ($dateTo === null) {
-            throw new ObjectInitializationException(sprintf('argument dateTo not found'));
+            throw new ObjectInitializationException(sprintf('argument date_to not found'));
         }
         $dateFrom = \DateTime::createFromFormat(\DATE_RFC3339, $dateFrom);
         if ($dateFrom === false) {
-            throw new ObjectInitializationException(sprintf('DateTime object initialization error for argument dateFrom [%s]', $dateFrom));
+            throw new ObjectInitializationException(sprintf('DateTime object initialization error for argument date_from [%s]', $dateFrom));
         }
         $dateTo = \DateTime::createFromFormat(\DATE_RFC3339, $dateTo);
         if ($dateTo === false) {
-            throw new ObjectInitializationException(sprintf('DateTime object initialization error for argument dateTo [%s]', $dateTo));
+            throw new ObjectInitializationException(sprintf('DateTime object initialization error for argument date_to [%s]', $dateTo));
         }
 
         return new self($dateFrom, $dateTo);
