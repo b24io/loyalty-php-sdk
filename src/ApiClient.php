@@ -25,7 +25,7 @@ class ApiClient
     /**
      * @var string SDK version
      */
-    protected const SDK_VERSION = '1.1.0';
+    protected const SDK_VERSION = '2.0.0';
     /**
      * @var string user agent
      */

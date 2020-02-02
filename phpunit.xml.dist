@@ -4,8 +4,11 @@
         bootstrap="tests/bootstrap.php"
         colors="true">
     <testsuites>
-        <testsuite name="loyalty-php-sdk test suite">
-            <directory>tests/src/</directory>
+        <testsuite name="unit-tests">
+            <directory>tests/unit/src/</directory>
+        </testsuite>
+        <testsuite name="integration-tests">
+            <directory>tests/integration/src/</directory>
         </testsuite>
     </testsuites>
     <filter>
@@ -13,4 +16,10 @@
             <directory suffix=".php">src/</directory>
         </whitelist>
     </filter>
+    <php>
+        <env name="LOYALTY_API_CLIENT_LOG_FILE" value="loyalty-api-client-integration-tests.log" force="true"/>
+        <env name="LOYALTY_PRODUCTION_TEST_CLIENT_API_KEY" value="6b921f12-0a9c-41a9-9fec-31359f1a193e" force="true"/>
+        <env name="LOYALTY_PRODUCTION_TEST_CLIENT_ADMIN_KEY" value="cc954f3c-99c1-4b1b-ab6d-2a7af59da7c7" force="true"/>
+        <env name="LOYALTY_PRODUCTION_TEST_API_ENDPOINT" value="https://loyalty.b24.cloud/api/" force="true"/>
+    </php>
 </phpunit>

@@ -25,38 +25,23 @@ class Fabric
     public static function initContactFromArray(array $arContact): Contact
     {
         try {
-            $newContact = new Contact();
-            if ($arContact['id'] !== null) {
-                $newContact->setContactId(new Users\DTO\UserId((int)$arContact['id']));
-            }
-
-            $newContact
-                ->setName($arContact['name'])
-                ->setSecondName($arContact['second_name'])
-                ->setLastName($arContact['last_name'])
-                ->setComments($arContact['comments'])
-                ->setCreated(new \DateTime($arContact['created']))
-                ->setModified(new \DateTime($arContact['modified']))
-                ->setOriginId($arContact['origin_id'])
-                ->setOriginatorId($arContact['originator_id'])
-                ->setSourceDescription($arContact['source_description']);
-            if ($arContact['mobile_phone'] !== null) {
-                $newContact->setMobilePhone(self::initMobilePhoneFromArray($arContact['mobile_phone']));
-            }
-            if ($arContact['birthday'] !== null) {
-                $newContact->setBirthday(new \DateTime($arContact['birthday']));
-            }
-            if ($arContact['email'] !== null) {
-                $newContact->setEmail(new Users\DTO\Email($arContact['email']));
-            }
-            if ($arContact['utm'] !== null) {
-                $newContact->setUtm(UTM::initFromArray($arContact['utm']));
-            }
-            if ($arContact['address'] !== null) {
-                $newContact->setAddress(Address::initFromArray($arContact['address']));
-            }
-
-            return $newContact;
+            return new Contact(
+                new \DateTime($arContact['created']),
+                new \DateTime($arContact['modified']),
+                $arContact['name'],
+                $arContact['second_name'],
+                $arContact['last_name'],
+                $arContact['mobile_phone'] !== null ? self::initMobilePhoneFromArray($arContact['mobile_phone']) : null,
+                $arContact['email'] !== null ? new Users\DTO\Email($arContact['email']) : null,
+                $arContact['id'] !== null ? new Users\DTO\UserId((int)$arContact['id']) : null,
+                $arContact['birthday'] !== null ? new \DateTime($arContact['birthday']) : null,
+                $arContact['comments'],
+                $arContact['address'] !== null ? Address::initFromArray($arContact['address']) : null,
+                $arContact['origin_id'],
+                $arContact['originator_id'],
+                $arContact['source_description'],
+                $arContact['utm'] !== null ? UTM::initFromArray($arContact['utm']) : null
+            );
         } catch (\Throwable $exception) {
             throw new ObjectInitializationException(
                 sprintf('contact initialization error «%s»', $exception->getMessage()),

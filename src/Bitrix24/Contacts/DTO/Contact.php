@@ -77,43 +77,56 @@ class Contact
     private $sourceDescription;
 
     /**
-     * @return string|null
-     */
-    public function getSourceDescription(): ?string
-    {
-        return $this->sourceDescription;
-    }
-
-    /**
-     * @param string|null $sourceDescription
+     * Contact constructor.
      *
-     * @return Contact
+     * @param \DateTime        $created
+     * @param \DateTime        $modified
+     * @param string           $name
+     * @param string|null      $secondName
+     * @param string|null      $lastName
+     * @param PhoneNumber|null $mobilePhone
+     * @param Email|null       $email
+     * @param UserId|null      $contactId
+     * @param \DateTime|null   $birthday
+     * @param string|null      $comments
+     * @param Address|null     $address
+     * @param string|null      $originId
+     * @param string|null      $originatorId
+     * @param string|null      $sourceDescription
+     * @param UTM|null         $utm
      */
-    public function setSourceDescription(?string $sourceDescription): Contact
-    {
+    public function __construct(
+        \DateTime $created,
+        \DateTime $modified,
+        string $name,
+        ?string $secondName,
+        ?string $lastName,
+        ?PhoneNumber $mobilePhone,
+        ?Email $email = null,
+        ?UserId $contactId = null,
+        ?\DateTime $birthday = null,
+        ?string $comments = null,
+        ?Address $address = null,
+        ?string $originId = null,
+        ?string $originatorId = null,
+        ?string $sourceDescription = null,
+        ?UTM $utm = null
+    ) {
+        $this->created = $created;
+        $this->modified = $modified;
+        $this->name = $name;
+        $this->secondName = $secondName;
+        $this->lastName = $lastName;
+        $this->mobilePhone = $mobilePhone;
+        $this->email = $email;
+        $this->contactId = $contactId;
+        $this->birthday = $birthday;
+        $this->comments = $comments;
+        $this->address = $address;
+        $this->originId = $originId;
+        $this->originatorId = $originatorId;
         $this->sourceDescription = $sourceDescription;
-
-        return $this;
-    }
-
-    /**
-     * @return UTM|null
-     */
-    public function getUtm(): ?UTM
-    {
-        return $this->utm;
-    }
-
-    /**
-     * @param UTM|null $utm
-     *
-     * @return Contact
-     */
-    public function setUtm(?UTM $utm): Contact
-    {
         $this->utm = $utm;
-
-        return $this;
     }
 
     /**
@@ -125,35 +138,11 @@ class Contact
     }
 
     /**
-     * @param UserId|null $contactId
-     *
-     * @return Contact
-     */
-    public function setContactId(?UserId $contactId): Contact
-    {
-        $this->contactId = $contactId;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getName(): string
     {
         return $this->name;
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return Contact
-     */
-    public function setName(string $name): Contact
-    {
-        $this->name = $name;
-
-        return $this;
     }
 
     /**
@@ -165,35 +154,11 @@ class Contact
     }
 
     /**
-     * @param string|null $secondName
-     *
-     * @return Contact
-     */
-    public function setSecondName(?string $secondName): Contact
-    {
-        $this->secondName = $secondName;
-
-        return $this;
-    }
-
-    /**
      * @return string|null
      */
     public function getLastName(): ?string
     {
         return $this->lastName;
-    }
-
-    /**
-     * @param string|null $lastName
-     *
-     * @return Contact
-     */
-    public function setLastName(?string $lastName): Contact
-    {
-        $this->lastName = $lastName;
-
-        return $this;
     }
 
     /**
@@ -205,35 +170,11 @@ class Contact
     }
 
     /**
-     * @param \DateTime|null $birthday
-     *
-     * @return Contact
-     */
-    public function setBirthday(?\DateTime $birthday): Contact
-    {
-        $this->birthday = $birthday;
-
-        return $this;
-    }
-
-    /**
      * @return string|null
      */
     public function getComments(): ?string
     {
         return $this->comments;
-    }
-
-    /**
-     * @param string|null $comments
-     *
-     * @return Contact
-     */
-    public function setComments(?string $comments): Contact
-    {
-        $this->comments = $comments;
-
-        return $this;
     }
 
     /**
@@ -245,55 +186,19 @@ class Contact
     }
 
     /**
-     * @param \DateTime $created
-     *
-     * @return Contact
+     * @return \DateTime
      */
-    public function setCreated(\DateTime $created): Contact
-    {
-        $this->created = $created;
-
-        return $this;
-    }
-
-    /**
-     * @return \DateTime|null
-     */
-    public function getModified(): ?\DateTime
+    public function getModified(): \DateTime
     {
         return $this->modified;
     }
 
     /**
-     * @param \DateTime|null $modified
-     *
-     * @return Contact
+     * @return PhoneNumber
      */
-    public function setModified(?\DateTime $modified): Contact
-    {
-        $this->modified = $modified;
-
-        return $this;
-    }
-
-    /**
-     * @return PhoneNumber|null
-     */
-    public function getMobilePhone(): ?PhoneNumber
+    public function getMobilePhone(): PhoneNumber
     {
         return $this->mobilePhone;
-    }
-
-    /**
-     * @param PhoneNumber $mobilePhone
-     *
-     * @return Contact
-     */
-    public function setMobilePhone(PhoneNumber $mobilePhone): Contact
-    {
-        $this->mobilePhone = $mobilePhone;
-
-        return $this;
     }
 
     /**
@@ -305,35 +210,11 @@ class Contact
     }
 
     /**
-     * @param Email|null $email
-     *
-     * @return Contact
-     */
-    public function setEmail(?Email $email): Contact
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
      * @return Address|null
      */
     public function getAddress(): ?Address
     {
         return $this->address;
-    }
-
-    /**
-     * @param Address $address
-     *
-     * @return Contact
-     */
-    public function setAddress(Address $address): Contact
-    {
-        $this->address = $address;
-
-        return $this;
     }
 
     /**
@@ -345,18 +226,6 @@ class Contact
     }
 
     /**
-     * @param string|null $originId
-     *
-     * @return Contact
-     */
-    public function setOriginId(?string $originId): Contact
-    {
-        $this->originId = $originId;
-
-        return $this;
-    }
-
-    /**
      * @return string|null
      */
     public function getOriginatorId(): ?string
@@ -365,14 +234,18 @@ class Contact
     }
 
     /**
-     * @param string|null $originatorId
-     *
-     * @return Contact
+     * @return UTM|null
      */
-    public function setOriginatorId(?string $originatorId): Contact
+    public function getUtm(): ?UTM
     {
-        $this->originatorId = $originatorId;
+        return $this->utm;
+    }
 
-        return $this;
+    /**
+     * @return string|null
+     */
+    public function getSourceDescription(): ?string
+    {
+        return $this->sourceDescription;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace B24io\Loyalty\SDK\Bitrix24\Contacts\DTO;
@@ -44,27 +45,56 @@ class Address
     private $countryCode;
 
     /**
+     * Address constructor.
+     *
+     * @param string|null $street
+     * @param string|null $apartment
+     * @param string|null $city
+     * @param string|null $postalCode
+     * @param string|null $region
+     * @param string|null $province
+     * @param string|null $country
+     * @param string|null $countryCode
+     */
+    public function __construct(
+        ?string $street,
+        ?string $apartment,
+        ?string $city,
+        ?string $postalCode,
+        ?string $region,
+        ?string $province,
+        ?string $country,
+        ?string $countryCode
+    ) {
+        $this->street = $street;
+        $this->apartment = $apartment;
+        $this->city = $city;
+        $this->postalCode = $postalCode;
+        $this->region = $region;
+        $this->province = $province;
+        $this->country = $country;
+        $this->countryCode = $countryCode;
+    }
+
+
+    /**
      * @param array $arAddress
      *
      * @return Address
      */
     public static function initFromArray(array $arAddress): self
     {
-        $address = new self();
-
-        $address
-            ->setCountry($arAddress['country'])
-            ->setCountryCode($arAddress['country_code'])
-            ->setRegion($arAddress['region'])
-            ->setProvince($arAddress['province'])
-            ->setCity($arAddress['city'])
-            ->setPostalCode($arAddress['postal_code'])
-            ->setApartment($arAddress['apartment'])
-            ->setStreet($arAddress['street']);
-
-        return $address;
+        return new self(
+            $arAddress['street'],
+            $arAddress['apartment'],
+            $arAddress['city'],
+            $arAddress['postal_code'],
+            $arAddress['region'],
+            $arAddress['province'],
+            $arAddress['country'],
+            $arAddress['country_code']
+        );
     }
-
 
     /**
      * @return array
@@ -72,14 +102,14 @@ class Address
     public function toArray(): array
     {
         return [
-            'country' => $this->getCountry(),
+            'country'      => $this->getCountry(),
             'country_code' => $this->getCountryCode(),
-            'region' => $this->getRegion(),
-            'province' => $this->getProvince(),
-            'city' => $this->getCity(),
-            'postal_code' => $this->getPostalCode(),
-            'apartment' => $this->getApartment(),
-            'street' => $this->getStreet(),
+            'region'       => $this->getRegion(),
+            'province'     => $this->getProvince(),
+            'city'         => $this->getCity(),
+            'postal_code'  => $this->getPostalCode(),
+            'apartment'    => $this->getApartment(),
+            'street'       => $this->getStreet(),
         ];
     }
 
@@ -92,35 +122,11 @@ class Address
     }
 
     /**
-     * @param string|null $street
-     *
-     * @return Address
-     */
-    public function setStreet(?string $street): Address
-    {
-        $this->street = $street;
-
-        return $this;
-    }
-
-    /**
      * @return string|null
      */
     public function getApartment(): ?string
     {
         return $this->apartment;
-    }
-
-    /**
-     * @param string|null $apartment
-     *
-     * @return Address
-     */
-    public function setApartment(?string $apartment): Address
-    {
-        $this->apartment = $apartment;
-
-        return $this;
     }
 
     /**
@@ -132,35 +138,11 @@ class Address
     }
 
     /**
-     * @param string|null $city
-     *
-     * @return Address
-     */
-    public function setCity(?string $city): Address
-    {
-        $this->city = $city;
-
-        return $this;
-    }
-
-    /**
      * @return string|null
      */
     public function getPostalCode(): ?string
     {
         return $this->postalCode;
-    }
-
-    /**
-     * @param string|null $postalCode
-     *
-     * @return Address
-     */
-    public function setPostalCode(?string $postalCode): Address
-    {
-        $this->postalCode = $postalCode;
-
-        return $this;
     }
 
     /**
@@ -172,35 +154,11 @@ class Address
     }
 
     /**
-     * @param string|null $region
-     *
-     * @return Address
-     */
-    public function setRegion(?string $region): Address
-    {
-        $this->region = $region;
-
-        return $this;
-    }
-
-    /**
      * @return string|null
      */
     public function getProvince(): ?string
     {
         return $this->province;
-    }
-
-    /**
-     * @param string|null $province
-     *
-     * @return Address
-     */
-    public function setProvince(?string $province): Address
-    {
-        $this->province = $province;
-
-        return $this;
     }
 
     /**
@@ -212,34 +170,10 @@ class Address
     }
 
     /**
-     * @param string|null $country
-     *
-     * @return Address
-     */
-    public function setCountry(?string $country): Address
-    {
-        $this->country = $country;
-
-        return $this;
-    }
-
-    /**
      * @return string|null
      */
     public function getCountryCode(): ?string
     {
         return $this->countryCode;
-    }
-
-    /**
-     * @param string|null $countryCode
-     *
-     * @return Address
-     */
-    public function setCountryCode(?string $countryCode): Address
-    {
-        $this->countryCode = $countryCode;
-
-        return $this;
     }
 }
