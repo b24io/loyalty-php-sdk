@@ -1,4 +1,12 @@
 # loyalty-php-sdk
+## 2.0.0 (1.02.2020)
+* add unit tests for `\SDK\Bitrix24\Contacts\DTO\Fabric::initContactFromArray`
+* add example `admin-add-contact-with-card-number.php`
+* add integration tests for `\SDK\Bitrix24\Contacts\Transport\Admin\Transport`
+* change constructor args for `\SDK\Bitrix24\Contacts\DTO\Contact`
+* remove setters for `\SDK\Bitrix24\Contacts\DTO\Contact`
+* remove setters for `\SDK\Bitrix24\Contacts\DTO\Address`
+
 ## 1.1.0 (26.01.2020)
 * add method `getReportByMetricCode` in `\Metrics\Transport\Admin` transport, return `MetricReportResponse` with `Report` DTO
 * add interface `DefaultRequestArgumentsInterface` with default request argument fields

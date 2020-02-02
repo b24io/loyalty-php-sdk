@@ -1,5 +1,5 @@
-# loyalty-php-sdk
-[![License](https://poser.pugx.org/b24io/loyalty-php-sdk/license.svg)](https://packagist.org/packages/b24io/loyalty-php-sdk) [![Total Downloads](https://poser.pugx.org/b24io/loyalty-php-sdk/downloads.svg)](https://packagist.org/packages/b24io/loyalty-php-sdk)
+# loyalty-php-sdk 
+[![License](https://poser.pugx.org/b24io/loyalty-php-sdk/license.svg)](https://packagist.org/packages/b24io/loyalty-php-sdk) [![Total Downloads](https://poser.pugx.org/b24io/loyalty-php-sdk/downloads.svg)](https://packagist.org/packages/b24io/loyalty-php-sdk) [![Build Status](https://travis-ci.org/b24io/loyalty-php-sdk.svg?branch=master)](https://travis-ci.org/b24io/loyalty-php-sdk)
 
 Loyalty PHP SDK is a tool for work with REST-API Bitrix24 Application [Loyalty Program and bonus cards for Bitrix24 CRM](https://www.bitrix24.ru/apps/?app=b24io.loyalty)
 
