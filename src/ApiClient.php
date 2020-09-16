@@ -6,14 +6,11 @@ namespace B24io\Loyalty\SDK;
 
 use B24io\Loyalty\SDK;
 use B24io\Loyalty\SDK\Exceptions;
-
 use Crell\ApiProblem\ApiProblem;
-use function MongoDB\BSON\fromJSON;
-use Psr\Log\NullLogger;
-use Psr\Log\LoggerInterface;
-use Fig\Http\Message\RequestMethodInterface;
 use Fig\Http\Message\StatusCodeInterface;
 use GuzzleHttp;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 /**
  * Class ApiClient
@@ -245,6 +242,16 @@ class ApiClient
                     'decodedResponse' => $result,
                 ]
             );
+            if ($response->getStatusCode() === StatusCodeInterface::STATUS_TOO_MANY_REQUESTS) {
+                $problem = ApiProblem::fromJson(json_encode($result));
+                throw new Exceptions\TooManyRequestsException(
+                    $problem,
+                    $problem->getTitle(),
+                    $exception->getCode(),
+                    $exception
+                );
+            }
+
             if (array_key_exists('result', $result)) {
                 $problem = ApiProblem::fromJson(json_encode($result['result']));
                 throw new Exceptions\ApiClientException($problem, $problem->getTitle(), $exception->getCode(), $exception);
