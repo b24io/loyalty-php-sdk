@@ -1,4 +1,9 @@
 # loyalty-php-sdk
+## 2.0.1 (1.10.2020)
+* add support for rps-error limits - no more than 2 rps
+* update dependencies
+* add x-request-id header support
+
 ## 2.0.0 (1.02.2020)
 * add unit tests for `\SDK\Bitrix24\Contacts\DTO\Fabric::initContactFromArray`
 * add example `admin-add-contact-with-card-number.php`

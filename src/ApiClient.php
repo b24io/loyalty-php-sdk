@@ -6,14 +6,12 @@ namespace B24io\Loyalty\SDK;
 
 use B24io\Loyalty\SDK;
 use B24io\Loyalty\SDK\Exceptions;
-
 use Crell\ApiProblem\ApiProblem;
-use function MongoDB\BSON\fromJSON;
-use Psr\Log\NullLogger;
-use Psr\Log\LoggerInterface;
-use Fig\Http\Message\RequestMethodInterface;
 use Fig\Http\Message\StatusCodeInterface;
 use GuzzleHttp;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
+use Ramsey\Uuid\Uuid;
 
 /**
  * Class ApiClient
@@ -25,7 +23,7 @@ class ApiClient
     /**
      * @var string SDK version
      */
-    protected const SDK_VERSION = '2.0.0';
+    protected const SDK_VERSION = '2.0.1';
     /**
      * @var string user agent
      */
@@ -183,6 +181,7 @@ class ApiClient
             'headers'         => [
                 'Cache-Control'             => 'no-cache',
                 'Content-type'              => 'application/json; charset=utf-8',
+                'X-LOYALTY-SDK-REQUEST-ID'  => Uuid::uuid4()->toString(),
                 'X-ENVIRONMENT-PHP-VERSION' => \PHP_VERSION,
                 'X-ENVIRONMENT-SDK-VERSION' => \strtolower(self::API_USER_AGENT . '.' . self::SDK_VERSION),
             ],
@@ -245,6 +244,16 @@ class ApiClient
                     'decodedResponse' => $result,
                 ]
             );
+            if ($response->getStatusCode() === StatusCodeInterface::STATUS_TOO_MANY_REQUESTS) {
+                $problem = ApiProblem::fromJson(json_encode($result));
+                throw new Exceptions\TooManyRequestsException(
+                    $problem,
+                    $problem->getTitle(),
+                    $exception->getCode(),
+                    $exception
+                );
+            }
+
             if (array_key_exists('result', $result)) {
                 $problem = ApiProblem::fromJson(json_encode($result['result']));
                 throw new Exceptions\ApiClientException($problem, $problem->getTitle(), $exception->getCode(), $exception);
