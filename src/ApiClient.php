@@ -11,6 +11,7 @@ use Fig\Http\Message\StatusCodeInterface;
 use GuzzleHttp;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use Ramsey\Uuid\Uuid;
 
 /**
  * Class ApiClient
@@ -22,7 +23,7 @@ class ApiClient
     /**
      * @var string SDK version
      */
-    protected const SDK_VERSION = '2.0.0';
+    protected const SDK_VERSION = '2.0.1';
     /**
      * @var string user agent
      */
@@ -180,6 +181,7 @@ class ApiClient
             'headers'         => [
                 'Cache-Control'             => 'no-cache',
                 'Content-type'              => 'application/json; charset=utf-8',
+                'X-LOYALTY-SDK-REQUEST-ID'  => Uuid::uuid4()->toString(),
                 'X-ENVIRONMENT-PHP-VERSION' => \PHP_VERSION,
                 'X-ENVIRONMENT-SDK-VERSION' => \strtolower(self::API_USER_AGENT . '.' . self::SDK_VERSION),
             ],

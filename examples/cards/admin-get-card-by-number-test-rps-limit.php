@@ -88,7 +88,7 @@ try {
         // usleep(500000);
 
         // 2+ RPS – 429 error
-        usleep(100000);
+        usleep(1000);
     }
 } catch (SDK\Exceptions\ApiClientException $exception) {
     print('error description:' . PHP_EOL);
