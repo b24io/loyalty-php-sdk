@@ -20,7 +20,7 @@
     }
   ],
   "require": {
-    "php": ">=7.1",
+    "php": "7.4.*|8.*",
     "ext-json": "*",
     "ext-curl": "*",
     "psr/log": "^1.0",
@@ -32,10 +32,10 @@
     "crell/api-problem": "^3.0",
     "giggsey/libphonenumber-for-php": "^8.12",
     "ramsey/uuid": "^3.9.3",
-    "symfony/http-foundation": "^4.4"
+    "symfony/http-foundation": "5.4.*"
   },
   "require-dev": {
-    "phpunit/phpunit": "^7"
+    "phpunit/phpunit": "9.*"
   },
   "autoload": {
     "psr-4": {

@@ -1,4 +1,7 @@
 # loyalty-php-sdk
+## 2.1.0 (7.12.2021)
+* bump php version requirements to `7.4` or `8.*`
+
 ## 2.0.1 (1.10.2020)
 * add support for rps-error limits - no more than 2 rps
 * update dependencies
