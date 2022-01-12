@@ -31,7 +31,7 @@
     "eloquent/enumeration": "^5.1",
     "crell/api-problem": "^3.0",
     "giggsey/libphonenumber-for-php": "^8.12",
-    "ramsey/uuid": "^3.9.3",
+    "ramsey/uuid": "4.*",
     "symfony/http-foundation": "5.4.*"
   },
   "require-dev": {

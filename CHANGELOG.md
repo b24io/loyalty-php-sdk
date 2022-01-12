@@ -1,4 +1,7 @@
 # loyalty-php-sdk
+## 2.1.1 (10.01.2022)
+* bump `ramsey/uuid` version requirements to `4.*`
+
 ## 2.1.0 (7.12.2021)
 * bump php version requirements to `7.4` or `8.*`
 
