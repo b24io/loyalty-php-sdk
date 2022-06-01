@@ -25,7 +25,7 @@
     "ext-curl": "*",
     "psr/log": "^1.0",
     "monolog/monolog": "1.*",
-    "guzzlehttp/guzzle": "6.5",
+    "guzzlehttp/guzzle": "6.*",
     "moneyphp/money": "^3.3",
     "fig/http-message-util": "1.*",
     "eloquent/enumeration": "^5.1",
