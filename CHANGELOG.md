@@ -1,7 +1,6 @@
 # loyalty-php-sdk
 ## 2.1.2 (01.06.2022)
 * bump `guzzlehttp/guzzle` version requirements to `6.*`
-* 
 ## 2.1.1 (10.01.2022)
 * bump `ramsey/uuid` version requirements to `4.*`
 
