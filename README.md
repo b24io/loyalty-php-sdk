@@ -128,56 +128,10 @@ SDK can work with two roles:
 
 Bitrix24 Application Loyalty Program and bonus cards work with many Bitrix24 accounts, each account has a `CLIENT_API_KEY` 
 If you want work in admin role you must use `ADMIN_API_KEY` to sign queries.
-
-```php
-$token = new SDK\Auth\DTO\Token(
-    SDK\Transport\DTO\Role::initializeByCode('admin'),
-    Uuid::fromString('CLIENT_API_KEY'),
-    Uuid::fromString('ADMIN_API_KEY')
-);
-```
 If you want work with client role in JS you must use `CLIENT_API_KEY` and `CARD_UUID` as user API key. 
 
 ## Basic Usage
-```php
-use \Monolog\Logger;
-use \B24io\Loyalty\SDK;
-use Ramsey\Uuid\Uuid;
 
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Middleware;
-use GuzzleHttp\MessageFormatter;
-
-$log = new Logger('loyalty-php-sdk');
-$log->pushHandler(new \Monolog\Handler\StreamHandler('loyalty-php-sdk-example.log', Logger::DEBUG));
-$guzzleHandlerStack = HandlerStack::create();
-$guzzleHandlerStack->push(
-    Middleware::log(
-        $log,
-        new MessageFormatter(MessageFormatter::SHORT)
-    )
-);
-$httpClient = new \GuzzleHttp\Client();
-
-$log->info('loyalty.apiClient.start');
-$token = new SDK\Auth\DTO\Token(
-    SDK\Transport\DTO\Role::initializeByCode('admin'),
-    Uuid::fromString('CLIENT_API_KEY'),
-    Uuid::fromString('ADMIN_API_KEY')
-);
-$apiClient = new SDK\ApiClient($apiEndpoint, $token, $httpClient, $log);
-$apiClient->setGuzzleHandlerStack($guzzleHandlerStack);
-
-$cardsTransport = SDK\Cards\Transport\Admin\Fabric::getCardTransport($apiClient, $log);
-
-$cardResponse = $cardsTransport->getCardByNumber(22222);
-
-$decimalMoneyFormatter = new \Money\Formatter\DecimalMoneyFormatter(new \Money\Currencies\ISOCurrencies());
-var_dump($cardResponse->getCard()->getNumber());
-var_dump($cardResponse->getCard()->getStatus()->getCode());
-var_dump($decimalMoneyFormatter->format($cardResponse->getCard()->getBalance()));
-var_dump($cardResponse->getCard()->getPercentage()->format());
-```
 ## Documentation and examples
 More complex examples and use cases you can see in folder [examples](examples)  
 
