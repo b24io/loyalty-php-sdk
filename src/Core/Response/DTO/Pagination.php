@@ -15,14 +15,15 @@ readonly class Pagination
     )
     {
     }
+
     public static function initFromArray(array $pagination): self
     {
         return new self(
-            $pagination['count'],
-            $pagination['total'],
-            $pagination['page'],
-            $pagination['pages'],
-            $pagination['per_page'],
+            $pagination['count'] ?? null,
+            $pagination['total'] ?? null,
+            $pagination['page'] ?? null,
+            $pagination['pages'] ?? null,
+            $pagination['per_page'] ?? null,
         );
     }
 }

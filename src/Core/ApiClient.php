@@ -6,10 +6,8 @@ namespace B24io\Loyalty\SDK\Core;
 
 use B24io\Loyalty\SDK\Core\Contracts\ApiClientInterface;
 use B24io\Loyalty\SDK\Core\Credentials\Context;
-use B24io\Loyalty\SDK\Core\Exceptions\InvalidArgumentException;
-use B24io\Loyalty\SDK\Core\Exceptions\TransportException;
-use Fig\Http\Message\StatusCodeInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
@@ -54,12 +52,16 @@ class ApiClient implements ApiClientInterface
         return $this->credentials;
     }
 
+    /**
+     * @throws TransportExceptionInterface
+     */
     public function getResponse(
         Context $context,
         string  $httpMethod,
         string  $apiMethod,
         array   $parameters = [],
-        ?int    $page = null
+        ?int    $page = null,
+        ?Uuid   $idempotencyKey = null
     ): ResponseInterface
     {
         $this->logger->info(
@@ -91,6 +93,9 @@ class ApiClient implements ApiClientInterface
         $headers = $this->getDefaultHeaders();
         if ($context === Context::admin) {
             $headers['X-LOYALTY-API-KEY-ADMIN'] = $this->getCredentials()->adminApiKey->toRfc4122();
+        }
+        if ($idempotencyKey !== null) {
+            $headers['Idempotency-Key'] = $idempotencyKey->toRfc4122();
         }
 
         $requestOptions = [

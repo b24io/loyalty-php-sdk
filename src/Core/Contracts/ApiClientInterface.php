@@ -6,8 +6,7 @@ namespace B24io\Loyalty\SDK\Core\Contracts;
 
 use B24io\Loyalty\SDK\Core\Credentials\Context;
 use B24io\Loyalty\SDK\Core\Credentials\Credentials;
-use B24io\Loyalty\SDK\Core\Exceptions\InvalidArgumentException;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 interface ApiClientInterface
@@ -17,7 +16,8 @@ interface ApiClientInterface
         string  $httpMethod,
         string  $apiMethod,
         array   $parameters = [],
-        ?int    $page = null
+        ?int    $page = null,
+        ?Uuid   $idempotencyKey = null
     ): ResponseInterface;
 
     public function getCredentials(): Credentials;

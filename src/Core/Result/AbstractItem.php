@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace B24io\Loyalty\SDK\Core\Result;
 
 use ArrayIterator;
+use B24io\Loyalty\SDK\Common\Reason;
 use B24io\Loyalty\SDK\Core\Exceptions\ImmutableResultViolationException;
 use DateTimeImmutable;
 use Exception;
@@ -40,6 +41,12 @@ abstract class AbstractItem implements IteratorAggregate
             case 'created':
             case 'modified':
                 return new DateTimeImmutable($this->data[$offset]);
+            case 'reason':
+                return new Reason(
+                    $this->data[$offset]['id'],
+                    $this->data[$offset]['code'],
+                    $this->data[$offset]['comment']
+                );
             default:
                 return $this->data[$offset] ?? null;
         }

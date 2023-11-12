@@ -8,9 +8,12 @@ use B24io\Loyalty\SDK\Core\Contracts\ApiClientInterface;
 use B24io\Loyalty\SDK\Core\Contracts\CoreInterface;
 use B24io\Loyalty\SDK\Core\Credentials\Context;
 use B24io\Loyalty\SDK\Core\Exceptions\AuthForbiddenException;
+use B24io\Loyalty\SDK\Core\Exceptions\BadRequestException;
 use B24io\Loyalty\SDK\Core\Exceptions\BaseException;
+use B24io\Loyalty\SDK\Core\Exceptions\InternalServerErrorException;
 use B24io\Loyalty\SDK\Core\Exceptions\MethodNotFoundException;
 use B24io\Loyalty\SDK\Core\Exceptions\TransportException;
+use B24io\Loyalty\SDK\Core\Response\ApiProblem;
 use B24io\Loyalty\SDK\Core\Response\Response;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Log\LoggerInterface;
@@ -54,7 +57,9 @@ class Core implements CoreInterface
                 $cmd->httpMethod,
                 $cmd->apiMethod,
                 $cmd->parameters,
-                $cmd->page);
+                $cmd->page,
+                $cmd->idempotencyKey
+            );
 
             $this->logger->debug(
                 'call.responseInfo',
@@ -74,6 +79,26 @@ class Core implements CoreInterface
                         ),
                         $this->logger);
                     break;
+                case StatusCodeInterface::STATUS_BAD_REQUEST:
+                    $this->logger->error(
+                        'bad request',
+                        [
+                            'clientId' => $this->apiClient->getCredentials()->clientId,
+                            'domainUrl' => $this->apiClient->getCredentials()->domainUrl,
+                            'apiMethod' => $cmd->apiMethod,
+                            'parameters' => $cmd->parameters,
+                            'response' => $apiCallResponse->toArray(false),
+                        ]
+                    );
+                    $responseResult = $apiCallResponse->toArray(false);
+                    $apiProblem = ApiProblem::fromArray($responseResult['error']);
+                    throw new BadRequestException(
+                        $apiProblem,
+                        sprintf('bad request «%s» on api call «%s» for client %s',
+                            $apiProblem->detail,
+                            $cmd->apiMethod,
+                            $this->apiClient->getCredentials()->clientId->toRfc4122())
+                    );
                 case StatusCodeInterface::STATUS_FORBIDDEN:
                     $this->logger->warning(
                         'authorisation forbidden',
@@ -95,6 +120,26 @@ class Core implements CoreInterface
                         ]
                     );
                     throw new MethodNotFoundException(sprintf('method %s not found', $cmd->apiMethod));
+                case StatusCodeInterface::STATUS_INTERNAL_SERVER_ERROR:
+                    $this->logger->error(
+                        'internal server error',
+                        [
+                            'clientId' => $this->apiClient->getCredentials()->clientId,
+                            'domainUrl' => $this->apiClient->getCredentials()->domainUrl,
+                            'apiMethod' => $cmd->apiMethod,
+                            'parameters' => $cmd->parameters,
+                            'response' => $apiCallResponse->toArray(false),
+                        ]
+                    );
+                    $responseResult = $apiCallResponse->toArray(false);
+                    $apiProblem = ApiProblem::fromArray($responseResult['error']);
+                    throw new InternalServerErrorException(
+                        $apiProblem,
+                        sprintf('internal server error «%s» on api call «%s» for client %s',
+                            $apiProblem->detail,
+                            $cmd->apiMethod,
+                            $this->apiClient->getCredentials()->clientId->toRfc4122())
+                    );
                 case StatusCodeInterface::STATUS_SERVICE_UNAVAILABLE:
                     $body = $apiCallResponse->toArray(false);
                     $this->logger->notice(
@@ -125,7 +170,7 @@ class Core implements CoreInterface
                 ]
             );
             throw new TransportException(sprintf('transport error - %s', $exception->getMessage()), $exception->getCode(), $exception);
-        } catch (BaseException $exception) {
+        } catch (BadRequestException|BaseException $exception) {
             // rethrow known php sdk exception
             throw $exception;
         } catch (\Throwable $exception) {
@@ -133,6 +178,7 @@ class Core implements CoreInterface
                 'call.unknownException',
                 [
                     'message' => $exception->getMessage(),
+                    'exceptionType' => get_class($exception),
                     'trace' => $exception->getTrace(),
                 ]
             );

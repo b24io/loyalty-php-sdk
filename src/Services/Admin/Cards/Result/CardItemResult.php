@@ -23,6 +23,8 @@ class CardItemResult extends AbstractItem
     public function __get(int|string $offset)
     {
         switch ($offset) {
+            case 'number':
+                return (string)$this->data[$offset];
             case 'balance':
                 return new Money(
                     (int)$this->data[$offset]['amount'],

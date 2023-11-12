@@ -66,6 +66,9 @@ class Response
                 if (!is_array($responseResult['data'])) {
                     $responseResult['data'] = [$responseResult['data']];
                 }
+                if (!array_key_exists('pagination', $responseResult)) {
+                    $responseResult['pagination'] = [];
+                }
 
                 $this->responseData = new DTO\ResponseData(
                     $responseResult['data'],
