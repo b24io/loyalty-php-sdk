@@ -86,7 +86,11 @@ class ApiClient implements ApiClientInterface
                 $context->name,
                 $apiMethod);
             if ($page !== null) {
-                $url .= '?page=' . $page;
+                if (parse_url($url, PHP_URL_QUERY) !== null) {
+                    $url .= '&page=' . $page;
+                } else {
+                    $url .= '?page=' . $page;
+                }
             }
         }
         // auth
