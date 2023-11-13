@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace B24io\Loyalty\SDK\Services\Admin\Transactions;
 
 use B24io\Loyalty\SDK\Common\Reason;
+use B24io\Loyalty\SDK\Common\TransactionType;
 use B24io\Loyalty\SDK\Core\Command;
 use B24io\Loyalty\SDK\Core\Credentials\Context;
 use B24io\Loyalty\SDK\Services\AbstractService;

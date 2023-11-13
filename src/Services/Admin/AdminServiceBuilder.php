@@ -11,7 +11,7 @@ use B24io\Loyalty\SDK\Services\Admin\Transactions\Transactions;
 
 class AdminServiceBuilder extends AbstractServiceBuilder
 {
-    public function getMain(): Main
+    public function main(): Main
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Main($this->core, $this->log);
@@ -20,7 +20,7 @@ class AdminServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    public function getCards(): Cards
+    public function cards(): Cards
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Cards($this->core, $this->log);
@@ -29,7 +29,7 @@ class AdminServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    public function getTransactions(): Transactions
+    public function transactions(): Transactions
     {
         if (!isset($this->serviceCache[__METHOD__])) {
             $this->serviceCache[__METHOD__] = new Transactions($this->core, $this->log);

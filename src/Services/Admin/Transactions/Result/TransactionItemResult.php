@@ -5,13 +5,11 @@ declare(strict_types=1);
 namespace B24io\Loyalty\SDK\Services\Admin\Transactions\Result;
 
 use B24io\Loyalty\SDK\Common\Reason;
+use B24io\Loyalty\SDK\Common\TransactionType;
 use B24io\Loyalty\SDK\Core\Result\AbstractItem;
-use B24io\Loyalty\SDK\Services\Admin\Cards\CardStatus;
-use B24io\Loyalty\SDK\Services\Admin\Transactions\TransactionType;
 use DateTimeImmutable;
-use DateTimeInterface;
-use Money\Money;
 use Money\Currency;
+use Money\Money;
 use Symfony\Component\Uid\Uuid;
 
 /**

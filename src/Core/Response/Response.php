@@ -61,7 +61,10 @@ class Response
                 $this->logger->info('getResponseData.responseBody', [
                     'responseBody' => $responseResult,
                 ]);
-
+                // fix health method data structure bug
+                if (!array_key_exists('data', $responseResult)) {
+                    $responseResult['data'] = $responseResult;
+                }
                 //todo try to handle api-level errors
                 if (!is_array($responseResult['data'])) {
                     $responseResult['data'] = [$responseResult['data']];

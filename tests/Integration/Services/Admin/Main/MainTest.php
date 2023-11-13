@@ -16,7 +16,7 @@ class MainTest extends TestCase
 
     public function testCallHealthMethod(): void
     {
-        $res = $this->sb->getMain()->health();
+        $res = $this->sb->main()->health();
         var_dump($res->getResponseData());
         $this->assertEquals(StatusCodeInterface::STATUS_OK, $res->httpResponse->getStatusCode());
 

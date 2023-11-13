@@ -22,4 +22,11 @@ readonly class Reason
             'comment' => $this->comment,
         ];
     }
+
+    public function equal(Reason $reason): bool
+    {
+        return $this->id === $reason->id
+            && $this->code === $reason->code
+            && $this->comment === $reason->comment;
+    }
 }

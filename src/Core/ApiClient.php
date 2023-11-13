@@ -76,11 +76,11 @@ class ApiClient implements ApiClientInterface
 
 
         if ($apiMethod === 'health') {
-            $url = sprintf('%s/api/v2/%s/',
+            $url = sprintf('%s%s',
                 $this->getCredentials()->domainUrl,
                 $apiMethod);
         } else {
-            $url = sprintf('%s/api/v2/%s/%s/%s',
+            $url = sprintf('%s%s/%s/%s',
                 $this->getCredentials()->domainUrl,
                 $this->getCredentials()->clientId->toRfc4122(),
                 $context->name,
