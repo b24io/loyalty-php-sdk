@@ -10,16 +10,20 @@ use B24io\Loyalty\SDK\Core\Exceptions\ImmutableResultViolationException;
 use DateTimeImmutable;
 use Exception;
 use IteratorAggregate;
+use Money\Currencies\ISOCurrencies;
+use Money\Parser\DecimalMoneyParser;
 use Symfony\Component\Uid\Uuid;
 use Traversable;
 
 abstract class AbstractItem implements IteratorAggregate
 {
     protected array $data;
+    protected DecimalMoneyParser $decimalMoneyParser;
 
     public function __construct(array $data)
     {
         $this->data = $data;
+        $this->decimalMoneyParser = new DecimalMoneyParser(new ISOCurrencies());
     }
 
     public function __isset(int|string $offset): bool
@@ -38,6 +42,8 @@ abstract class AbstractItem implements IteratorAggregate
         switch ($offset) {
             case 'id':
                 return Uuid::fromString($this->data[$offset]);
+            case 'externalId':
+                return (string)$this->data['external_id'];
             case 'created':
             case 'modified':
                 return new DateTimeImmutable($this->data[$offset]);

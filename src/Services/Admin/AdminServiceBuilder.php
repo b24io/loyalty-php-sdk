@@ -6,6 +6,8 @@ namespace B24io\Loyalty\SDK\Services\Admin;
 
 use B24io\Loyalty\SDK\Services\AbstractServiceBuilder;
 use B24io\Loyalty\SDK\Services\Admin\Cards\Cards;
+use B24io\Loyalty\SDK\Services\Admin\Cards\CardsFetcher;
+use B24io\Loyalty\SDK\Services\Admin\Cards\CardsServiceBuilder;
 use B24io\Loyalty\SDK\Services\Admin\Contacts\Contacts;
 use B24io\Loyalty\SDK\Services\Admin\Main\Main;
 use B24io\Loyalty\SDK\Services\Admin\Transactions\Transactions;
@@ -21,10 +23,12 @@ class AdminServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    public function cards(): Cards
+    public function cardsScope(): CardsServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Cards($this->core, $this->log);
+            $this->serviceCache[__METHOD__] = new CardsServiceBuilder(
+                $this->core,
+                $this->log);
         }
 
         return $this->serviceCache[__METHOD__];

@@ -13,4 +13,13 @@ readonly class FullName
     )
     {
     }
+
+    public function toArray(): array
+    {
+        return [
+            'name' => $this->name,
+            'surname' => $this->surname,
+            'patronymic' => $this->patronymic
+        ];
+    }
 }

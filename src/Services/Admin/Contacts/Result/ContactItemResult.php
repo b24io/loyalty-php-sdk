@@ -45,7 +45,7 @@ class ContactItemResult extends AbstractItem
             case 'gender':
                 return Gender::from($this->data[$offset]);
             case 'externalIds':
-                return Gender::from($this->data['external_ids']);
+                return $this->data['external_ids'];
             case 'card':
                 if ($this->data['card'] === null) {
                     return null;

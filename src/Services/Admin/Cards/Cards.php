@@ -6,13 +6,12 @@ namespace B24io\Loyalty\SDK\Services\Admin\Cards;
 
 use B24io\Loyalty\SDK\Core\Command;
 use B24io\Loyalty\SDK\Core\Credentials\Context;
-use B24io\Loyalty\SDK\Core\Response\Response;
+use B24io\Loyalty\SDK\Core\Exceptions\BaseException;
 use B24io\Loyalty\SDK\Services\AbstractService;
 use B24io\Loyalty\SDK\Services\Admin\Cards\Result\CardItemResult;
 use B24io\Loyalty\SDK\Services\Admin\Cards\Result\CardsResult;
 use Fig\Http\Message\RequestMethodInterface;
 use Symfony\Component\Uid\Uuid;
-
 
 class Cards extends AbstractService
 {
@@ -42,5 +41,23 @@ class Cards extends AbstractService
                 )
             )
         );
+    }
+
+    /**
+     * @throws BaseException
+     */
+    public function count(): int
+    {
+        return (new CardsResult(
+            $this->core->call(
+                new Command(
+                    Context::admin,
+                    RequestMethodInterface::METHOD_GET,
+                    'cards',
+                    [],
+                    1
+                )
+            )
+        ))->getCoreResponse()->getResponseData()->pagination->total;
     }
 }

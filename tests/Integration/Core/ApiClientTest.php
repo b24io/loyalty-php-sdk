@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace B24io\Loyalty\SDK\Tests\Integration\Core;
 
 use B24io\Loyalty\SDK\Core\Contracts\ApiClientInterface;
+use B24io\Loyalty\SDK\Core\Credentials\Context;
 use B24io\Loyalty\SDK\Tests\Integration\Fabric;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -17,13 +18,19 @@ class ApiClientTest extends TestCase
 
     public function testCallUnknownMethod(): void
     {
-        $res = $this->apiClient->getResponse(RequestMethodInterface::METHOD_GET, 'unknown');
+        $res = $this->apiClient->getResponse(
+            Context::admin,
+            RequestMethodInterface::METHOD_GET,
+            'unknown');
         $this->assertEquals(StatusCodeInterface::STATUS_NOT_FOUND, $res->getStatusCode());
     }
 
     public function testCallHealthMethod(): void
     {
-        $res = $this->apiClient->getResponse(RequestMethodInterface::METHOD_GET, 'health');
+        $res = $this->apiClient->getResponse(
+            Context::admin,
+            RequestMethodInterface::METHOD_GET,
+             'health');
         $this->assertEquals(StatusCodeInterface::STATUS_OK, $res->getStatusCode());
     }
 

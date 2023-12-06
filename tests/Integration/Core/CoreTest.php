@@ -25,7 +25,10 @@ class CoreTest extends TestCase
             'unknownMethod'
 
         ));
-        $this->assertEquals(StatusCodeInterface::STATUS_NOT_FOUND, $res->httpResponse->getStatusCode());        $this->assertEquals(StatusCodeInterface::STATUS_NOT_FOUND, $res->getStatusCode());
+        $this->assertEquals(StatusCodeInterface::STATUS_NOT_FOUND,
+            $res->httpResponse->getStatusCode());
+        $this->assertEquals(StatusCodeInterface::STATUS_NOT_FOUND,
+            $res->httpResponse->getStatusCode());
     }
 
     public function testCallHealthMethod(): void
@@ -36,7 +39,8 @@ class CoreTest extends TestCase
             'health'
 
         ));
-        $this->assertEquals(StatusCodeInterface::STATUS_OK, $res->httpResponse->getStatusCode());
+        $this->assertEquals(StatusCodeInterface::STATUS_OK,
+            $res->httpResponse->getStatusCode());
     }
 
     public function setUp(): void

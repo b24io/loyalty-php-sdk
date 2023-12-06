@@ -158,13 +158,13 @@ class ProcessTransactions extends Command
 
     private function loadCards(AdminServiceBuilder $adminServiceBuilder): array
     {
-        $res = $adminServiceBuilder->cards()->list();
+        $res = $adminServiceBuilder->cardsScope()->cards()->list();
 
         $cards = $res->getCards();
         $pages = $res->getCoreResponse()->getResponseData()->pagination->pages;
 
         for ($i = 1; $i <= $pages; $i++) {
-            $res = $adminServiceBuilder->cards()->list($i);
+            $res = $adminServiceBuilder->cardsScope()->cards()->list($i);
             $cards = array_merge($cards, $res->getCards());
         }
 

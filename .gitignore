@@ -3,5 +3,5 @@ vendor
 tests/logs/
 composer.phar
 composer.lock
-*.env.local
+.env.local
 /.phpunit.result.cache

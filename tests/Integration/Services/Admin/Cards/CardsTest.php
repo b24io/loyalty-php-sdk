@@ -20,7 +20,7 @@ class CardsTest extends TestCase
      */
     public function testCardsList(): void
     {
-        $res = $this->sb->cards()->list();
+        $res = $this->sb->cardsScope()->cards()->list();
         $this->assertEquals(StatusCodeInterface::STATUS_OK, $res->getCoreResponse()->httpResponse->getStatusCode());
     }
 
