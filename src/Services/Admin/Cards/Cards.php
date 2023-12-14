@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace B24io\Loyalty\SDK\Services\Admin\Cards;
 
+use B24io\Loyalty\SDK\Common\Result\Cards\CardItemResult;
+use B24io\Loyalty\SDK\Common\Result\Cards\CardsResult;
 use B24io\Loyalty\SDK\Core\Command;
 use B24io\Loyalty\SDK\Core\Credentials\Context;
 use B24io\Loyalty\SDK\Core\Exceptions\BaseException;
 use B24io\Loyalty\SDK\Services\AbstractService;
-use B24io\Loyalty\SDK\Services\Admin\Cards\Result\CardItemResult;
-use B24io\Loyalty\SDK\Services\Admin\Cards\Result\CardsResult;
 use Fig\Http\Message\RequestMethodInterface;
 use Symfony\Component\Uid\Uuid;
 

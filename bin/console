@@ -2,6 +2,9 @@
 <?php
 
 use B24io\Loyalty\SDK\Commands;
+use B24io\Loyalty\SDK\Common\Formatters\Cards\CardItemFormatter;
+use B24io\Loyalty\SDK\Common\Formatters\Cards\CardLevelItemFormatter;
+use B24io\Loyalty\SDK\Common\Formatters\Contacts\ContactItemFormatter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Monolog\Processor\MemoryUsageProcessor;
@@ -49,5 +52,9 @@ $log->pushProcessor(new MemoryUsageProcessor(true, true));
 
 $application = new Application();
 $application->add(new Commands\ProcessTransactions($log));
-$application->add(new Commands\Cards\ExportCards($log));
+$application->add(new Commands\Cards\ExportCards(
+    new CardItemFormatter(),
+    new CardLevelItemFormatter(),
+    new ContactItemFormatter(),
+    $log));
 $application->run($input);

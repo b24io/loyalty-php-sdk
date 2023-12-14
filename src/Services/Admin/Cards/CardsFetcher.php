@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace B24io\Loyalty\SDK\Services\Admin\Cards;
 
+use B24io\Loyalty\SDK\Common\Result\Cards\CardItemResult;
 use B24io\Loyalty\SDK\Core\Exceptions\BaseException;
-use B24io\Loyalty\SDK\Services\Admin\Cards\Result\CardItemResult;
 use Generator;
 use Psr\Log\LoggerInterface;
 

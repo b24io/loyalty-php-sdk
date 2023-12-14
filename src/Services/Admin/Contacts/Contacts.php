@@ -6,14 +6,11 @@ namespace B24io\Loyalty\SDK\Services\Admin\Contacts;
 
 use B24io\Loyalty\SDK\Common\FullName;
 use B24io\Loyalty\SDK\Common\Gender;
+use B24io\Loyalty\SDK\Common\Result\Contacts\ContactItemResult;
+use B24io\Loyalty\SDK\Common\Result\Contacts\ContactsResult;
 use B24io\Loyalty\SDK\Core\Command;
 use B24io\Loyalty\SDK\Core\Credentials\Context;
-use B24io\Loyalty\SDK\Core\Response\Response;
 use B24io\Loyalty\SDK\Services\AbstractService;
-use B24io\Loyalty\SDK\Services\Admin\Cards\Result\CardItemResult;
-use B24io\Loyalty\SDK\Services\Admin\Cards\Result\CardsResult;
-use B24io\Loyalty\SDK\Services\Admin\Contacts\Result\ContactItemResult;
-use B24io\Loyalty\SDK\Services\Admin\Contacts\Result\ContactsResult;
 use DateTimeImmutable;
 use DateTimeZone;
 use Fig\Http\Message\RequestMethodInterface;
@@ -53,10 +50,8 @@ class Contacts extends AbstractService
                 Uuid::v4()
             ));
 
-        var_dump($res->getResponseData()->result);
         return $res;
     }
-
 
     public function getById(Uuid $id): ContactItemResult
     {

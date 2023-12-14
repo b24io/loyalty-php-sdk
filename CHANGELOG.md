@@ -1,4 +1,8 @@
 # loyalty-php-sdk
+
+## 3.0 (2023.12.15)
+
+
 ## 2.1.2 (01.06.2022)
 * bump `guzzlehttp/guzzle` version requirements to `6.*`
 * 

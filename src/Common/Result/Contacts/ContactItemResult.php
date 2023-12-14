@@ -2,18 +2,14 @@
 
 declare(strict_types=1);
 
-namespace B24io\Loyalty\SDK\Services\Admin\Contacts\Result;
+namespace B24io\Loyalty\SDK\Common\Result\Contacts;
 
 use B24io\Loyalty\SDK\Common\FullName;
 use B24io\Loyalty\SDK\Common\Gender;
+use B24io\Loyalty\SDK\Common\Result\Cards\CardItemResult;
 use B24io\Loyalty\SDK\Core\Result\AbstractItem;
-use B24io\Loyalty\SDK\Services\Admin\Cards\CardStatus;
-use B24io\Loyalty\SDK\Services\Admin\Cards\Result\CardItemResult;
 use DateTimeImmutable;
-use DateTimeInterface;
 use DateTimeZone;
-use Money\Money;
-use Money\Currency;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -40,8 +36,12 @@ class ContactItemResult extends AbstractItem
                 );
             case 'timezone':
                 return new DateTimeZone($this->data[$offset]['name']);
+
             case 'birthday':
-                return new DateTimeImmutable($this->data[$offset]) ?? null;
+                if ($this->data[$offset] === null) {
+                    return null;
+                }
+                return new DateTimeImmutable($this->data[$offset]);
             case 'gender':
                 return Gender::from($this->data[$offset]);
             case 'externalIds':

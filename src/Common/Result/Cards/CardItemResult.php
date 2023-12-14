@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace B24io\Loyalty\SDK\Services\Admin\Cards\Result;
+namespace B24io\Loyalty\SDK\Common\Result\Cards;
 
+use B24io\Loyalty\SDK\Common\Result\Contacts\ContactItemResult;
 use B24io\Loyalty\SDK\Core\Result\AbstractItem;
-use B24io\Loyalty\SDK\Services\Admin\Cards\CardStatus;
-use B24io\Loyalty\SDK\Services\Admin\Contacts\Result\ContactItemResult;
 use DateTimeImmutable;
-use Money\Money;
 use Money\Currency;
+use Money\Money;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -21,6 +20,7 @@ use Symfony\Component\Uid\Uuid;
  * @property-read DateTimeImmutable $modified
  * @property-read CardStatus $status
  * @property-read string $externalId
+ * @property-read ?CardLevelItemResult $level
  * @property-read ContactItemResult $contact
  */
 class CardItemResult extends AbstractItem
@@ -37,7 +37,15 @@ class CardItemResult extends AbstractItem
                 );
             case 'status':
                 return CardStatus::from($this->data[$offset]);
+            case 'level':
+                if ($this->data['card_level'] === null) {
+                    return null;
+                }
+                return new CardLevelItemResult($this->data['card_level']);
             case 'contact':
+                if ($this->data[$offset] === null) {
+                    return null;
+                }
                 return new ContactItemResult($this->data[$offset]);
             default:
                 return parent::__get($offset);

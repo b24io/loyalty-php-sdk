@@ -4,17 +4,15 @@ declare(strict_types=1);
 
 namespace B24io\Loyalty\SDK\Commands\Cards;
 
+use B24io\Loyalty\SDK\Common\Formatters\Cards\CardItemFormatter;
+use B24io\Loyalty\SDK\Common\Formatters\Cards\CardLevelItemFormatter;
+use B24io\Loyalty\SDK\Common\Formatters\Contacts\ContactItemFormatter;
+use B24io\Loyalty\SDK\Core\Exceptions\BaseException;
+use League\Csv\CannotInsertRecord;
+use League\Csv\Exception;
+use League\Csv\UnavailableStream;
 use League\Csv\Writer;
-use B24io\Loyalty\SDK\Common\Reason;
-use B24io\Loyalty\SDK\Common\TransactionType;
-use B24io\Loyalty\SDK\Services\Admin\AdminServiceBuilder;
 use B24io\Loyalty\SDK\Services\ServiceBuilderFactory;
-use Generator;
-use InvalidArgumentException;
-use Money\Currencies\ISOCurrencies;
-use Money\Currency;
-use Money\Formatter\DecimalMoneyFormatter;
-use Money\Parser\DecimalMoneyParser;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -30,7 +28,10 @@ use Symfony\Component\Filesystem\Filesystem;
 class ExportCards extends Command
 {
     public function __construct(
-        protected LoggerInterface $logger
+        protected CardItemFormatter      $cardItemFormatter,
+        protected CardLevelItemFormatter $cardLevelItemFormatter,
+        protected ContactItemFormatter   $contactItemFormatter,
+        protected LoggerInterface        $logger
     )
     {
         parent::__construct();
@@ -61,6 +62,12 @@ class ExportCards extends Command
             'file to store cards');
     }
 
+    /**
+     * @throws UnavailableStream
+     * @throws CannotInsertRecord
+     * @throws Exception
+     * @throws BaseException
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln([
@@ -115,40 +122,27 @@ class ExportCards extends Command
         $progressBar = new ProgressBar($output, $cardsTotal);
 
         $writer = Writer::createFromPath($filename, 'w+');
-        $writer->insertOne([
-            'card_id',
-            'card_number',
-            'card_status',
-            'card_barcode',
-            'card_amount',
-            'card_iso_currency_code',
-            'card_created',
-            'card_modified',
-            'contact_external_id',
-            'contact_name',
-            'contact_surname',
-            'contact_patronymic',
-        ]);
+        // add table header
+        $writer->insertOne(
+            array_merge(
+                $this->cardItemFormatter->fields(),
+                $this->cardLevelItemFormatter->fields(),
+                $this->contactItemFormatter->fields()
+            )
+        );
 
-        $decimalMoneyFormatter = new DecimalMoneyFormatter(new ISOCurrencies());
+        foreach ($admSb->cardsScope()->fetcher()->list() as $card) {
+            $contact = array_fill(0, count($this->contactItemFormatter->fields()), null);
+            if ($card->contact !== null) {
+                //todo add external_id_key to cli arguments
+                $contact = $this->contactItemFormatter->toFlatArray($card->contact, 'bitrix24');
+            }
 
-        foreach ($admSb->cardsScope()->fetcher()->list() as $cnt => $card) {
-            $cardItem = [
-                'card_id' => $card->id->toRfc4122(),
-                'card_number' => $card->number,
-                'card_status' => $card->status->name,
-                'card_barcode' => $card->barcode,
-                'card_amount' => $decimalMoneyFormatter->format($card->balance),
-                'card_iso_currency_code' => $card->balance->getCurrency()->getCode(),
-                'card_created' => $card->created->format(DATE_ATOM),
-                'card_modified' => $card->modified->format(DATE_ATOM),
-                // todo add to options
-                'contact_external_id' => $card->contact->externalIds['bitrix24'],
-                'contact_name' => $card->contact->fullName->name,
-                'contact_surname' => $card->contact->fullName->surname,
-                'contact_patronymic' => $card->contact->fullName->patronymic
-            ];
-            $writer->insertOne(array_values($cardItem));
+            $writer->insertOne(array_values(array_merge(
+                $this->cardItemFormatter->toFlatArray($card),
+                $this->cardLevelItemFormatter->toFlatArray($card->level),
+                $contact)));
+
             $progressBar->advance();
         }
         $progressBar->finish();
