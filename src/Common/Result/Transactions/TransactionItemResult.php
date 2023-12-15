@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace B24io\Loyalty\SDK\Services\Admin\Transactions\Result;
+namespace B24io\Loyalty\SDK\Common\Result\Transactions;
 
 use B24io\Loyalty\SDK\Common\Reason;
 use B24io\Loyalty\SDK\Common\TransactionType;
@@ -15,6 +15,7 @@ use Symfony\Component\Uid\Uuid;
 /**
  * @property-read Uuid $id
  * @property-read Uuid $cardId
+ * @property-read string $cardNumber
  * @property-read Money $value
  * @property-read TransactionType $type
  * @property-read DateTimeImmutable $created
@@ -31,7 +32,7 @@ class TransactionItemResult extends AbstractItem
                     new Currency((string)$this->data[$offset]['currency']
                     ));
             case 'type':
-                return TransactionType::from($this->data[$offset]);
+                return TransactionType::from(str_replace('_transaction', '', $this->data[$offset]));
             case 'cardId':
                 return Uuid::fromString($this->data['card']['id']);
             case 'cardNumber':

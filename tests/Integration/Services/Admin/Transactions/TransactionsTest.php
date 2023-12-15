@@ -23,7 +23,7 @@ class TransactionsTest extends TestCase
      */
     public function testTransactionsList(): void
     {
-        $res = $this->sb->transactions()->list();
+        $res = $this->sb->transactionsScope()->transactions()->list();
         $this->assertEquals(StatusCodeInterface::STATUS_OK, $res->getCoreResponse()->httpResponse->getStatusCode());
     }
 
@@ -32,13 +32,13 @@ class TransactionsTest extends TestCase
      */
     public function testTransactionsListByCardNumber(): void
     {
-        $res = $this->sb->transactions()->getByCardNumber('1');
+        $res = $this->sb->transactionsScope()->transactions()->getByCardNumber('1');
         $this->assertEquals(StatusCodeInterface::STATUS_OK, $res->getCoreResponse()->httpResponse->getStatusCode());
     }
 
     public function testProcessAccrualTransactionByCardNumber(): void
     {
-        $res = $this->sb->transactions()->processAccrualTransactionByCardNumber(
+        $res = $this->sb->transactionsScope()->transactions()->processAccrualTransactionByCardNumber(
             '1',
             new Money('10000', new Currency('RUB')),
             new Reason('1', 'test', 'test')

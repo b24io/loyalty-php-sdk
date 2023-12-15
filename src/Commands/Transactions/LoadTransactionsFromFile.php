@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace B24io\Loyalty\SDK\Commands;
+namespace B24io\Loyalty\SDK\Commands\Transactions;
 
 use B24io\Loyalty\SDK\Common\Reason;
 use B24io\Loyalty\SDK\Common\TransactionType;
@@ -22,9 +22,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
 #[AsCommand(
-    name: 'transactions:process',
+    name: 'transactions:load-from-file',
     description: 'Process transactions from csv file')]
-class ProcessTransactions extends Command
+class LoadTransactionsFromFile extends Command
 {
     public function __construct(
         protected LoggerInterface $logger
@@ -135,7 +135,7 @@ class ProcessTransactions extends Command
             }
 
             // get transactions for current card
-            $trx = $admSb->transactions()->getByCardNumber($row['phone'])->getTransactions();
+            $trx = $admSb->transactionsScope()->transactions()->getByCardNumber($row['phone'])->getTransactions();
             foreach ($trx as $t) {
                 if ($t->reason->equal($row['reason'])) {
                     continue 2;
@@ -143,7 +143,7 @@ class ProcessTransactions extends Command
             }
 
             if ($row['type'] === TransactionType::accrual) {
-                $res = $admSb->transactions()->processAccrualTransactionByCardNumber(
+                $res = $admSb->transactionsScope()->transactions()->processAccrualTransactionByCardNumber(
                     $row['phone'],
                     $row['amount'],
                     $row['reason']

@@ -5,6 +5,7 @@ use B24io\Loyalty\SDK\Commands;
 use B24io\Loyalty\SDK\Common\Formatters\Cards\CardItemFormatter;
 use B24io\Loyalty\SDK\Common\Formatters\Cards\CardLevelItemFormatter;
 use B24io\Loyalty\SDK\Common\Formatters\Contacts\ContactItemFormatter;
+use B24io\Loyalty\SDK\Common\Formatters\Transactions\TransactionItemFormatter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Monolog\Processor\MemoryUsageProcessor;
@@ -51,10 +52,14 @@ $log->pushHandler(new StreamHandler($_ENV['LOYALTY_SDK_CLI_LOGS_FILE'], (int)$_E
 $log->pushProcessor(new MemoryUsageProcessor(true, true));
 
 $application = new Application();
-$application->add(new Commands\ProcessTransactions($log));
+$application->add(new Commands\Transactions\LoadTransactionsFromFile($log));
 $application->add(new Commands\Cards\ExportCards(
     new CardItemFormatter(),
     new CardLevelItemFormatter(),
     new ContactItemFormatter(),
+    $log));
+$application->add(new Commands\Transactions\BulkTransactions($log));
+$application->add(new Commands\Transactions\ExportTransactions(
+    new TransactionItemFormatter(),
     $log));
 $application->run($input);
