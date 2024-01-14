@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace B24io\Loyalty\SDK\Services\Admin\Transactions;
 
 use B24io\Loyalty\SDK\Common\Reason;
-use B24io\Loyalty\SDK\Common\Result\Cards\CardsResult;
 use B24io\Loyalty\SDK\Common\Result\Transactions\ProcessedTransactionResult;
 use B24io\Loyalty\SDK\Common\Result\Transactions\TransactionsResult;
 use B24io\Loyalty\SDK\Common\TransactionType;
@@ -47,6 +46,27 @@ class Transactions extends AbstractService
                 )
             )
         );
+    }
+
+    public function processPaymentTransactionByCardNumber(string $cardNumber, Money $amount, Reason $reason): ProcessedTransactionResult
+    {
+        return new ProcessedTransactionResult($this->core->call(
+            new Command(
+                Context::admin,
+                RequestMethodInterface::METHOD_POST,
+                sprintf('transactions/with-card-number/%s', $cardNumber),
+                [
+                    'type' => TransactionType::payment->name,
+                    'bonus_points' => [
+                        'amount' => $this->decimalMoneyFormatter->format($amount),
+                        'currency' => $amount->getCurrency()->getCode(),
+                    ],
+                    'reason' => $reason->toArray(),
+                ],
+                null,
+                Uuid::v4()
+            )
+        ));
     }
 
     public function processAccrualTransactionByCardNumber(string $cardNumber, Money $amount, Reason $reason): ProcessedTransactionResult

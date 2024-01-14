@@ -59,6 +59,7 @@ $application->add(new Commands\Cards\ExportCards(
     new ContactItemFormatter(),
     $log));
 $application->add(new Commands\Transactions\BulkTransactions($log));
+$application->add(new Commands\Transactions\BurnBonuses($log));
 $application->add(new Commands\Transactions\ExportTransactions(
     new TransactionItemFormatter(),
     $log));

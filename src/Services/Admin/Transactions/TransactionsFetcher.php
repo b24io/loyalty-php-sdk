@@ -32,20 +32,45 @@ readonly class TransactionsFetcher
             'pages' => $pages
         ]);
 
-        $cardCnt = 0;
+        $trxCnt = 0;
         for ($i = 1; $i <= $pages; $i++) {
             $res = $this->transactions->list($i);
             $this->logger->debug('TransactionsFetcher.list.pageItem', [
                 'page' => $res->getCoreResponse()->getResponseData()->pagination->page,
-                'cardCnt' => $cardCnt
+                'trxCnt' => $trxCnt
             ]);
 
             foreach ($res->getTransactions() as $trx) {
-                $cardCnt++;
-                yield $cardCnt => $trx;
+                $trxCnt++;
+                yield $trxCnt => $trx;
             }
 
         }
         $this->logger->debug('TransactionsFetcher.list.finish');
+    }
+
+    /**
+     * @return Generator<TransactionItemResult>
+     * @throws BaseException
+     */
+    public function listByCardNumber(string $cardNumber): Generator
+    {
+        $firstPage = $this->transactions->getByCardNumber($cardNumber);
+        $trxCnt = 0;
+        foreach ($firstPage->getTransactions() as $trx) {
+            $trxCnt++;
+            yield $trxCnt => $trx;
+        }
+
+        $pagesCnt = $firstPage->getCoreResponse()->getResponseData()->pagination->pages;
+        if ($pagesCnt > 1) {
+            for ($page = 2; $page <= $pagesCnt; $page++) {
+                $res = $this->transactions->getByCardNumber($cardNumber, $page);
+                foreach ($res->getTransactions() as $trx) {
+                    $trxCnt++;
+                    yield $trxCnt => $trx;
+                }
+            }
+        }
     }
 }

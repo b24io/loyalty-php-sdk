@@ -27,10 +27,10 @@ class TransactionItemResult extends AbstractItem
     {
         switch ($offset) {
             case 'value':
-                return new Money(
-                    (int)$this->data[$offset]['amount'],
-                    new Currency((string)$this->data[$offset]['currency']
-                    ));
+                return $this->decimalMoneyParser->parse(
+                    $this->data[$offset]['amount'],
+                    new Currency((string)$this->data[$offset]['currency'])
+                );
             case 'type':
                 return TransactionType::from(str_replace('_transaction', '', $this->data[$offset]));
             case 'cardId':

@@ -1,9 +1,10 @@
 # loyalty-php-sdk
 
-## 3.0 (2023.12.15)
+## 3.0 (2024.01.15)
 * migrate to 'symfony/http-client'
 * bump minimum PHP version requirements to `8.2.*`
 * add `TransactionsFetcher` - fetch transactions
+* add cli command `transactions:burn-bonuses`
 
 ## 2.1.2 (01.06.2022)
 * bump `guzzlehttp/guzzle` version requirements to `6.*`

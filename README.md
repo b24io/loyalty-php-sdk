@@ -80,15 +80,25 @@ Work with card levels as an `admin` role
 
 ### Transactions
 
-Work with transactions as an `admin` role
+Work with transactions as an `admin` role.
 
-| Method                                  | Status | Description                                   |
-|-----------------------------------------|--------|-----------------------------------------------|
-| `list`                                  | ✅      | get transactions list for all cards           |
-| `count`                                 | ✅      | count transactions                            |
-| `getByCardNumber`                       | ✅      | get transactions list for current card number |
-| `processAccrualTransactionByCardNumber` | ✅      | process accrual transaction                   |
-| `processPaymentTransactionByCardNumber` | 🛠     | process payment transaction                   |
+Transactions service contains this methods, list method work with pagination
+
+| Method                                  | Description                                         |
+|-----------------------------------------|-----------------------------------------------------|
+| `list`                                  | get transactions list for all cards with pagination |
+| `count`                                 | count transactions                                  |
+| `getByCardNumber`                       | get transactions list for current card number       |
+| `processAccrualTransactionByCardNumber` | process accrual transaction                         |
+| `processPaymentTransactionByCardNumber` | process payment transaction                         |
+
+if you want read all transactions without pagination you can work with `TransactionsFetcher`All fetcher methods return generator, under the hood fetcher use pagination. 
+
+| Method               | Description                                                                                     |
+|----------------------|-------------------------------------------------------------------------------------------------|
+| `list`               | get transactions list for all cards  |
+| `listByCardNumber`   | list all transactions for current card                                                          |
+
 
 Work with transactions as an `user` role
 
