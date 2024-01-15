@@ -184,23 +184,24 @@ class BurnBonuses extends Command
                     $burnSum = $card->balance->subtract($trxSumAfterBurnDate);
                 }
                 // burn bonuses
-                $paymentTrx = $admSb->transactionsScope()->transactions()->processPaymentTransactionByCardNumber(
-                    $card->number,
-                    $burnSum,
-                    new Reason(self::REASON_ID, $reasonCode, $reasonComment))->getTransaction();
+                if ($burnSum->isPositive()) {
+                    $paymentTrx = $admSb->transactionsScope()->transactions()->processPaymentTransactionByCardNumber(
+                        $card->number,
+                        $burnSum,
+                        new Reason(self::REASON_ID, $reasonCode, $reasonComment))->getTransaction();
 
-                $output->write(sprintf('burn %s bonuses from card %s',
-                    $decimalMoneyFormatter->format($paymentTrx->value),
-                    $card->number
-                ), true);
-
-
+                    $output->write(sprintf('burn %s bonuses from card %s',
+                        $decimalMoneyFormatter->format($paymentTrx->value),
+                        $card->number
+                    ), true);
+                }
             } catch (Throwable $exception) {
                 $io->error([
                     '',
                     $exception->getMessage(),
                     $exception->getTraceAsString()
                 ]);
+                exit();
             }
         }
         $progressBar->finish();
@@ -216,8 +217,6 @@ class BurnBonuses extends Command
         Currency            $defaultCurrency
     ): Money
     {
-        $decimalMoneyFormatter = new DecimalMoneyFormatter(new ISOCurrencies());
-
         $totalSum = new Money(0, $defaultCurrency);
         foreach ($adminServiceBuilder->transactionsScope()->fetcher()->listByCardNumber($cardNumber) as $trxItem) {
             if ($burnDate < $trxItem->created && $trxItem->type === TransactionType::accrual) {
@@ -227,5 +226,3 @@ class BurnBonuses extends Command
         return $totalSum;
     }
 }
-
-// php bin/console transactions:burn-bonuses --api-endpoint-url=https://loyalty.b24.cloud/api/v2/ --api-client-id=17cf6873-722d-4dca-8941-de278d7db64c --api-admin-key=561174c3-88b3-4b8c-9c1a-e1202b3ac5c7 --reason-code="2023-bonuses-burn" --reason-comment="Списание баллов за 2023 год, согласно правилам программы лояльности" --dryrun --date=01.01.2024
