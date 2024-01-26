@@ -9,6 +9,7 @@ use B24io\Loyalty\SDK\Common\Gender;
 use B24io\Loyalty\SDK\Services\Admin\AdminServiceBuilder;
 use B24io\Loyalty\SDK\Services\Admin\Contacts\ContactsFilter;
 use B24io\Loyalty\SDK\Tests\Integration\Fabric;
+use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumber;
 use PHPUnit\Framework\TestCase;
 use Fig\Http\Message\StatusCodeInterface;
@@ -19,6 +20,10 @@ class ContactsTest extends TestCase
 {
     protected AdminServiceBuilder $sb;
 
+    /**
+     * @throws TransportExceptionInterface
+     * @throws NumberParseException
+     */
     public function testAdd():void
     {
         $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
@@ -31,7 +36,7 @@ class ContactsTest extends TestCase
             null,
             ['mobile_backend' => '1234567890']
         );
-        $this->assertEquals(StatusCodeInterface::STATUS_OK, $res->getCoreResponse()->httpResponse->getStatusCode());
+        $this->assertEquals(StatusCodeInterface::STATUS_OK, $res->httpResponse->getStatusCode());
     }
 
     /**
