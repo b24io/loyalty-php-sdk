@@ -9,6 +9,14 @@ use Symfony\Component\Uid\Uuid;
 
 readonly class Command
 {
+    /**
+     * @param Context $context
+     * @param string $httpMethod
+     * @param string $apiMethod
+     * @param array<string, mixed> $parameters
+     * @param int|null $page
+     * @param Uuid|null $idempotencyKey
+     */
     public function __construct(
         public Context $context,
         public string  $httpMethod,

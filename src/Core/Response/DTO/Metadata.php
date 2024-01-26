@@ -21,6 +21,7 @@ readonly class Metadata
     }
 
     /**
+     * @param array<string, mixed> $metadata
      * @throws Exception
      */
     public static function initFromArray(array $metadata): self

@@ -8,6 +8,9 @@ use B24io\Loyalty\SDK\Common\Result\Cards\CardLevelItemResult;
 
 readonly class CardLevelItemFormatter
 {
+    /**
+     * @return string[]
+     */
     public function fields(): array
     {
         return [
@@ -22,7 +25,9 @@ readonly class CardLevelItemFormatter
             'card_level_modified'
         ];
     }
-
+    /**
+     * @return array<string, mixed>
+     */
     public function toFlatArray(?CardLevelItemResult $level): array
     {
         return [

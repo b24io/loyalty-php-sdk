@@ -8,6 +8,9 @@ use B24io\Loyalty\SDK\Common\Result\Contacts\ContactItemResult;
 
 readonly class ContactItemFormatter
 {
+    /**
+     * @return string[]
+     */
     public function fields(): array
     {
         return [
@@ -23,7 +26,9 @@ readonly class ContactItemFormatter
             'contact_modified',
         ];
     }
-
+    /**
+     * @return array<string, mixed>
+     */
     public function toFlatArray(ContactItemResult $contact, string $externalIdKey): array
     {
         return [

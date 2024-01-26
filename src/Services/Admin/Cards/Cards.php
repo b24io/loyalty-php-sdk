@@ -48,7 +48,7 @@ class Cards extends AbstractService
      */
     public function count(): int
     {
-        return (new CardsResult(
+        return (int)(new CardsResult(
             $this->core->call(
                 new Command(
                     Context::admin,

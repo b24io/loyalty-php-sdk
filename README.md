@@ -187,6 +187,15 @@ php bin/console
 
 Bugs and feature request are tracked on [GitHub](https://github.com/b24io/loyalty-php-sdk/issues)
 
+## Development
+
+### Testing
+
+Run static analysis tool
+```shell
+make phpstan
+```
+
 ## Support
 
 * [app@b24.io](mailto:app@b24.io)

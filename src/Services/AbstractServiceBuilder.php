@@ -12,6 +12,9 @@ abstract class AbstractServiceBuilder
 {
     protected CoreInterface $core;
     protected LoggerInterface $log;
+    /**
+     * @var array<string, mixed>
+     */
     protected array $serviceCache;
 
     public function __construct(

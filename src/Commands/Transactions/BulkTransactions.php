@@ -202,9 +202,11 @@ class BulkTransactions extends Command
                     )
                 );
                 $this->logger->info(
-                    sprintf('transaction for card %s processed', $card->number), [
-                    'trxId' => $trxResult->getTransaction()->id->toRfc4122()
-                ]);
+                    sprintf('transaction for card %s processed', $card->number),
+                    [
+                        'trxId' => $trxResult->getTransaction()->id->toRfc4122()
+                    ]
+                );
             } catch (Throwable $exception) {
                 $io->error([
                     '',

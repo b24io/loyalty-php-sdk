@@ -14,6 +14,9 @@ readonly class FullName
     {
     }
 
+    /**
+     * @return array<string, ?string>
+     */
     public function toArray(): array
     {
         return [

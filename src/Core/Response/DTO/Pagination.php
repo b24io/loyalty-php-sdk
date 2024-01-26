@@ -16,6 +16,10 @@ readonly class Pagination
     {
     }
 
+    /**
+     * @param array<string,?int> $pagination
+     * @return self
+     */
     public static function initFromArray(array $pagination): self
     {
         return new self(

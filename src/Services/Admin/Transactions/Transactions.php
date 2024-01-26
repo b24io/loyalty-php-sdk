@@ -95,7 +95,7 @@ class Transactions extends AbstractService
      */
     public function count(): int
     {
-        return (new TransactionsResult(
+        return (int)(new TransactionsResult(
             $this->core->call(
                 new Command(
                     Context::admin,

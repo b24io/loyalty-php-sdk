@@ -133,6 +133,11 @@ class BurnBonuses extends Command
             return Command::INVALID;
         }
         $burnoutDate = DateTime::createFromFormat('d.m.Y', $rawBurnoutDate);
+        if(!$burnoutDate){
+            $io->error('you must set valid «date» option in format dd.mm.YYYY');
+
+            return Command::INVALID;
+        }
 
         $admSb = ServiceBuilderFactory::createAdminRoleServiceBuilder($this->logger, $apiEndpointUrl, $apiClientId, $apiAdminKey);
         $cardsTotal = $admSb->cardsScope()->cards()->count();

@@ -29,7 +29,7 @@ class TransactionItemResult extends AbstractItem
             case 'value':
                 return $this->decimalMoneyParser->parse(
                     $this->data[$offset]['amount'],
-                    new Currency((string)$this->data[$offset]['currency'])
+                    new Currency(($this->data[$offset]['currency']) ?? '')
                 );
             case 'type':
                 return TransactionType::from(str_replace('_transaction', '', $this->data[$offset]));

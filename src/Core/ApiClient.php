@@ -17,8 +17,8 @@ class ApiClient implements ApiClientInterface
     protected HttpClientInterface $client;
     protected LoggerInterface $logger;
     protected Credentials\Credentials $credentials;
-    protected const SDK_VERSION = '3.0.0';
-    protected const SDK_USER_AGENT = 'b24io-loyalty-php-sdk';
+    protected const string SDK_VERSION = '3.0.0';
+    protected const string SDK_USER_AGENT = 'b24io-loyalty-php-sdk';
 
     public function __construct(Credentials\Credentials $credentials, HttpClientInterface $client, LoggerInterface $logger)
     {
@@ -95,7 +95,7 @@ class ApiClient implements ApiClientInterface
         }
         // auth
         $headers = $this->getDefaultHeaders();
-        if ($context === Context::admin) {
+        if ($context === Context::admin && $this->getCredentials()->adminApiKey !== null) {
             $headers['X-LOYALTY-API-KEY-ADMIN'] = $this->getCredentials()->adminApiKey->toRfc4122();
         }
         if ($idempotencyKey !== null) {

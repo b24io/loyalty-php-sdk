@@ -11,6 +11,15 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 
 interface ApiClientInterface
 {
+    /**
+     * @param Context $context
+     * @param string $httpMethod
+     * @param string $apiMethod
+     * @param array<string, mixed> $parameters
+     * @param int|null $page
+     * @param Uuid|null $idempotencyKey
+     * @return ResponseInterface
+     */
     public function getResponse(
         Context $context,
         string  $httpMethod,

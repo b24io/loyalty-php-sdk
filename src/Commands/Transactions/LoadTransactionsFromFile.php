@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace B24io\Loyalty\SDK\Commands\Transactions;
 
 use B24io\Loyalty\SDK\Common\Reason;
+use B24io\Loyalty\SDK\Common\Result\Cards\CardItemResult;
 use B24io\Loyalty\SDK\Common\TransactionType;
+use B24io\Loyalty\SDK\Core\Exceptions\BaseException;
+use B24io\Loyalty\SDK\Core\Exceptions\FileUnavailableException;
 use B24io\Loyalty\SDK\Services\Admin\AdminServiceBuilder;
 use B24io\Loyalty\SDK\Services\ServiceBuilderFactory;
 use Generator;
@@ -127,7 +130,7 @@ class LoadTransactionsFromFile extends Command
         $cards = $this->loadCards($admSb);
 
         foreach ($this->loadTransactionsFromFile($filename, $currency) as $row) {
-               // todo pass zero trx
+            // todo pass zero trx
 
             if (!array_key_exists($row['phone'], $cards)) {
                 $output->writeln(sprintf('warning: card %s not found', $row['phone']));
@@ -156,6 +159,11 @@ class LoadTransactionsFromFile extends Command
         return Command::SUCCESS;
     }
 
+    /**
+     * @param AdminServiceBuilder $adminServiceBuilder
+     * @return CardItemResult[]
+     * @throws BaseException
+     */
     private function loadCards(AdminServiceBuilder $adminServiceBuilder): array
     {
         $res = $adminServiceBuilder->cardsScope()->cards()->list();
@@ -172,11 +180,17 @@ class LoadTransactionsFromFile extends Command
         return array_column($cards, null, 'number');
     }
 
+    /**
+     * @throws FileUnavailableException
+     */
     private function loadTransactionsFromFile(string $file, Currency $currency): Generator
     {
         $moneyParser = new DecimalMoneyParser(new ISOCurrencies());
 
         $handle = fopen($file, 'rb');
+        if (!$handle) {
+            throw new FileUnavailableException(sprintf('file %s unavailable', $file));
+        }
         for ($i = 0; $row = fgetcsv($handle, null, ';'); ++$i) {
             if ($i === 0) {
                 // check headers

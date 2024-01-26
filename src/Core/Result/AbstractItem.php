@@ -15,11 +15,20 @@ use Money\Parser\DecimalMoneyParser;
 use Symfony\Component\Uid\Uuid;
 use Traversable;
 
+/**
+ * @implements IteratorAggregate<int|string, int|string>
+ */
 abstract class AbstractItem implements IteratorAggregate
 {
+    /**
+     * @var array<string, mixed>
+     */
     protected array $data;
     protected DecimalMoneyParser $decimalMoneyParser;
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public function __construct(array $data)
     {
         $this->data = $data;

@@ -10,6 +10,9 @@ use Money\Formatter\DecimalMoneyFormatter;
 
 readonly class CardItemFormatter
 {
+    /**
+     * @return string[]
+     */
     public function fields(): array
     {
         return [
@@ -24,6 +27,10 @@ readonly class CardItemFormatter
         ];
     }
 
+    /**
+     * @param CardItemResult $card
+     * @return array<string, mixed>
+     */
     public function toFlatArray(CardItemResult $card): array
     {
         $decimalMoneyFormatter = new DecimalMoneyFormatter(new ISOCurrencies());

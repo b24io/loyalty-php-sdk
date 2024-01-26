@@ -33,7 +33,7 @@ class CardItemResult extends AbstractItem
             case 'balance':
                 return $this->decimalMoneyParser->parse(
                     $this->data[$offset]['amount'],
-                    new Currency((string)$this->data[$offset]['currency'])
+                    new Currency($this->data[$offset]['currency'] ?? '')
                 );
             case 'status':
                 return CardStatus::from($this->data[$offset]);

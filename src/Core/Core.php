@@ -49,7 +49,6 @@ class Core implements CoreInterface
             ]
         );
 
-        $response = null;
         try {
             // make async request
             $apiCallResponse = $this->apiClient->getResponse(
@@ -141,24 +140,45 @@ class Core implements CoreInterface
                             $this->apiClient->getCredentials()->clientId->toRfc4122())
                     );
                 case StatusCodeInterface::STATUS_SERVICE_UNAVAILABLE:
-                    $body = $apiCallResponse->toArray(false);
-                    $this->logger->notice(
-                        'unavailable',
+                    $this->logger->error(
+                        'server unavailable error',
                         [
-                            'body' => $body,
+                            'clientId' => $this->apiClient->getCredentials()->clientId,
+                            'domainUrl' => $this->apiClient->getCredentials()->domainUrl,
+                            'apiMethod' => $cmd->apiMethod,
+                            'parameters' => $cmd->parameters,
+                            'response' => $apiCallResponse->toArray(false),
                         ]
                     );
-                    break;
+                    $responseResult = $apiCallResponse->toArray(false);
+                    $apiProblem = ApiProblem::fromArray($responseResult['error']);
+                    throw new InternalServerErrorException(
+                        $apiProblem,
+                        sprintf('server unavailable error «%s» on api call «%s» for client %s',
+                            $apiProblem->detail,
+                            $cmd->apiMethod,
+                            $this->apiClient->getCredentials()->clientId->toRfc4122())
+                    );
                 default:
-                    $body = $apiCallResponse->toArray(false);
                     $this->logger->error(
                         'unhandled server status',
                         [
-                            'httpStatus' => $apiCallResponse->getStatusCode(),
-                            'body' => $body,
+                            'clientId' => $this->apiClient->getCredentials()->clientId,
+                            'domainUrl' => $this->apiClient->getCredentials()->domainUrl,
+                            'apiMethod' => $cmd->apiMethod,
+                            'parameters' => $cmd->parameters,
+                            'response' => $apiCallResponse->toArray(false),
                         ]
                     );
-                    break;
+                    $responseResult = $apiCallResponse->toArray(false);
+                    $apiProblem = ApiProblem::fromArray($responseResult['error']);
+                    throw new InternalServerErrorException(
+                        $apiProblem,
+                        sprintf('unhandled server status error «%s» on api call «%s» for client %s',
+                            $apiProblem->detail,
+                            $cmd->apiMethod,
+                            $this->apiClient->getCredentials()->clientId->toRfc4122())
+                    );
             }
         } catch (TransportExceptionInterface $exception) {
             // catch symfony http client transport exception

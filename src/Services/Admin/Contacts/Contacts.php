@@ -10,6 +10,7 @@ use B24io\Loyalty\SDK\Common\Result\Contacts\ContactItemResult;
 use B24io\Loyalty\SDK\Common\Result\Contacts\ContactsResult;
 use B24io\Loyalty\SDK\Core\Command;
 use B24io\Loyalty\SDK\Core\Credentials\Context;
+use B24io\Loyalty\SDK\Core\Response\Response;
 use B24io\Loyalty\SDK\Services\AbstractService;
 use DateTimeImmutable;
 use DateTimeZone;
@@ -22,6 +23,15 @@ use Symfony\Component\Uid\Uuid;
 
 class Contacts extends AbstractService
 {
+    /**
+     * @param FullName $fullName
+     * @param DateTimeZone $timezone
+     * @param Gender $gender
+     * @param PhoneNumber $mobilePhone
+     * @param DateTimeImmutable|null $birthdate
+     * @param array<string, string> $externalIds
+     * @return Response
+     */
     public function add(
         FullName           $fullName,
         DateTimeZone       $timezone,

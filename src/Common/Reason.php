@@ -14,6 +14,9 @@ readonly class Reason
     {
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function toArray(): array
     {
         return [

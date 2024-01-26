@@ -43,9 +43,10 @@
     "symfony/dotenv": "6.*",
     "symfony/debug-bundle": "7.*",
     "phpstan/phpstan": "1.*",
-    "phpunit/phpunit": "9.6.*",
+    "phpunit/phpunit": "*",
     "symfony/stopwatch": "7.*",
-    "roave/security-advisories": "dev-master"
+    "roave/security-advisories": "dev-master",
+    "nunomaduro/phpinsights": "2.*"
   },
   "autoload": {
     "psr-4": {
@@ -55,6 +56,11 @@
   "autoload-dev": {
     "psr-4": {
       "B24io\\Loyalty\\SDK\\Tests\\": "tests/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
     }
   }
 }

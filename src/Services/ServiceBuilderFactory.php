@@ -69,7 +69,7 @@ readonly class ServiceBuilderFactory
             HttpClient::create(
                 [
                     'http_version' => '2.0',
-                    'timeout' => 20,
+                    'timeout' => 60,
                 ]
             ),
             $logger
