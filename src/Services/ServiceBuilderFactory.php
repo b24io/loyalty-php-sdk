@@ -13,6 +13,7 @@ use B24io\Loyalty\SDK\Services\Admin\AdminServiceBuilder;
 use Money\Currencies\ISOCurrencies;
 use Money\Formatter\DecimalMoneyFormatter;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpClient\CurlHttpClient;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Uid\Uuid;
 
@@ -66,11 +67,11 @@ readonly class ServiceBuilderFactory
                 $apiAdminKey !== null ?
                     Uuid::fromString($apiAdminKey) : null
             ),
-            HttpClient::create(
+            new CurlHttpClient(
                 [
                     'http_version' => '2.0',
                     'timeout' => 60,
-                ]
+                ],
             ),
             $logger
         );

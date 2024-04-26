@@ -9,12 +9,16 @@ use B24io\Loyalty\SDK\Common\Result\Cards\CardItemResult;
 use B24io\Loyalty\SDK\Common\TransactionType;
 use B24io\Loyalty\SDK\Core\Exceptions\BaseException;
 use B24io\Loyalty\SDK\Core\Exceptions\FileUnavailableException;
+use B24io\Loyalty\SDK\Infrastructure\Filesystem\TransactionsReader;
 use B24io\Loyalty\SDK\Services\Admin\AdminServiceBuilder;
 use B24io\Loyalty\SDK\Services\ServiceBuilderFactory;
+use DateTime;
 use Generator;
 use InvalidArgumentException;
+use League\Csv\Writer;
 use Money\Currencies\ISOCurrencies;
 use Money\Currency;
+use Money\Formatter\DecimalMoneyFormatter;
 use Money\Parser\DecimalMoneyParser;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -23,14 +27,26 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Throwable;
 
 #[AsCommand(
     name: 'transactions:load-from-file',
-    description: 'Process transactions from csv file')]
+    description: 'Process transactions from csv file' . PHP_EOL .
+    'file columns:' . PHP_EOL .
+    '   card_number - card number, example: 12345' . PHP_EOL .
+    '   transaction_amount - bonus amount, example: 245.65' . PHP_EOL .
+    '   transaction_type - accrual or payment transaction, example: accrual' . PHP_EOL .
+    '   reason_id - unique reason id per client transaction list, example: gift2024.04.25' . PHP_EOL .
+    '   reason_code -  reason code, example: marketingGiftProgram ' . PHP_EOL .
+    '   reason_comment - reason comment for user, example: Spring gift! We double your bonuses!'
+)]
 class LoadTransactionsFromFile extends Command
 {
     public function __construct(
-        protected LoggerInterface $logger
+        private TransactionsReader    $transactionsReader,
+        private DecimalMoneyFormatter $decimalMoneyFormatter,
+        private LoggerInterface       $logger
     )
     {
         parent::__construct();
@@ -58,12 +74,28 @@ class LoadTransactionsFromFile extends Command
             'file',
             null,
             InputOption::VALUE_REQUIRED,
-            'file in csv format with transactions log');
+            'file with transactions in csv format');
         $this->addOption(
-            'currency',
+            'skip-check',
             null,
-            InputOption::VALUE_REQUIRED,
-            'fallback ISO currency code');
+            InputOption::VALUE_OPTIONAL,
+            'skip check via api-call «get-transactions-by-card» is transaction already processed',
+            false
+        );
+        $this->addOption(
+            'skip-check',
+            null,
+            InputOption::VALUE_OPTIONAL,
+            'skip check via api-call «get-transactions-by-card» is transaction already processed',
+            false
+        );
+        $this->addOption(
+            'offset',
+            null,
+            InputOption::VALUE_OPTIONAL,
+            'skip «offset» transactions from file, and start with offset+1',
+            0
+        );
 
     }
 
@@ -110,13 +142,17 @@ class LoadTransactionsFromFile extends Command
             return Command::INVALID;
         }
 
-        $currency = $input->getOption('currency');
-        if ($currency === null) {
-            $output->writeln('error: you must set currency option');
-
-            return Command::INVALID;
+        $isSkipCheckIsTransactionAlreadyProcessed = false;
+        $skipCheckTrxValue = $input->getOption('skip-check');
+        if ($skipCheckTrxValue === null || $skipCheckTrxValue === true) {
+            $isSkipCheckIsTransactionAlreadyProcessed = true;
         }
-        $currency = new Currency($currency);
+
+        $offsetTrxCount = 0;
+        $offsetTrxCountValue = $input->getOption('offset');
+        if (is_numeric($offsetTrxCountValue)) {
+            $offsetTrxCount = (int)$offsetTrxCountValue;
+        }
 
         $admSb = ServiceBuilderFactory::createAdminRoleServiceBuilder(
             $this->logger,
@@ -125,100 +161,133 @@ class LoadTransactionsFromFile extends Command
             $apiAdminKey
         );
 
-        // load card in memory
-        // todo add progress bar
-        $cards = $this->loadCards($admSb);
+        // src/Commands/Transactions
+        $baseFolder = dirname(__DIR__, 3) . '/';
+        /**
+         * @var array{'extension':string,'filename':string} $pathInfo
+         */
+        $pathInfo = pathinfo($filename);
 
-        foreach ($this->loadTransactionsFromFile($filename, $currency) as $row) {
-            // todo pass zero trx
+        $totalTransactionsInFile = $this->transactionsReader->countTransactionsInFile($filename);
+        $output->writeln(sprintf('transactions count %s in file %s', $totalTransactionsInFile, $filename));
 
-            if (!array_key_exists($row['phone'], $cards)) {
-                $output->writeln(sprintf('warning: card %s not found', $row['phone']));
+        $failureTrxFilename = sprintf('failure_%s_%s.%s', (new DateTime())->format('YmdHis'), $pathInfo['filename'], $pathInfo['extension']);
+        $revokedTrxFilename = sprintf('revoked_%s_%s.%s', (new DateTime())->format('YmdHis'), $pathInfo['filename'], $pathInfo['extension']);
+        $processedTrxFilename = sprintf('processed_%s_%s.%s', (new DateTime())->format('YmdHis'), $pathInfo['filename'], $pathInfo['extension']);
+
+        $output->writeln([
+            'start processing transactions, results stored in files:',
+            sprintf('   %s contains failed transcactions', $failureTrxFilename),
+            sprintf('   %s contains revoked transactions, eg already processed before current run', $revokedTrxFilename),
+            sprintf('   %s contains processed transactions', $processedTrxFilename),
+            '',
+            sprintf('is skip check transaction already processed: %s', $isSkipCheckIsTransactionAlreadyProcessed ? 'Y' : 'N'),
+            sprintf('offset transactions in file: %s', $offsetTrxCount)
+        ]);
+
+        $failureTrxLog = Writer::createFromPath($baseFolder . $failureTrxFilename, 'w+');
+        $failureTrxLog->insertOne(['card_id', 'card_number', 'transaction_type', 'transaction_amount', 'transaction_iso_currency_code', 'error_message']);
+
+        $revokedTrxLog = Writer::createFromPath($baseFolder . $revokedTrxFilename, 'w+');
+        $revokedTrxLog->insertOne(['card_id', 'card_number', 'transaction_type', 'transaction_amount', 'transaction_iso_currency_code', 'comment', 'transaction_id', 'transaction_created_at']);
+
+        $processedTrxLog = Writer::createFromPath($baseFolder . $processedTrxFilename, 'w+');
+        $processedTrxLog->insertOne(['card_id', 'card_number', 'transaction_type', 'transaction_amount', 'transaction_iso_currency_code', 'transaction_id']);
+
+        $progressBar = new ProgressBar($output, $totalTransactionsInFile);
+        $progressBar->setFormat("%current%/%max% [%bar%] %percent:3s%%\n  %estimated:-21s% %memory:21s%\ninfo: %status%\n");
+        $status = 'started...';
+        $progressBar->setMessage($status, 'status');
+
+        foreach ($this->transactionsReader->loadTransactionsByCardNumber($filename) as $cnt => $newTrx) {
+            // skip processed transactions
+            if (($offsetTrxCount > 0) && $offsetTrxCount > $cnt) {
+                $progressBar->advance();
                 continue;
             }
+            try {
+                // check is transaction already processed
+                if (!$isSkipCheckIsTransactionAlreadyProcessed) {
+                    // get transactions for current card and check is new transaction already processed
+                    $existsTrx = $admSb->transactionsScope()->transactions()->getByCardNumber($newTrx->cardNumber)->getTransactions();
+                    foreach ($existsTrx as $t) {
+                        if ($t->reason->equal($newTrx->reason)) {
+                            $this->logger->warning('LoadTransactionsFromFile.transactionAlreadyProcessed', [
+                                'cardNumber' => $newTrx->cardNumber
+                            ]);
+                            $status = sprintf('transaction type %s with amount %s for card %s number already processed',
+                                $newTrx->type->value,
+                                $this->decimalMoneyFormatter->format($newTrx->amount),
+                                $newTrx->cardNumber,
+                            );
+                            $progressBar->setMessage($status, 'status');
+                            $progressBar->advance();
 
-            // get transactions for current card
-            $trx = $admSb->transactionsScope()->transactions()->getByCardNumber($row['phone'])->getTransactions();
-            foreach ($trx as $t) {
-                if ($t->reason->equal($row['reason'])) {
-                    continue 2;
+                            $revokedTrxLog->insertOne([
+                                $newTrx->cardId->toRfc4122(),
+                                $newTrx->cardNumber,
+                                $newTrx->type->value,
+                                $this->decimalMoneyFormatter->format($newTrx->amount),
+                                $newTrx->amount->getCurrency()->getCode(),
+                                'транзакция уже проведена',
+                                $t->id->toRfc4122(),
+                                $t->created->format(DATE_ATOM),
+                            ]);
+
+                            continue 2;
+                        }
+                    }
                 }
-            }
 
-            if ($row['type'] === TransactionType::accrual) {
-                $res = $admSb->transactionsScope()->transactions()->processAccrualTransactionByCardNumber(
-                    $row['phone'],
-                    $row['amount'],
-                    $row['reason']
+                switch ($newTrx->type) {
+                    case TransactionType::accrual:
+                        $resTrx = $admSb->transactionsScope()->transactions()->processAccrualTransactionByCardNumber(
+                            $newTrx->cardNumber,
+                            $newTrx->amount,
+                            $newTrx->reason
+                        );
+
+                        $status = sprintf('accrual transaction %s processed - %s', $resTrx->getTransaction()->id, $resTrx->getTransaction()->value->getAmount());
+
+                        break;
+                    case TransactionType::payment:
+                        $resTrx = $admSb->transactionsScope()->transactions()->processPaymentTransactionByCardNumber(
+                            $newTrx->cardNumber,
+                            $newTrx->amount,
+                            $newTrx->reason
+                        );
+
+                        $status = sprintf('payment transaction %s processed - %s', $resTrx->getTransaction()->id, $resTrx->getTransaction()->value->getAmount());
+                        break;
+                }
+                // write to processed file
+                $processedTrxLog->insertOne([
+                        $newTrx->cardId->toRfc4122(),
+                        $newTrx->cardNumber,
+                        $newTrx->type->value,
+                        $this->decimalMoneyFormatter->format($newTrx->amount),
+                        $newTrx->amount->getCurrency()->getCode(),
+                        $resTrx->getTransaction()->id->toRfc4122(),
+                    ]
                 );
-
-                $output->writeln(sprintf('accrual transaction %s processed - %s', $res->getTransaction()->id, $res->getTransaction()->value->getAmount()));
+            } catch (Throwable $exception) {
+                $this->logger->error('LoadTransactionsFromFile.processItem.error', [
+                    'message' => $exception->getMessage()
+                ]);
+                $failureTrxLog->insertOne([
+                    $newTrx->cardId->toRfc4122(),
+                    $newTrx->cardNumber,
+                    $newTrx->type->value,
+                    $this->decimalMoneyFormatter->format($newTrx->amount),
+                    $newTrx->amount->getCurrency()->getCode(),
+                    $exception->getMessage()
+                ]);
             }
+            $progressBar->setMessage($status, 'status');
+            $progressBar->advance();
         }
+        $progressBar->finish();
 
         return Command::SUCCESS;
-    }
-
-    /**
-     * @param AdminServiceBuilder $adminServiceBuilder
-     * @return CardItemResult[]
-     * @throws BaseException
-     */
-    private function loadCards(AdminServiceBuilder $adminServiceBuilder): array
-    {
-        $res = $adminServiceBuilder->cardsScope()->cards()->list();
-
-        $cards = $res->getCards();
-        $pages = $res->getCoreResponse()->getResponseData()->pagination->pages;
-
-        for ($i = 1; $i <= $pages; $i++) {
-            $res = $adminServiceBuilder->cardsScope()->cards()->list($i);
-            $cards = array_merge($cards, $res->getCards());
-        }
-
-        // index by number column
-        return array_column($cards, null, 'number');
-    }
-
-    /**
-     * @throws FileUnavailableException
-     */
-    private function loadTransactionsFromFile(string $file, Currency $currency): Generator
-    {
-        $moneyParser = new DecimalMoneyParser(new ISOCurrencies());
-
-        $handle = fopen($file, 'rb');
-        if (!$handle) {
-            throw new FileUnavailableException(sprintf('file %s unavailable', $file));
-        }
-        for ($i = 0; $row = fgetcsv($handle, null, ';'); ++$i) {
-            if ($i === 0) {
-                // check headers
-                if (!in_array('phone', $row, true)) {
-                    throw new InvalidArgumentException('phone column header not found in first row in file');
-                }
-                if (!in_array('amount', $row, true)) {
-                    throw new InvalidArgumentException('amount column header not found in first row in file');
-                }
-                if (!in_array('type', $row, true)) {
-                    throw new InvalidArgumentException('type column header not found in first row in file');
-                }
-
-                continue;
-            }
-
-            // todo add position validation
-            yield [
-                'phone' => $row[0],
-                'amount' => $moneyParser->parse($row[1], $currency),
-                'type' => TransactionType::from($row[2]),
-                'reason' => new Reason(
-                    'admin',
-                    'import',
-                    'import data from file'
-                )
-            ];
-        }
-        fclose($handle);
     }
 }

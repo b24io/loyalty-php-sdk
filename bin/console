@@ -2,10 +2,13 @@
 <?php
 
 use B24io\Loyalty\SDK\Commands;
+use B24io\Loyalty\SDK\Infrastructure;
 use B24io\Loyalty\SDK\Common\Formatters\Cards\CardItemFormatter;
 use B24io\Loyalty\SDK\Common\Formatters\Cards\CardLevelItemFormatter;
 use B24io\Loyalty\SDK\Common\Formatters\Contacts\ContactItemFormatter;
 use B24io\Loyalty\SDK\Common\Formatters\Transactions\TransactionItemFormatter;
+use Money\Currencies\ISOCurrencies;
+use Money\Formatter\DecimalMoneyFormatter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Monolog\Processor\MemoryUsageProcessor;
@@ -52,7 +55,10 @@ $log->pushHandler(new StreamHandler($_ENV['LOYALTY_SDK_CLI_LOGS_FILE'], (int)$_E
 $log->pushProcessor(new MemoryUsageProcessor(true, true));
 
 $application = new Application();
-$application->add(new Commands\Transactions\LoadTransactionsFromFile($log));
+$application->add(new Commands\Transactions\LoadTransactionsFromFile(
+        new Infrastructure\Filesystem\TransactionsReader($log),
+        new DecimalMoneyFormatter(new ISOCurrencies()),
+        $log));
 $application->add(new Commands\Cards\ExportCards(
     new CardItemFormatter(),
     new CardLevelItemFormatter(),
@@ -60,7 +66,5 @@ $application->add(new Commands\Cards\ExportCards(
     $log));
 $application->add(new Commands\Transactions\BulkTransactions($log));
 $application->add(new Commands\Transactions\BurnBonuses($log));
-$application->add(new Commands\Transactions\ExportTransactions(
-    new TransactionItemFormatter(),
-    $log));
+$application->add(new Commands\Transactions\ExportTransactions(new TransactionItemFormatter(), $log));
 $application->run($input);

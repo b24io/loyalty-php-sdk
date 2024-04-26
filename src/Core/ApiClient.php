@@ -17,8 +17,8 @@ class ApiClient implements ApiClientInterface
     protected HttpClientInterface $client;
     protected LoggerInterface $logger;
     protected Credentials\Credentials $credentials;
-    protected const string SDK_VERSION = '3.0.0';
-    protected const string SDK_USER_AGENT = 'b24io-loyalty-php-sdk';
+    protected const SDK_VERSION = '3.0.0';
+    protected const SDK_USER_AGENT = 'b24io-loyalty-php-sdk';
 
     public function __construct(Credentials\Credentials $credentials, HttpClientInterface $client, LoggerInterface $logger)
     {
@@ -42,8 +42,8 @@ class ApiClient implements ApiClientInterface
             'Accept' => 'application/json',
             'Accept-Charset' => 'utf-8',
             'User-Agent' => sprintf('%s-v-%s-php-%s', self::SDK_USER_AGENT, self::SDK_VERSION, PHP_VERSION),
-            'X-BITRIX24-PHP-SDK-PHP-VERSION' => PHP_VERSION,
-            'X-BITRIX24-PHP-SDK-VERSION' => self::SDK_VERSION,
+            'X-LOYALTY-PHP-SDK-PHP-VERSION' => PHP_VERSION,
+            'X-LOYALTY-PHP-SDK-VERSION' => self::SDK_VERSION,
         ];
     }
 

@@ -35,16 +35,16 @@ class CardsFetcher
         $cardCnt = 0;
         for ($i = 1; $i <= $pages; $i++) {
             $res = $this->cards->list($i);
-            $this->logger->debug('CardsFetcher.list.pageItem', [
+            $this->logger->info('CardsFetcher.list.pageItem', [
                 'page' => $res->getCoreResponse()->getResponseData()->pagination->page,
-                'cardCnt' => $cardCnt
+                'cardCnt' => $cardCnt,
+                'queryDuration' => $res->getCoreResponse()->getResponseData()->metadata->duration
             ]);
 
             foreach ($res->getCards() as $card) {
                 $cardCnt++;
                 yield $cardCnt => $card;
             }
-
         }
         $this->logger->debug('CardsFetcher.list.finish');
     }

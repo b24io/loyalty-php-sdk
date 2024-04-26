@@ -5,6 +5,7 @@
 * bump minimum PHP version requirements to `8.3.*`
 * add `TransactionsFetcher` - fetch transactions
 * add cli command `transactions:burn-bonuses`
+* add `TransactionsReader` - read transactions from csv-file
 
 ## 2.1.2 (01.06.2022)
 * bump `guzzlehttp/guzzle` version requirements to `6.*`
