@@ -1,0 +1,70 @@
+#!/usr/bin/env php
+<?php
+
+use B24io\Loyalty\SDK\Commands;
+use B24io\Loyalty\SDK\Infrastructure;
+use B24io\Loyalty\SDK\Common\Formatters\Cards\CardItemFormatter;
+use B24io\Loyalty\SDK\Common\Formatters\Cards\CardLevelItemFormatter;
+use B24io\Loyalty\SDK\Common\Formatters\Contacts\ContactItemFormatter;
+use B24io\Loyalty\SDK\Common\Formatters\Transactions\TransactionItemFormatter;
+use Money\Currencies\ISOCurrencies;
+use Money\Formatter\DecimalMoneyFormatter;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+use Monolog\Processor\MemoryUsageProcessor;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Dotenv\Dotenv;
+use Symfony\Component\ErrorHandler\Debug;
+
+if (!in_array(PHP_SAPI, ['cli', 'phpdbg', 'embed'], true)) {
+    echo 'Warning: The console should be invoked via the CLI version of PHP, not the ' . PHP_SAPI . ' SAPI' . PHP_EOL;
+}
+
+set_time_limit(0);
+
+require dirname(__DIR__) . '/vendor/autoload.php';
+
+if (!class_exists(Dotenv::class)) {
+    throw new LogicException('You need to add "symfony/dotenv" as Composer dependencies.');
+}
+
+$input = new ArgvInput();
+if (null !== $env = $input->getParameterOption(['--env', '-e'], null, true)) {
+    putenv('APP_ENV=' . $_SERVER['APP_ENV'] = $_ENV['APP_ENV'] = $env);
+}
+
+if ($input->hasParameterOption('--no-debug', true)) {
+    putenv('APP_DEBUG=' . $_SERVER['APP_DEBUG'] = $_ENV['APP_DEBUG'] = '0');
+}
+
+(new Dotenv())->bootEnv(dirname(__DIR__) . '/.env');
+
+if ($_SERVER['APP_DEBUG']) {
+    umask(0000);
+
+    if (class_exists(
+        Debug::class
+    )) {
+        Debug::enable();
+    }
+}
+
+$log = new Logger('loyalty-php-sdk-cli');
+$log->pushHandler(new StreamHandler($_ENV['LOYALTY_SDK_CLI_LOGS_FILE'], (int)$_ENV['LOYALTY_SDK_CLI_LOGS_LEVEL']));
+$log->pushProcessor(new MemoryUsageProcessor(true, true));
+
+$application = new Application();
+$application->add(new Commands\Transactions\LoadTransactionsFromFile(
+        new Infrastructure\Filesystem\TransactionsReader($log),
+        new DecimalMoneyFormatter(new ISOCurrencies()),
+        $log));
+$application->add(new Commands\Cards\ExportCards(
+    new CardItemFormatter(),
+    new CardLevelItemFormatter(),
+    new ContactItemFormatter(),
+    $log));
+$application->add(new Commands\Transactions\BulkTransactions($log));
+$application->add(new Commands\Transactions\BurnBonuses($log));
+$application->add(new Commands\Transactions\ExportTransactions(new TransactionItemFormatter(), $log));
+$application->run($input);
