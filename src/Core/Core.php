@@ -82,7 +82,7 @@ class Core implements CoreInterface
                     $this->logger->error(
                         'bad request',
                         [
-                            'clientId' => $this->apiClient->getCredentials()->clientId,
+                            'clientId' => $this->apiClient->getCredentials()->clientId->toRfc4122(),
                             'domainUrl' => $this->apiClient->getCredentials()->domainUrl,
                             'apiMethod' => $cmd->apiMethod,
                             'parameters' => $cmd->parameters,
@@ -102,7 +102,7 @@ class Core implements CoreInterface
                     $this->logger->warning(
                         'authorisation forbidden',
                         [
-                            'clientId' => $this->apiClient->getCredentials()->clientId,
+                            'clientId' => $this->apiClient->getCredentials()->clientId->toRfc4122(),
                             'domainUrl' => $this->apiClient->getCredentials()->domainUrl,
                             'apiMethod' => $cmd->apiMethod,
                         ]
@@ -111,9 +111,9 @@ class Core implements CoreInterface
                         $this->apiClient->getCredentials()->clientId->toRfc4122()));
                 case StatusCodeInterface::STATUS_NOT_FOUND:
                     $this->logger->error(
-                        'method not found',
+                        'method or entity not found',
                         [
-                            'clientId' => $this->apiClient->getCredentials()->clientId,
+                            'clientId' => $this->apiClient->getCredentials()->clientId->toRfc4122(),
                             'domainUrl' => $this->apiClient->getCredentials()->domainUrl,
                             'apiMethod' => $cmd->apiMethod,
                         ]
@@ -123,7 +123,7 @@ class Core implements CoreInterface
                     $this->logger->error(
                         'internal server error',
                         [
-                            'clientId' => $this->apiClient->getCredentials()->clientId,
+                            'clientId' => $this->apiClient->getCredentials()->clientId->toRfc4122(),
                             'domainUrl' => $this->apiClient->getCredentials()->domainUrl,
                             'apiMethod' => $cmd->apiMethod,
                             'parameters' => $cmd->parameters,
@@ -143,7 +143,7 @@ class Core implements CoreInterface
                     $this->logger->error(
                         'server unavailable error',
                         [
-                            'clientId' => $this->apiClient->getCredentials()->clientId,
+                            'clientId' => $this->apiClient->getCredentials()->clientId->toRfc4122(),
                             'domainUrl' => $this->apiClient->getCredentials()->domainUrl,
                             'apiMethod' => $cmd->apiMethod,
                             'parameters' => $cmd->parameters,
@@ -163,7 +163,7 @@ class Core implements CoreInterface
                     $this->logger->error(
                         'unhandled server status',
                         [
-                            'clientId' => $this->apiClient->getCredentials()->clientId,
+                            'clientId' => $this->apiClient->getCredentials()->clientId->toRfc4122(),
                             'domainUrl' => $this->apiClient->getCredentials()->domainUrl,
                             'apiMethod' => $cmd->apiMethod,
                             'parameters' => $cmd->parameters,
