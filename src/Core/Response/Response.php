@@ -6,6 +6,7 @@ namespace B24io\Loyalty\SDK\Core\Response;
 
 use B24io\Loyalty\SDK\Core\Command;
 use B24io\Loyalty\SDK\Core\Exceptions\BaseException;
+use B24io\Loyalty\SDK\Core\Exceptions\TransportException;
 use B24io\Loyalty\SDK\Core\Response\DTO\Metadata;
 use B24io\Loyalty\SDK\Core\Response\DTO\Pagination;
 use Psr\Log\LoggerInterface;
@@ -23,28 +24,6 @@ class Response
     {
     }
 
-
-    public function __destruct()
-    {
-//        // пишем эту информацию в деструкторе, т.к. метод getResponseData может и не быть вызван
-//        // логировать в конструкторе смысла нет, т.к. запрос ещё может не завершиться из-за того,
-//        // что он асинхронный и неблокирующий
-//        $restTimings = null;
-//        if ($this->responseData !== null) {
-//            $restTimings = [
-//                'rest_query_duration' => $this->responseData->getTime()->getDuration(),
-//                'rest_query_processing' => $this->responseData->getTime()->getProcessing(),
-//                'rest_query_start' => $this->responseData->getTime()->getStart(),
-//                'rest_query_finish' => $this->responseData->getTime()->getFinish(),
-//            ];
-//        }
-//        $this->logger->info('Response.TransportInfo', [
-//            'restTimings' => $restTimings,
-//            'networkTimings' => (new NetworkTimingsParser($this->httpResponse->getInfo()))->toArrayWithMicroseconds(),
-//            'responseInfo' => (new ResponseInfoParser($this->httpResponse->getInfo()))->toArray(),
-//        ]);
-    }
-
     /**
      * @return DTO\ResponseData
      * @throws BaseException
@@ -56,7 +35,7 @@ class Response
         if ($this->responseData === null) {
             try {
                 $this->logger->debug('getResponseData.parseResponse.start');
-                $responseResult = $this->httpResponse->toArray(true);
+                $responseResult = $this->httpResponse->toArray();
 
                 $this->logger->info('getResponseData.responseBody', [
                     'responseBody' => $responseResult,

@@ -112,10 +112,10 @@ class ExportCards extends Command
         }
 
         $admSb = ServiceBuilderFactory::createAdminRoleServiceBuilder(
-            $this->logger,
             $apiEndpointUrl,
             $apiClientId,
-            $apiAdminKey
+            $apiAdminKey,
+            $this->logger
         );
 
         $cardsTotal = $admSb->cardsScope()->cards()->count();

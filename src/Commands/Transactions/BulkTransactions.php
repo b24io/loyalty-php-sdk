@@ -161,10 +161,10 @@ class BulkTransactions extends Command
         // add result trx log
 
         $admSb = ServiceBuilderFactory::createAdminRoleServiceBuilder(
-            $this->logger,
             $apiEndpointUrl,
             $apiClientId,
-            $apiAdminKey
+            $apiAdminKey,
+            $this->logger
         );
         $cardsTotal = $admSb->cardsScope()->cards()->count();
         $io->info([

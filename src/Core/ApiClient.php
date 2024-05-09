@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace B24io\Loyalty\SDK\Core;
 
+use B24io\Loyalty\SDK\Common\Requests\ItemsOrder;
 use B24io\Loyalty\SDK\Core\Contracts\ApiClientInterface;
 use B24io\Loyalty\SDK\Core\Credentials\Context;
 use Psr\Log\LoggerInterface;
@@ -56,12 +57,13 @@ class ApiClient implements ApiClientInterface
      * @throws TransportExceptionInterface
      */
     public function getResponse(
-        Context $context,
-        string  $httpMethod,
-        string  $apiMethod,
-        array   $parameters = [],
-        ?int    $page = null,
-        ?Uuid   $idempotencyKey = null
+        Context     $context,
+        string      $httpMethod,
+        string      $apiMethod,
+        array       $parameters = [],
+        ?ItemsOrder $order = null,
+        ?int        $page = null,
+        ?Uuid       $idempotencyKey = null
     ): ResponseInterface
     {
         $this->logger->info(
@@ -92,6 +94,9 @@ class ApiClient implements ApiClientInterface
                     $url .= '?page=' . $page;
                 }
             }
+            if ($order !== null) {
+                $url .= '&' . $order->toQueryParams();
+            }
         }
         // auth
         $headers = $this->getDefaultHeaders();
@@ -113,6 +118,7 @@ class ApiClient implements ApiClientInterface
             'getResponse.end',
             [
                 'apiMethod' => $apiMethod,
+                'url' => $url,
                 'responseInfo' => $response->getInfo(),
             ]
         );

@@ -139,7 +139,7 @@ class BurnBonuses extends Command
             return Command::INVALID;
         }
 
-        $admSb = ServiceBuilderFactory::createAdminRoleServiceBuilder($this->logger, $apiEndpointUrl, $apiClientId, $apiAdminKey);
+        $admSb = ServiceBuilderFactory::createAdminRoleServiceBuilder($apiEndpointUrl, $apiClientId, $apiAdminKey, $this->logger);
         $cardsTotal = $admSb->cardsScope()->cards()->count();
 
         $io->info([
