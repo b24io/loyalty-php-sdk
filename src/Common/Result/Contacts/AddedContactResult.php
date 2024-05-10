@@ -15,6 +15,6 @@ class AddedContactResult extends AbstractResult
      */
     public function getContact(): ContactItemResult
     {
-        return new ContactItemResult($this->getCoreResponse()->getResponseData()->result);
+        return new ContactItemResult($this->getCoreResponse()->getResponseData()->result['contact']);
     }
 }

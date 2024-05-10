@@ -1,15 +1,21 @@
 # loyalty-php-sdk
 
-## 3.1.0 (2024.05.9)
-* add requrenments:
-   * `symfony/console` version  `7.*`,
+## 3.1.0 (2024.05.11)
+* add requirements:
+   * `symfony/console` version `7.*`,
    * `symfony/dotenv`: version `7.*`,
 * add `InvalidArgumentException` class
 * add `ItemsOrder` for `Command` class
-* add `Contacts::add` method for add contacts
-* add order by for entities:
-    * cards
-    * contacts
+* add `Contacts::add` method for add contacts, you can set start params for card:
+   * card start balance
+   * card start percentage
+   * card start status: active or blocked
+* add order by argument for entities:
+   * `cards` - order available by fields
+     * `created`
+     * `modified`
+     * `balance`
+   * `contacts`
 
 ## 3.0 (2024.01.15)
 

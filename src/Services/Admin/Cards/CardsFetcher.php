@@ -34,7 +34,7 @@ class CardsFetcher
 
         $cardCnt = 0;
         for ($i = 1; $i <= $pages; $i++) {
-            $res = $this->cards->list($i);
+            $res = $this->cards->list(null, $i);
             $this->logger->info('CardsFetcher.list.pageItem', [
                 'page' => $res->getCoreResponse()->getResponseData()->pagination->page,
                 'cardCnt' => $cardCnt,

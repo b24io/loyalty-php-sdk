@@ -6,3 +6,6 @@ phpstan:
 	vendor/bin/phpstan analyse
 phpinsights:
 	vendor/bin/phpinsights analyse ./src
+
+test-integration:
+	php vendor/bin/phpunit --colors=always --testsuite integration-tests
