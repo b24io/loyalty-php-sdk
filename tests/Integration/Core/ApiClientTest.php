@@ -6,7 +6,7 @@ namespace B24io\Loyalty\SDK\Tests\Integration\Core;
 
 use B24io\Loyalty\SDK\Core\Contracts\ApiClientInterface;
 use B24io\Loyalty\SDK\Core\Credentials\Context;
-use B24io\Loyalty\SDK\Tests\Integration\Fabric;
+use B24io\Loyalty\SDK\Tests\Integration\IntegrationTestsContextBuilder;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Fig\Http\Message\StatusCodeInterface;
@@ -32,10 +32,11 @@ class ApiClientTest extends TestCase
             RequestMethodInterface::METHOD_GET,
              'health');
         $this->assertEquals(StatusCodeInterface::STATUS_OK, $res->getStatusCode());
+        var_dump($res->toArray());
     }
 
     public function setUp(): void
     {
-        $this->apiClient = Fabric::getApiClient();
+        $this->apiClient = IntegrationTestsContextBuilder::getApiClient();
     }
 }

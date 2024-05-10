@@ -7,7 +7,7 @@ namespace B24io\Loyalty\SDK\Tests\Integration\Core;
 use B24io\Loyalty\SDK\Core\Command;
 use B24io\Loyalty\SDK\Core\Contracts\CoreInterface;
 use B24io\Loyalty\SDK\Core\Credentials\Context;
-use B24io\Loyalty\SDK\Tests\Integration\Fabric;
+use B24io\Loyalty\SDK\Tests\Integration\IntegrationTestsContextBuilder;
 use PHPUnit\Framework\TestCase;
 use Fig\Http\Message\StatusCodeInterface;
 use Fig\Http\Message\RequestMethodInterface;
@@ -27,8 +27,6 @@ class CoreTest extends TestCase
         ));
         $this->assertEquals(StatusCodeInterface::STATUS_NOT_FOUND,
             $res->httpResponse->getStatusCode());
-        $this->assertEquals(StatusCodeInterface::STATUS_NOT_FOUND,
-            $res->httpResponse->getStatusCode());
     }
 
     public function testCallHealthMethod(): void
@@ -45,6 +43,6 @@ class CoreTest extends TestCase
 
     public function setUp(): void
     {
-        $this->core = Fabric::getCore();
+        $this->core = IntegrationTestsContextBuilder::getCore();
     }
 }
