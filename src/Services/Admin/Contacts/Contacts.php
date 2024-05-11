@@ -6,6 +6,7 @@ namespace B24io\Loyalty\SDK\Services\Admin\Contacts;
 
 use B24io\Loyalty\SDK\Common\FullName;
 use B24io\Loyalty\SDK\Common\Gender;
+use B24io\Loyalty\SDK\Common\Requests\ItemsOrder;
 use B24io\Loyalty\SDK\Common\Result\Contacts\AddedContactResult;
 use B24io\Loyalty\SDK\Common\Result\Contacts\ContactItemResult;
 use B24io\Loyalty\SDK\Common\Result\Contacts\ContactsResult;
@@ -72,7 +73,10 @@ class Contacts extends AbstractService
         );
     }
 
-    public function list(?ContactsFilter $filter = null, ?int $page = 1): ContactsResult
+    public function list(
+        ?ContactsFilter $filter = null,
+        ?ItemsOrder     $order = null,
+        ?int            $page = 1): ContactsResult
     {
         $url = 'contacts';
         if (!is_null($filter)) {
@@ -86,7 +90,7 @@ class Contacts extends AbstractService
                     RequestMethodInterface::METHOD_GET,
                     $url,
                     [],
-                    null,
+                    $order,
                     $page
                 )
             )

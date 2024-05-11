@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace B24io\Loyalty\SDK\Tests\Integration\Services\Admin\Main;
 
 use B24io\Loyalty\SDK\Services\Admin\AdminServiceBuilder;
-use B24io\Loyalty\SDK\Tests\Integration\Fabric;
+use B24io\Loyalty\SDK\Tests\Integration\IntegrationTestsContextBuilder;
 use PHPUnit\Framework\TestCase;
 use Fig\Http\Message\StatusCodeInterface;
 use Fig\Http\Message\RequestMethodInterface;
@@ -24,6 +24,6 @@ class MainTest extends TestCase
 
     public function setUp(): void
     {
-        $this->sb = Fabric::getAdminServiceBuilder();
+        $this->sb = IntegrationTestsContextBuilder::getAdminServiceBuilder();
     }
 }

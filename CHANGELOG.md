@@ -6,7 +6,7 @@
    * `symfony/dotenv`: version `7.*`,
 * add `InvalidArgumentException` class
 * add `ItemsOrder` for `Command` class
-* add `Contacts::add` method for add contacts, you can set start params for card:
+* add `Cards::add` method for add cards, you can set start params for card:
    * card start balance
    * card start percentage
    * card start status: active or blocked
@@ -16,6 +16,8 @@
      * `modified`
      * `balance`
    * `contacts`
+     * `created`
+     * `modified`
 
 ## 3.0 (2024.01.15)
 

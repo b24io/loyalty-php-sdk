@@ -125,6 +125,7 @@ Work with contacts as an `admin` role
 | `getById`          | ✅      | get contact by id           |
 | `add`              | ✅      | add new contact             |
 | `update`           | ❌️     | update contact              |
+| `delete`           | ❌️     | delete contact              |
 | `count`            | 🛠     | count contacts              |
 | `startAuthByPhone` | ❌️     | start auth attempt by phone |
 | `finishAuth`       | ❌️     | finish auth attempt         |

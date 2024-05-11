@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace B24io\Loyalty\SDK\Common\Requests;
 
-use B24io\Loyalty\SDK\Core\Exceptions\InvalidArgumentException;
-
 readonly class ItemsOrder
 {
     public function __construct(
