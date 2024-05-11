@@ -76,6 +76,8 @@ Work with card as a `user` role
 |-----------|--------|------------------|
 | `getById` | 🛠     | get card by uuid |
 
+If you need export all cards, you can use `CardsFetcher`
+
 ### CardLevels
 
 Work with card levels as an `admin` role

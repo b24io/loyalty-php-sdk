@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace B24io\Loyalty\SDK\Commands\Transactions;
 
 use B24io\Loyalty\SDK\Common\Reason;
+use B24io\Loyalty\SDK\Common\Requests\ItemsOrder;
+use B24io\Loyalty\SDK\Common\Requests\OrderDirection;
 use B24io\Loyalty\SDK\Common\TransactionType;
 use B24io\Loyalty\SDK\Services\Admin\AdminServiceBuilder;
 use B24io\Loyalty\SDK\Services\ServiceBuilderFactory;
@@ -154,7 +156,7 @@ class BurnBonuses extends Command
         }
 
         $progressBar = new ProgressBar($output, $cardsTotal);
-        foreach ($admSb->cardsScope()->fetcher()->list() as $cnt => $card) {
+        foreach ($admSb->cardsScope()->fetcher()->list(new ItemsOrder('created', OrderDirection::desc)) as $cnt => $card) {
             $progressBar->advance();
             try {
                 // filter cards with balance > 0

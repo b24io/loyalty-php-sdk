@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace B24io\Loyalty\SDK\Services\Admin\Cards;
 
+use B24io\Loyalty\SDK\Common\Requests\ItemsOrder;
 use B24io\Loyalty\SDK\Common\Result\Cards\CardItemResult;
 use B24io\Loyalty\SDK\Core\Exceptions\BaseException;
 use Generator;
@@ -22,7 +23,7 @@ class CardsFetcher
      * @return Generator<CardItemResult>
      * @throws BaseException
      */
-    public function list(): Generator
+    public function list(ItemsOrder $order): Generator
     {
         $res = $this->cards->list();
 
@@ -34,7 +35,7 @@ class CardsFetcher
 
         $cardCnt = 0;
         for ($i = 1; $i <= $pages; $i++) {
-            $res = $this->cards->list(null, $i);
+            $res = $this->cards->list($order, $i);
             $this->logger->info('CardsFetcher.list.pageItem', [
                 'page' => $res->getCoreResponse()->getResponseData()->pagination->page,
                 'cardCnt' => $cardCnt,

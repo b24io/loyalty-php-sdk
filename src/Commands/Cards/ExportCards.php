@@ -7,6 +7,8 @@ namespace B24io\Loyalty\SDK\Commands\Cards;
 use B24io\Loyalty\SDK\Common\Formatters\Cards\CardItemFormatter;
 use B24io\Loyalty\SDK\Common\Formatters\Cards\CardLevelItemFormatter;
 use B24io\Loyalty\SDK\Common\Formatters\Contacts\ContactItemFormatter;
+use B24io\Loyalty\SDK\Common\Requests\ItemsOrder;
+use B24io\Loyalty\SDK\Common\Requests\OrderDirection;
 use B24io\Loyalty\SDK\Core\Exceptions\BaseException;
 use League\Csv\CannotInsertRecord;
 use League\Csv\Exception;
@@ -131,7 +133,7 @@ class ExportCards extends Command
             )
         );
 
-        foreach ($admSb->cardsScope()->fetcher()->list() as $card) {
+        foreach ($admSb->cardsScope()->fetcher()->list(new ItemsOrder('created', OrderDirection::desc)) as $card) {
             $contact = array_fill(0, count($this->contactItemFormatter->fields()), null);
             if ($card->contact !== null) {
                 //todo add external_id_key to cli arguments
