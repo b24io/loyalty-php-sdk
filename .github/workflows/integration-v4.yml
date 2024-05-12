@@ -36,10 +36,6 @@ jobs:
           coverage: "none"
           php-version: "${{ matrix.php-version }}"
           ini-values: variables_order=EGPCS
-        env:
-          LOYALTY_API_ENDPOINT_URL: ${{ vars.LOYALTY_API_ENDPOINT_URL }}
-          LOYALTY_API_CLIENT_ID: ${{ secrets.LOYALTY_API_CLIENT_ID }}
-          LOYALTY_API_ADMIN_KEY: ${{ secrets.LOYALTY_API_ADMIN_KEY }}
 
       - name: "Install dependencies"
         run: |
@@ -47,7 +43,8 @@ jobs:
 
       - name: "Debug ENV variables"
         run: |
-          echo "$LOYALTY_API_ENDPOINT_URL: $LOYALTY_API_ENDPOINT_URL" 
+          echo "LOYALTY_API_ENDPOINT_URL: $LOYALTY_API_ENDPOINT_URL" 
+          echo "LOYALTY_API_ENDPOINT_URL: $env.LOYALTY_API_ENDPOINT_URL" 
           printenv
 
       - name: "Run integration tests"
