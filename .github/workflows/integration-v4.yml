@@ -32,7 +32,7 @@ jobs:
         uses: "actions/checkout@v2"
 
       - name: "Install PHP"
-        uses: "shivammathur/setup-php@v2.30.4"
+        uses: "shivammathur/setup-php@v2.9.0"
         with:
           coverage: xdebug
           extensions: mbstring, intl, json, bcmath, curl
