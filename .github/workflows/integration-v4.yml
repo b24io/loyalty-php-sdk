@@ -16,6 +16,7 @@ jobs:
   tests:
     name: "Integration tests"
     runs-on: ${{ matrix.operating-system }}
+    environment: integration-tests
     strategy:
       fail-fast: false
       matrix:
