@@ -8,8 +8,44 @@ use B24io\Loyalty\SDK\Common\Requests\ItemsOrder;
 use B24io\Loyalty\SDK\Core\Credentials\Context;
 use Symfony\Component\Uid\Uuid;
 
-readonly class Command
+class Command
 {
+    /**
+     * @var Context
+     * @readonly
+     */
+    public Context $context;
+    /**
+     * @var string
+     * @readonly
+     */
+    public string $httpMethod;
+    /**
+     * @var string
+     * @readonly
+     */
+    public string $apiMethod;
+    /**
+     * @var array<string, mixed>
+     * @readonly
+     */
+    public array $parameters = [];
+    /**
+     * @var ItemsOrder|null
+     * @readonly
+     */
+    public ?ItemsOrder $itemsOrder = null;
+    /**
+     * @var int|null
+     * @readonly
+     */
+    public ?int $page = null;
+    /**
+     * @var Uuid|null
+     * @readonly
+     */
+    public ?Uuid $idempotencyKey = null;
+
     /**
      * @param Context $context
      * @param string $httpMethod
@@ -20,14 +56,20 @@ readonly class Command
      * @param Uuid|null $idempotencyKey
      */
     public function __construct(
-        public Context     $context,
-        public string      $httpMethod,
-        public string      $apiMethod,
-        public array       $parameters = [],
-        public ?ItemsOrder $itemsOrder = null,
-        public ?int        $page = null,
-        public ?Uuid       $idempotencyKey = null
-    )
+        Context     $context,
+        string      $httpMethod,
+        string      $apiMethod,
+        array       $parameters = [],
+        ?ItemsOrder $itemsOrder = null,
+        ?int        $page = null,
+        ?Uuid       $idempotencyKey = null)
     {
+        $this->context = $context;
+        $this->httpMethod = $httpMethod;
+        $this->apiMethod = $apiMethod;
+        $this->parameters = $parameters;
+        $this->itemsOrder = $itemsOrder;
+        $this->page = $page;
+        $this->idempotencyKey = $idempotencyKey;
     }
 }
