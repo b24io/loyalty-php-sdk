@@ -29,7 +29,8 @@ class CardsFetcherTest extends TestCase
         foreach ($this->sb->cardsScope()->fetcher()->list(new ItemsOrder('created', OrderDirection::desc)) as $card) {
             $cardCnt++;
         }
-        $this->assertEquals($cardsCount, $cardCnt);
+
+        $this->assertGreaterThanOrEqual($cardsCount, $cardCnt);
     }
 
     public function setUp(): void

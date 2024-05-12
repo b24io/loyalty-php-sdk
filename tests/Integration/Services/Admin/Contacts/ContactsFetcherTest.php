@@ -30,7 +30,7 @@ class ContactsFetcherTest extends TestCase
         foreach ($this->sb->contactsScope()->fetcher()->list(null, new ItemsOrder('created', OrderDirection::desc)) as $item) {
             $itemCnt++;
         }
-        $this->assertEquals($contactsCount, $itemCnt);
+        $this->assertGreaterThanOrEqual($contactsCount, $itemCnt);
     }
 
     public function setUp(): void

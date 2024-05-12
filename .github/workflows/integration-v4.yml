@@ -44,8 +44,6 @@ jobs:
 
       - name: "Debug ENV variables"
         run: |
-          echo "LOYALTY_API_ENDPOINT_URL: $LOYALTY_API_ENDPOINT_URL" 
-          echo "LOYALTY_API_ENDPOINT_URL: $env.LOYALTY_API_ENDPOINT_URL" 
           printenv
 
       - name: "Run integration tests"
