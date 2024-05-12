@@ -128,7 +128,7 @@ Work with contacts as an `admin` role
 | `add`              | ✅      | add new contact             |
 | `update`           | ❌️     | update contact              |
 | `delete`           | ❌️     | delete contact              |
-| `count`            | 🛠     | count contacts              |
+| `count`            | ✅     | count contacts              |
 | `startAuthByPhone` | ❌️     | start auth attempt by phone |
 | `finishAuth`       | ❌️     | finish auth attempt         |
 
@@ -139,6 +139,8 @@ Work with contacts as an `user` role
 | `getById`          | 🛠     | get contact by id           |
 | `startAuthByPhone` | 🛠     | start auth attempt by phone |
 | `finishAuth`       | 🛠     | finish auth attempt         |
+
+If you need export all contacts, you can use `ContactsFetcher`
 
 ### Company
 

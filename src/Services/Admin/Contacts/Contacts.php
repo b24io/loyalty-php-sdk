@@ -7,11 +7,13 @@ namespace B24io\Loyalty\SDK\Services\Admin\Contacts;
 use B24io\Loyalty\SDK\Common\FullName;
 use B24io\Loyalty\SDK\Common\Gender;
 use B24io\Loyalty\SDK\Common\Requests\ItemsOrder;
+use B24io\Loyalty\SDK\Common\Result\Cards\CardsResult;
 use B24io\Loyalty\SDK\Common\Result\Contacts\AddedContactResult;
 use B24io\Loyalty\SDK\Common\Result\Contacts\ContactItemResult;
 use B24io\Loyalty\SDK\Common\Result\Contacts\ContactsResult;
 use B24io\Loyalty\SDK\Core\Command;
 use B24io\Loyalty\SDK\Core\Credentials\Context;
+use B24io\Loyalty\SDK\Core\Exceptions\BaseException;
 use B24io\Loyalty\SDK\Services\AbstractService;
 use DateTimeImmutable;
 use DateTimeZone;
@@ -95,5 +97,29 @@ class Contacts extends AbstractService
                 )
             )
         );
+    }
+
+    /**
+     * @throws BaseException
+     */
+    public function count(?ContactsFilter $filter = null): int
+    {
+        $url = 'contacts';
+        if (!is_null($filter)) {
+            $url .= $filter->build();
+        }
+
+        return (int)(new ContactsResult(
+            $this->core->call(
+                new Command(
+                    Context::admin,
+                    RequestMethodInterface::METHOD_GET,
+                    $url,
+                    [],
+                    null,
+                    1
+                )
+            )
+        ))->getCoreResponse()->getResponseData()->pagination->total;
     }
 }

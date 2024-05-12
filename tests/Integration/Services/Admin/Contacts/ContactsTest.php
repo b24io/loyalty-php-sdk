@@ -33,9 +33,14 @@ class ContactsTest extends TestCase
     private Faker\Generator $faker;
     private PhoneNumberUtil $phoneNumberUtil;
 
+    /**
+     * @throws TransportExceptionInterface|BaseException|NumberParseException
+     * @testdox Test add contact
+     * @covers \B24io\Loyalty\SDK\Services\Admin\Contacts\Contacts::add
+     */
     public function testAdd(): void
     {
-        $addedContact = $this->sb->contacts()->add(
+        $addedContact = $this->sb->contactsScope()->contacts()->add(
             new FullName(
                 $this->faker->firstName(),
                 $this->faker->lastName(),
@@ -60,7 +65,7 @@ class ContactsTest extends TestCase
      */
     public function testContactsListWithNullArguments(): void
     {
-        $res = $this->sb->contacts()->list(null, null, null);
+        $res = $this->sb->contactsScope()->contacts()->list(null, null, null);
         $this->assertEquals(StatusCodeInterface::STATUS_OK, $res->getCoreResponse()->httpResponse->getStatusCode());
         $this->assertGreaterThanOrEqual(0, $res->getCoreResponse()->getResponseData()->pagination->total);
         $this->assertGreaterThanOrEqual(0, count($res->getContacts()));
@@ -73,7 +78,7 @@ class ContactsTest extends TestCase
      */
     public function testContactsListWithDefaultArguments(): void
     {
-        $res = $this->sb->contacts()->list();
+        $res = $this->sb->contactsScope()->contacts()->list();
         $this->assertEquals(StatusCodeInterface::STATUS_OK, $res->getCoreResponse()->httpResponse->getStatusCode());
         $this->assertGreaterThanOrEqual(0, $res->getCoreResponse()->getResponseData()->pagination->total);
         $this->assertGreaterThanOrEqual(0, count($res->getContacts()));
@@ -100,7 +105,7 @@ class ContactsTest extends TestCase
             $this->expectException($expectedExceptionClassname);
         }
 
-        $res = $this->sb->contacts()->list(null, $order);
+        $res = $this->sb->contactsScope()->contacts()->list(null, $order);
         $this->assertEquals(StatusCodeInterface::STATUS_OK, $res->getCoreResponse()->httpResponse->getStatusCode());
         $this->assertGreaterThanOrEqual(0, $res->getCoreResponse()->getResponseData()->pagination->total);
         $this->assertGreaterThanOrEqual(0, count($res->getContacts()));
@@ -244,14 +249,48 @@ class ContactsTest extends TestCase
         ];
     }
 
+    /**
+     * @throws TransportExceptionInterface|BaseException|NumberParseException
+     * @testdox Test filter contacts with cards
+     * @covers \B24io\Loyalty\SDK\Services\Admin\Contacts\Contacts::list
+     */
     public function testContactsListWithCard(): void
     {
-        $res = $this->sb->contacts()->list(
+        $res = $this->sb->contactsScope()->contacts()->list(
             (new ContactsFilter())
                 ->withHasCard(true));
         $this->assertEquals(StatusCodeInterface::STATUS_OK, $res->getCoreResponse()->httpResponse->getStatusCode());
     }
 
+    /**
+     * @throws TransportExceptionInterface|BaseException|NumberParseException
+     * @testdox Count contacts
+     * @covers \B24io\Loyalty\SDK\Services\Admin\Contacts\Contacts::count
+     */
+    public function testContactsCount(): void
+    {
+        $cntBefore = $this->sb->contactsScope()->contacts()->count();
+
+        $addedContact = $this->sb->contactsScope()->contacts()->add(
+            new FullName(
+                $this->faker->firstName(),
+                $this->faker->lastName(),
+            ),
+            new DateTimeZone('Europe/Moscow'),
+            Gender::male,
+            $this->phoneNumberUtil->parse(
+                $this->faker->phoneNumber,
+                'RU'
+            )
+        );
+
+        $cntAfter = $this->sb->contactsScope()->contacts()->count();
+
+        $this->assertEquals(
+            $cntBefore + 1,
+            $cntAfter
+        );
+    }
 
     public function setUp(): void
     {

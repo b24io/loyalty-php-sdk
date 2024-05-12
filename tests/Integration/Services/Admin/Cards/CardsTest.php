@@ -56,7 +56,7 @@ class CardsTest extends TestCase
      */
     public function testAddCard(): void
     {
-        $addedContact = $this->sb->contacts()->add(
+        $addedContact = $this->sb->contactsScope()->contacts()->add(
             new FullName(
                 $this->faker->firstName(),
                 $this->faker->lastName(),

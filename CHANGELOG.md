@@ -20,6 +20,8 @@
         * `created`
         * `modified`
 * add `ItemsOrder` for `Cards\Fetcher` class
+* add `Contacts::count` for count contacts
+* add `ContactsFetcher` for bulk read contacts
 
 ## 3.0 (2024.01.15)
 
