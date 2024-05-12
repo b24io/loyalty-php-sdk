@@ -6,7 +6,7 @@ namespace B24io\Loyalty\SDK\Tests\Integration\Services\Admin\Transactions;
 
 use B24io\Loyalty\SDK\Common\Reason;
 use B24io\Loyalty\SDK\Services\Admin\AdminServiceBuilder;
-use B24io\Loyalty\SDK\Tests\Integration\Fabric;
+use B24io\Loyalty\SDK\Tests\Integration\IntegrationTestsContextBuilder;
 use Money\Currency;
 use Money\Money;
 use PHPUnit\Framework\TestCase;
@@ -49,6 +49,6 @@ class TransactionsTest extends TestCase
 
     public function setUp(): void
     {
-        $this->sb = Fabric::getAdminServiceBuilder();
+        $this->sb = IntegrationTestsContextBuilder::getAdminServiceBuilder();
     }
 }

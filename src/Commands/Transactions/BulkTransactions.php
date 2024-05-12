@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace B24io\Loyalty\SDK\Commands\Transactions;
 
 use B24io\Loyalty\SDK\Common\Reason;
+use B24io\Loyalty\SDK\Common\Requests\ItemsOrder;
+use B24io\Loyalty\SDK\Common\Requests\OrderDirection;
 use B24io\Loyalty\SDK\Common\TransactionType;
 use B24io\Loyalty\SDK\Services\ServiceBuilderFactory;
 use Money\Currencies\ISOCurrencies;
@@ -161,10 +163,10 @@ class BulkTransactions extends Command
         // add result trx log
 
         $admSb = ServiceBuilderFactory::createAdminRoleServiceBuilder(
-            $this->logger,
             $apiEndpointUrl,
             $apiClientId,
-            $apiAdminKey
+            $apiAdminKey,
+            $this->logger
         );
         $cardsTotal = $admSb->cardsScope()->cards()->count();
         $io->info([
@@ -176,7 +178,7 @@ class BulkTransactions extends Command
         ]);
 
         $progressBar = new ProgressBar($output, $cardsTotal);
-        foreach ($admSb->cardsScope()->fetcher()->list() as $card) {
+        foreach ($admSb->cardsScope()->fetcher()->list(new ItemsOrder('created', OrderDirection::desc)) as $card) {
             try {
                 if ($isDryrun) {
                     $io->note(['', 'dry run mode is active', '']);

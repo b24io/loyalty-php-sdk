@@ -9,6 +9,7 @@ use B24io\Loyalty\SDK\Core\Result\AbstractItem;
 use DateTimeImmutable;
 use Money\Currency;
 use Money\Money;
+use MoneyPHP\Percentage\Percentage;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -16,6 +17,7 @@ use Symfony\Component\Uid\Uuid;
  * @property-read string $number
  * @property-read string $barcode
  * @property-read Money $balance
+ * @property-read Percentage $percentage
  * @property-read DateTimeImmutable $created
  * @property-read DateTimeImmutable $modified
  * @property-read CardStatus $status
@@ -35,6 +37,8 @@ class CardItemResult extends AbstractItem
                     $this->data[$offset]['amount'],
                     new Currency($this->data[$offset]['currency'] ?? '')
                 );
+            case 'percentage':
+                return new Percentage($this->data[$offset]);
             case 'status':
                 return CardStatus::from($this->data[$offset]);
             case 'level':
