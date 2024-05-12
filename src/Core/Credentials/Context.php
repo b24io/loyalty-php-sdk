@@ -8,4 +8,5 @@ enum Context: string
 {
     case admin = 'admin';
     case user = 'user';
+    case default = '';
 }

@@ -22,6 +22,15 @@ Via Composer
 $ composer require b24io/loyalty-php-sdk
 ```
 
+### Versions
+
+| loyalty-php-sdk version | support status | REST-API version | PHP versions |
+|-------------------------|----------------|------------------|--------------|
+| **v4**                  | 🟩 **active**  | **2**            | `8.2`,`8.3`  |
+| v3                      | 🟨 bugfix only | 2                | `7.4`        |
+| v2                      | 🟥 end of life | 1                | `7.4`        |
+| v1                      | 🟥 end of life | 1                | `7.4`        |
+
 ### Requirements
 
 Loyalty PHP SDK works with PHP 8.2 or above, need `ext-json` and `ext-curl` support
@@ -55,7 +64,7 @@ Work with card as an `admin` role
 | `getById`       | ✅      | get card by uuid                   |
 | `count`         | ✅️     | count cards                        |
 | `delete`        | 🛠️    | delete card by uuid                |
-| `add`           | ❌️     | add new card                       |
+| `add`           | ✅️     | add new card                       |
 | `block`         | ❌️     | block card by uuid                 |
 | `unblock`       | ❌️     | unblock card by uuid               |
 | `setLevel`      | ❌️     | set card level by uuid             |
@@ -66,6 +75,8 @@ Work with card as a `user` role
 | Method    | Status | Description      |
 |-----------|--------|------------------|
 | `getById` | 🛠     | get card by uuid |
+
+If you need export all cards, you can use `CardsFetcher`
 
 ### CardLevels
 
@@ -82,7 +93,7 @@ Work with card levels as an `admin` role
 
 Work with transactions as an `admin` role.
 
-Transactions service contains this methods, list method work with pagination
+Transactions service contains methods, list method work with pagination
 
 | Method                                  | Description                                         |
 |-----------------------------------------|-----------------------------------------------------|
@@ -92,13 +103,13 @@ Transactions service contains this methods, list method work with pagination
 | `processAccrualTransactionByCardNumber` | process accrual transaction                         |
 | `processPaymentTransactionByCardNumber` | process payment transaction                         |
 
-if you want read all transactions without pagination you can work with `TransactionsFetcher`All fetcher methods return generator, under the hood fetcher use pagination. 
+if you want read all transactions without pagination you can work with `TransactionsFetcher`All fetcher methods return
+generator, under the hood fetcher use pagination.
 
-| Method               | Description                                                                                     |
-|----------------------|-------------------------------------------------------------------------------------------------|
-| `list`               | get transactions list for all cards  |
-| `listByCardNumber`   | list all transactions for current card                                                          |
-
+| Method             | Description                            |
+|--------------------|----------------------------------------|
+| `list`             | get transactions list for all cards    |
+| `listByCardNumber` | list all transactions for current card |
 
 Work with transactions as an `user` role
 
@@ -116,10 +127,10 @@ Work with contacts as an `admin` role
 | `getById`          | ✅      | get contact by id           |
 | `add`              | ✅      | add new contact             |
 | `update`           | ❌️     | update contact              |
-| `count`            | 🛠     | count contacts              |
+| `delete`           | ❌️     | delete contact              |
+| `count`            | ✅     | count contacts              |
 | `startAuthByPhone` | ❌️     | start auth attempt by phone |
 | `finishAuth`       | ❌️     | finish auth attempt         |
-
 
 Work with contacts as an `user` role
 
@@ -129,6 +140,7 @@ Work with contacts as an `user` role
 | `startAuthByPhone` | 🛠     | start auth attempt by phone |
 | `finishAuth`       | 🛠     | finish auth attempt         |
 
+If you need export all contacts, you can use `ContactsFetcher`
 
 ### Company
 
@@ -148,6 +160,7 @@ Work with company as an `user` role
 | `current` | 🛠     | get current company |
 
 ### ApplicationJournal
+
 Work with application journal as an `admin` role
 
 | Method    | Status | Description                                             |
@@ -155,8 +168,8 @@ Work with application journal as an `admin` role
 | `list`    | 🛠     | get application journal items list with page navigation |
 | `getById` | 🛠     | get application journal item by id                      |
 
-
 ### TouchPoints
+
 Work with touch points as an `admin` role
 
 | Method    | Status | Description                                |
@@ -166,7 +179,6 @@ Work with touch points as an `admin` role
 | `add`     | 🛠     | add new touch point                        |
 | `update`  | ❌️     | update touch point                         |
 | `delete`  | 🛠️    | delete touch point                         |
-
 
 ## Basic Usage
 
@@ -192,6 +204,7 @@ Bugs and feature request are tracked on [GitHub](https://github.com/b24io/loyalt
 ### Testing
 
 Run static analysis tool
+
 ```shell
 make phpstan
 ```

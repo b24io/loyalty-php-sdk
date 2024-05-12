@@ -5,13 +5,10 @@ declare(strict_types=1);
 namespace B24io\Loyalty\SDK\Services\Admin;
 
 use B24io\Loyalty\SDK\Services\AbstractServiceBuilder;
-use B24io\Loyalty\SDK\Services\Admin\Cards\Cards;
-use B24io\Loyalty\SDK\Services\Admin\Cards\CardsFetcher;
 use B24io\Loyalty\SDK\Services\Admin\Cards\CardsServiceBuilder;
-use B24io\Loyalty\SDK\Services\Admin\Contacts\Contacts;
-use B24io\Loyalty\SDK\Services\Admin\Main\Main;
-use B24io\Loyalty\SDK\Services\Admin\Transactions\Transactions;
+use B24io\Loyalty\SDK\Services\Admin\Contacts\ContactsServiceBuilder;
 use B24io\Loyalty\SDK\Services\Admin\Transactions\TransactionsServiceBuilder;
+use B24io\Loyalty\SDK\Services\Admin\Main\Main;
 
 class AdminServiceBuilder extends AbstractServiceBuilder
 {
@@ -35,10 +32,10 @@ class AdminServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    public function transactionsScope(): TransactionsServiceBuilder
+    public function contactsScope(): ContactsServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new TransactionsServiceBuilder(
+            $this->serviceCache[__METHOD__] = new ContactsServiceBuilder(
                 $this->core,
                 $this->log);
         }
@@ -46,10 +43,12 @@ class AdminServiceBuilder extends AbstractServiceBuilder
         return $this->serviceCache[__METHOD__];
     }
 
-    public function contacts(): Contacts
+    public function transactionsScope(): TransactionsServiceBuilder
     {
         if (!isset($this->serviceCache[__METHOD__])) {
-            $this->serviceCache[__METHOD__] = new Contacts($this->core, $this->log);
+            $this->serviceCache[__METHOD__] = new TransactionsServiceBuilder(
+                $this->core,
+                $this->log);
         }
 
         return $this->serviceCache[__METHOD__];

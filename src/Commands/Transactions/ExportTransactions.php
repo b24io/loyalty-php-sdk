@@ -110,10 +110,10 @@ class ExportTransactions extends Command
         }
 
         $admSb = ServiceBuilderFactory::createAdminRoleServiceBuilder(
-            $this->logger,
             $apiEndpointUrl,
             $apiClientId,
-            $apiAdminKey
+            $apiAdminKey,
+            $this->logger
         );
 
         $trxTotal = $admSb->transactionsScope()->transactions()->count();

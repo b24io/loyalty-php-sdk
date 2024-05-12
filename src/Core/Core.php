@@ -46,6 +46,10 @@ class Core implements CoreInterface
                 'httpMethod' => $cmd->httpMethod,
                 'apiMethod' => $cmd->apiMethod,
                 'parameters' => $cmd->parameters,
+                'order' => [
+                    'orderBy' => $cmd->itemsOrder?->orderBy,
+                    'direction' => $cmd->itemsOrder?->direction,
+                ],
             ]
         );
 
@@ -56,6 +60,7 @@ class Core implements CoreInterface
                 $cmd->httpMethod,
                 $cmd->apiMethod,
                 $cmd->parameters,
+                $cmd->itemsOrder,
                 $cmd->page,
                 $cmd->idempotencyKey
             );

@@ -155,10 +155,10 @@ class LoadTransactionsFromFile extends Command
         }
 
         $admSb = ServiceBuilderFactory::createAdminRoleServiceBuilder(
-            $this->logger,
             $apiEndpointUrl,
             $apiClientId,
-            $apiAdminKey
+            $apiAdminKey,
+            $this->logger
         );
 
         // src/Commands/Transactions

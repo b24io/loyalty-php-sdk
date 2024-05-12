@@ -27,6 +27,7 @@ class Transactions extends AbstractService
                     RequestMethodInterface::METHOD_GET,
                     'transactions',
                     [],
+                    null,
                     $page
                 )
             )
@@ -42,6 +43,7 @@ class Transactions extends AbstractService
                     RequestMethodInterface::METHOD_GET,
                     sprintf('transactions/with-card-number/%s', $cardNumber),
                     [],
+                    null,
                     $page
                 )
             )
@@ -64,6 +66,7 @@ class Transactions extends AbstractService
                     'reason' => $reason->toArray(),
                 ],
                 null,
+                null,
                 Uuid::v4()
             )
         ));
@@ -85,6 +88,7 @@ class Transactions extends AbstractService
                     'reason' => $reason->toArray(),
                 ],
                 null,
+                null,
                 Uuid::v4()
             )
         ));
@@ -102,6 +106,7 @@ class Transactions extends AbstractService
                     RequestMethodInterface::METHOD_GET,
                     'transactions',
                     [],
+                    null,
                     1
                 )
             )
