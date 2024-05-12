@@ -8,7 +8,7 @@ on:
 
 env:
   COMPOSER_FLAGS: "--ansi --no-interaction --no-progress --prefer-dist"
-  LOYALTY_API_ENDPOINT_URL: ${{ secrets.LOYALTY_API_ENDPOINT_URL }}
+  LOYALTY_API_ENDPOINT_URL: ${{ vars.LOYALTY_API_ENDPOINT_URL }}
   LOYALTY_API_CLIENT_ID: ${{ secrets.LOYALTY_API_CLIENT_ID }}
   LOYALTY_API_ADMIN_KEY: ${{ secrets.LOYALTY_API_ADMIN_KEY }}
 
@@ -37,7 +37,9 @@ jobs:
           php-version: "${{ matrix.php-version }}"
           ini-values: variables_order=EGPCS
         env:
-          BITRIX24_PHP_SDK_PLAYGROUND_WEBHOOK: ${{ secrets.BITRIX24_PHP_SDK_PLAYGROUND_WEBHOOK }}
+          LOYALTY_API_ENDPOINT_URL: ${{ vars.LOYALTY_API_ENDPOINT_URL }}
+          LOYALTY_API_CLIENT_ID: ${{ secrets.LOYALTY_API_CLIENT_ID }}
+          LOYALTY_API_ADMIN_KEY: ${{ secrets.LOYALTY_API_ADMIN_KEY }}
 
       - name: "Install dependencies"
         run: |
