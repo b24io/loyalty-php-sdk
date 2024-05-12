@@ -350,6 +350,18 @@ class CardsTest extends TestCase
         ];
     }
 
+    /**
+     * @return void
+     * @throws BaseException
+     * @covers Cards::count()
+     * @testdox Test count cards method
+     */
+    public function testCount():void
+    {
+        $cnt = $this->sb->cardsScope()->cards()->count();
+        $this->assertGreaterThan(0, $cnt);
+    }
+
     public function setUp(): void
     {
         $this->sb = IntegrationTestsContextBuilder::getAdminServiceBuilder();
