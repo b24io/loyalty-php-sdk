@@ -105,6 +105,11 @@ class CardsTest extends TestCase
             $cardStatus,
             $addedCard->getCard()->status
         );
+        $this->assertEquals(
+            0,
+            $addedCard->getCard()->turnovers->totalPurchasesCount
+        );
+        $this->assertTrue($addedCard->getCard()->turnovers->totalPurchasesSum->isZero());
     }
 
     /**
@@ -356,7 +361,7 @@ class CardsTest extends TestCase
      * @covers Cards::count()
      * @testdox Test count cards method
      */
-    public function testCount():void
+    public function testCount(): void
     {
         $cnt = $this->sb->cardsScope()->cards()->count();
         $this->assertGreaterThan(0, $cnt);

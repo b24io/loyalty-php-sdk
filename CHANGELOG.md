@@ -1,5 +1,14 @@
 # loyalty-php-sdk
 
+## 4.1.0 (2024.05.22)
+* add `Turnovers` for `CardItemResult`, contains:
+  * total purchases count
+  * total purchases sum
+
+## 4.0.0 (2024.05.11)
+* bump SDK version for PHP `8.2` and `8.3` branch
+
+
 ## 3.1.0 (2024.05.11)
 
 * add requirements:
