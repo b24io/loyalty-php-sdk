@@ -20,18 +20,13 @@ use Traversable;
  */
 abstract class AbstractItem implements IteratorAggregate
 {
-    /**
-     * @var array<string, mixed>
-     */
-    protected array $data;
     protected DecimalMoneyParser $decimalMoneyParser;
 
     /**
      * @param array<string, mixed> $data
      */
-    public function __construct(array $data)
+    public function __construct(protected array $data)
     {
-        $this->data = $data;
         $this->decimalMoneyParser = new DecimalMoneyParser(new ISOCurrencies());
     }
 
@@ -48,29 +43,22 @@ abstract class AbstractItem implements IteratorAggregate
      */
     public function __get(int|string $offset)
     {
-        switch ($offset) {
-            case 'id':
-                return Uuid::fromString($this->data[$offset]);
-            case 'externalId':
-                return (string)$this->data['external_id'];
-            case 'created':
-            case 'modified':
-                return new DateTimeImmutable($this->data[$offset]);
-            case 'reason':
-                return new Reason(
-                    $this->data[$offset]['id'],
-                    $this->data[$offset]['code'],
-                    $this->data[$offset]['comment']
-                );
-            default:
-                return $this->data[$offset] ?? null;
-        }
+        return match ($offset) {
+            'id' => Uuid::fromString($this->data[$offset]),
+            'externalId' => (string)$this->data['external_id'],
+            'created', 'modified' => new DateTimeImmutable($this->data[$offset]),
+            'reason' => new Reason(
+                $this->data[$offset]['id'],
+                $this->data[$offset]['code'],
+                $this->data[$offset]['comment']
+            ),
+            default => $this->data[$offset] ?? null,
+        };
 
     }
 
     /**
      * @param int|string $offset
-     * @param mixed $value
      *
      * @return void
      * @throws ImmutableResultViolationException

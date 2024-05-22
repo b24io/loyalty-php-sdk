@@ -1,9 +1,22 @@
 # loyalty-php-sdk
 
 ## 4.1.0 (2024.05.22)
-* add `Turnovers` for `CardItemResult`, contains:
+* add `TurnoversItemResult` for `CardItemResult`, contains:
   * total purchases count
   * total purchases sum
+* add `TurnoversItemResult` for `ContactItemResult`, contains:
+  * total purchases count
+  * total purchases sum
+* add `CardLevelItem` for `ContactItemResult`, contains:
+  * `id` card level id  
+  * `nextLevelId` next level id
+  * `name` level name
+  * `code` level code
+  * `defaultPercentage` card level default percentage
+  * `description` card level description
+  * `externalId` card level external id
+  * `created` date time card level create
+  * `modified` date time card level update
 
 ## 4.0.0 (2024.05.11)
 * bump SDK version for PHP `8.2` and `8.3` branch

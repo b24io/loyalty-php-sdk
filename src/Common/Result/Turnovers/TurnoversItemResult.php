@@ -16,16 +16,13 @@ class TurnoversItemResult extends AbstractItem
 {
     public function __get(int|string $offset)
     {
-        switch ($offset) {
-            case 'totalPurchasesCount':
-                return (int)$this->data['total_purchases_count'];
-            case 'totalPurchasesSum':
-                return $this->decimalMoneyParser->parse(
-                    $this->data['total_purchases_sum']['amount'],
-                    new Currency($this->data['total_purchases_sum']['currency'] ?? '')
-                );
-            default:
-                return parent::__get($offset);
-        }
+        return match ($offset) {
+            'totalPurchasesCount' => (int)$this->data['total_purchases_count'],
+            'totalPurchasesSum' => $this->decimalMoneyParser->parse(
+                $this->data['total_purchases_sum']['amount'],
+                new Currency($this->data['total_purchases_sum']['currency'] ?? '')
+            ),
+            default => parent::__get($offset),
+        };
     }
 }
