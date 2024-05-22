@@ -44,9 +44,9 @@ use Throwable;
 class LoadTransactionsFromFile extends Command
 {
     public function __construct(
-        private TransactionsReader    $transactionsReader,
-        private DecimalMoneyFormatter $decimalMoneyFormatter,
-        private LoggerInterface       $logger
+        private readonly TransactionsReader    $transactionsReader,
+        private readonly DecimalMoneyFormatter $decimalMoneyFormatter,
+        private readonly LoggerInterface       $logger
     )
     {
         parent::__construct();
@@ -166,7 +166,7 @@ class LoadTransactionsFromFile extends Command
         /**
          * @var array{'extension':string,'filename':string} $pathInfo
          */
-        $pathInfo = pathinfo($filename);
+        $pathInfo = pathinfo((string) $filename);
 
         $totalTransactionsInFile = $this->transactionsReader->countTransactionsInFile($filename);
         $output->writeln(sprintf('transactions count %s in file %s', $totalTransactionsInFile, $filename));

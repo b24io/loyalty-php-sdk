@@ -21,16 +21,10 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 class Core implements CoreInterface
 {
-    protected ApiClientInterface $apiClient;
-    protected LoggerInterface $logger;
-
     public function __construct(
-        ApiClientInterface $apiClient,
-        LoggerInterface    $logger
-    )
+        protected ApiClientInterface $apiClient,
+        protected LoggerInterface    $logger)
     {
-        $this->apiClient = $apiClient;
-        $this->logger = $logger;
     }
 
     /**
@@ -203,7 +197,7 @@ class Core implements CoreInterface
                 'call.unknownException',
                 [
                     'message' => $exception->getMessage(),
-                    'exceptionType' => get_class($exception),
+                    'exceptionType' => $exception::class,
                     'trace' => $exception->getTrace(),
                 ]
             );

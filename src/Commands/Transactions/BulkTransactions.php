@@ -28,7 +28,9 @@ use Throwable;
     description: 'Bulk accrual or payment transaction to all active cards')]
 class BulkTransactions extends Command
 {
-    public function __construct(private LoggerInterface $logger)
+    public function __construct(
+        private readonly LoggerInterface $logger
+        )
     {
         parent::__construct();
     }
@@ -186,9 +188,7 @@ class BulkTransactions extends Command
                 }
 
                 $trxHistoryByCard = $admSb->transactionsScope()->transactions()->getByCardNumber($card->number);
-                $reasonCodeHistory = array_map(static function (Reason $reason) {
-                    return $reason->code;
-                }, array_column($trxHistoryByCard->getTransactions(), 'reason'));
+                $reasonCodeHistory = array_map(static fn(Reason $reason) => $reason->code, array_column($trxHistoryByCard->getTransactions(), 'reason'));
                 if (in_array($reasonCode, $reasonCodeHistory, true)) {
                     $this->logger->info(sprintf('transaction already processed for card %s', $card->number));
                     continue;

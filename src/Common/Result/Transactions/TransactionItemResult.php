@@ -25,21 +25,16 @@ class TransactionItemResult extends AbstractItem
 {
     public function __get(int|string $offset)
     {
-        switch ($offset) {
-            case 'value':
-                return $this->decimalMoneyParser->parse(
-                    $this->data[$offset]['amount'],
-                    new Currency(($this->data[$offset]['currency']) ?? '')
-                );
-            case 'type':
-                return TransactionType::from(str_replace('_transaction', '', $this->data[$offset]));
-            case 'cardId':
-                return Uuid::fromString($this->data['card']['id']);
-            case 'cardNumber':
-                return $this->data['card']['number'];
-            default:
-                return parent::__get($offset);
-        }
+        return match ($offset) {
+            'value' => $this->decimalMoneyParser->parse(
+                $this->data[$offset]['amount'],
+                new Currency(($this->data[$offset]['currency']) ?? '')
+            ),
+            'type' => TransactionType::from(str_replace('_transaction', '', $this->data[$offset])),
+            'cardId' => Uuid::fromString($this->data['card']['id']),
+            'cardNumber' => $this->data['card']['number'],
+            default => parent::__get($offset),
+        };
 
     }
 }

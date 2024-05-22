@@ -1,6 +1,6 @@
 # loyalty-php-sdk
 
-[![License](https://poser.pugx.org/b24io/loyalty-php-sdk/license.svg)](https://packagist.org/packages/b24io/loyalty-php-sdk) [![Total Downloads](https://poser.pugx.org/b24io/loyalty-php-sdk/downloads.svg)](https://packagist.org/packages/b24io/loyalty-php-sdk) [![Build Status](https://travis-ci.org/b24io/loyalty-php-sdk.svg?branch=master)](https://travis-ci.org/b24io/loyalty-php-sdk)
+[![License](https://poser.pugx.org/b24io/loyalty-php-sdk/license.svg)](https://packagist.org/packages/b24io/loyalty-php-sdk) [![Total Downloads](https://poser.pugx.org/b24io/loyalty-php-sdk/downloads.svg)](https://packagist.org/packages/b24io/loyalty-php-sdk)
 
 Loyalty PHP SDK is a tool for work with REST-API Bitrix24
 Application [Loyalty Program and bonus cards for Bitrix24 CRM](https://www.bitrix24.ru/apps/?app=b24io.loyalty)
@@ -24,12 +24,12 @@ $ composer require b24io/loyalty-php-sdk
 
 ### Versions
 
-| loyalty-php-sdk version | support status | REST-API version | PHP versions |
-|-------------------------|----------------|------------------|--------------|
-| **v4**                  | 🟩 **active**  | **2**            | `8.2`,`8.3`  |
-| v3                      | 🟨 bugfix only | 2                | `7.4`        |
-| v2                      | 🟥 end of life | 1                | `7.4`        |
-| v1                      | 🟥 end of life | 1                | `7.4`        |
+| loyalty-php-sdk<br/> version | support status    | build <br/> status                                                                                                                                                                                                                   | REST-API<br/>version | PHP<br/> versions |
+|------------------------------|-------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------|-------------------|
+| **v4.x**                     | 🟩 **active**     | ![integration tests](https://github.com/b24io/loyalty-php-sdk/actions/workflows/integration-v4.yml/badge.svg?branch=v4) <br/> ![phpstan](https://github.com/b24io/loyalty-php-sdk/actions/workflows/phpstan.yml/badge.svg?branch=v4) | **2**                | `8.2`,`8.3`       |
+| v3.x                         | 🟨 bugfix only    | ![integration tests](https://github.com/b24io/loyalty-php-sdk/actions/workflows/integration-v4.yml/badge.svg?branch=v3) <br/> ![phpstan](https://github.com/b24io/loyalty-php-sdk/actions/workflows/phpstan.yml/badge.svg?branch=v3) | 2                    | `7.4`             |
+| v2                           | 🟥 end of life ☠️ |                                                                                                                                                                                                                                      | 1                    | `7.4`             |
+| v1                           | 🟥 end of life ☠️ |                                                                                                                                                                                                                                      | 1                    | `7.4`             |
 
 ### Requirements
 

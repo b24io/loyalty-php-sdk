@@ -77,28 +77,36 @@ class ExportCards extends Command
             '============',
             '',
         ]);
-
+        /**
+         * @var ?string $apiEndpointUrl
+         */
         $apiEndpointUrl = $input->getOption('api-endpoint-url');
         if ($apiEndpointUrl === null) {
             $output->writeln('error: you must set api-endpoint-url option');
 
             return Command::INVALID;
         }
-
+        /**
+         * @var ?string $apiClientId
+         */
         $apiClientId = $input->getOption('api-client-id');
         if ($apiClientId === null) {
             $output->writeln('error: you must set api-client-id option');
 
             return Command::INVALID;
         }
-
+        /**
+         * @var ?string $apiAdminKey
+         */
         $apiAdminKey = $input->getOption('api-admin-key');
         if ($apiAdminKey === null) {
             $output->writeln('error: you must set api-admin-key option');
 
             return Command::INVALID;
         }
-
+        /**
+         * @var ?string $filename
+         */
         $filename = $input->getOption('file');
         if ($filename === null) {
             $output->writeln('error: you must set file option');

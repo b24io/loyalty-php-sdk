@@ -12,15 +12,11 @@ use Psr\Log\LoggerInterface;
 
 abstract class AbstractService
 {
-    public readonly CoreInterface $core;
-    protected readonly LoggerInterface $log;
     protected readonly DecimalMoneyFormatter $decimalMoneyFormatter;
     protected readonly PhoneNumberUtil $phoneNumberUtil;
 
-    public function __construct(CoreInterface $core, LoggerInterface $log)
+    public function __construct(public readonly CoreInterface $core, protected readonly LoggerInterface $log)
     {
-        $this->core = $core;
-        $this->log = $log;
         $this->decimalMoneyFormatter = new DecimalMoneyFormatter(new ISOCurrencies());
         $this->phoneNumberUtil = PhoneNumberUtil::getInstance();
     }

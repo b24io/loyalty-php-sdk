@@ -8,11 +8,8 @@ use B24io\Loyalty\SDK\Core\Response\Response;
 
 abstract class AbstractResult
 {
-    protected Response $coreResponse;
-
-    public function __construct(Response $coreResponse)
+    public function __construct(protected Response $coreResponse)
     {
-        $this->coreResponse = $coreResponse;
     }
 
     public function getCoreResponse(): Response
