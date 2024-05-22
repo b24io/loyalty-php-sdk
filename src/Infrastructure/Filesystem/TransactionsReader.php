@@ -13,17 +13,23 @@ use League\Csv\UnavailableStream;
 use Psr\Log\LoggerInterface;
 use League\Csv;
 
-readonly class TransactionsReader
+class TransactionsReader
 {
     /**
+     * @readonly
+     */
+    private LoggerInterface $log;
+    /**
      * @var array<int|string>
+     * @readonly
      */
     private array $transactionByCardNumberFileHeader;
 
     public function __construct(
-        private LoggerInterface $log
+        LoggerInterface $log
     )
     {
+        $this->log = $log;
         $this->transactionByCardNumberFileHeader = [
             'card_id',
             'card_number',
