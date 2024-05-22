@@ -29,6 +29,21 @@ class Context
         $this->value = $value;
     }
 
+    public static function default(): self
+    {
+        return new self(self::default);
+    }
+
+    public static function user(): self
+    {
+        return new self(self::user);
+    }
+
+    public static function admin(): self
+    {
+        return new self(self::admin);
+    }
+
     public function isDefault(): bool
     {
         return $this->value === self::default;

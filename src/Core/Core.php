@@ -47,8 +47,8 @@ class Core implements CoreInterface
                 'apiMethod' => $cmd->apiMethod,
                 'parameters' => $cmd->parameters,
                 'order' => [
-                    'orderBy' => $cmd->itemsOrder?->orderBy,
-                    'direction' => $cmd->itemsOrder?->direction,
+                    'orderBy' => $cmd->itemsOrder !== null ? $cmd->itemsOrder->orderBy : null,
+                    'direction' => $cmd->itemsOrder !== null ? $cmd->itemsOrder->direction : null,
                 ],
             ]
         );
@@ -76,7 +76,7 @@ class Core implements CoreInterface
                     //todo check with empty response size from server
                     $response = new Response($apiCallResponse,
                         new Command(
-                            Context::admin,
+                            Context::admin(),
                             $cmd->httpMethod,
                             $cmd->apiMethod,
                             $cmd->parameters

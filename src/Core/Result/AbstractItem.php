@@ -35,7 +35,10 @@ abstract class AbstractItem implements IteratorAggregate
         $this->decimalMoneyParser = new DecimalMoneyParser(new ISOCurrencies());
     }
 
-    public function __isset(int|string $offset): bool
+    /**
+     * @param int|string $offset
+     */
+    public function __isset($offset): bool
     {
         return isset($this->data[$offset]);
     }
@@ -46,7 +49,7 @@ abstract class AbstractItem implements IteratorAggregate
      * @return mixed
      * @throws Exception
      */
-    public function __get(int|string $offset)
+    public function __get($offset)
     {
         switch ($offset) {
             case 'id':
@@ -76,7 +79,7 @@ abstract class AbstractItem implements IteratorAggregate
      * @throws ImmutableResultViolationException
      *
      */
-    public function __set(int|string $offset, mixed $value)
+    public function __set($offset, $value)
     {
         throw new ImmutableResultViolationException(sprintf('Result is immutable, violation at offset %s', $offset));
     }
@@ -86,7 +89,7 @@ abstract class AbstractItem implements IteratorAggregate
      *
      * @throws ImmutableResultViolationException
      */
-    public function __unset(int|string $offset)
+    public function __unset($offset)
     {
         throw new ImmutableResultViolationException(sprintf('Result is immutable, violation at offset %s', $offset));
     }
