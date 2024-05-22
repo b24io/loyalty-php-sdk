@@ -4,18 +4,36 @@ declare(strict_types=1);
 
 namespace B24io\Loyalty\SDK\Core\Response\DTO;
 
-readonly class Pagination
+class Pagination
 {
-    public function __construct(
-        public ?int $count,
-        public ?int $total,
-        public ?int $page,
-        public ?int $pages,
-        public ?int $pageSize,
-    )
+    /**
+     * @readonly
+     */
+    public ?int $count;
+    /**
+     * @readonly
+     */
+    public ?int $total;
+    /**
+     * @readonly
+     */
+    public ?int $page;
+    /**
+     * @readonly
+     */
+    public ?int $pages;
+    /**
+     * @readonly
+     */
+    public ?int $pageSize;
+    public function __construct(?int $count, ?int $total, ?int $page, ?int $pages, ?int $pageSize)
     {
+        $this->count = $count;
+        $this->total = $total;
+        $this->page = $page;
+        $this->pages = $pages;
+        $this->pageSize = $pageSize;
     }
-
     /**
      * @param array<string,?int> $pagination
      * @return self
