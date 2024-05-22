@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
+use Rector\Set\ValueObject\DowngradeLevelSetList;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
 
 return RectorConfig::configure()
@@ -10,9 +11,11 @@ return RectorConfig::configure()
         __DIR__ . '/src',
         __DIR__ . '/tests',
     ])
+    ->withSets(
+        [DowngradeLevelSetList::DOWN_TO_PHP_82]
+    )
      ->withPhpSets(
-         false, // 8.3
-         true   // 8.2
+         php82: true   // 8.2
      )
     ->withRules([
         AddVoidReturnTypeWhereNoReturnRector::class,

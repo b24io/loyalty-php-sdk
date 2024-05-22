@@ -32,7 +32,10 @@ use Throwable;
     description: 'Burning of bonuses accrued before the specified date')]
 class BurnBonuses extends Command
 {
-    private const string REASON_ID = 'b24io.loyalty.sdk.cli.util';
+    /**
+     * @var string
+     */
+    private const REASON_ID = 'b24io.loyalty.sdk.cli.util';
 
     public function __construct(
         private readonly LoggerInterface $logger
