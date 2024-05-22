@@ -6,12 +6,28 @@ namespace B24io\Loyalty\SDK\Core\Credentials;
 
 use Symfony\Component\Uid\Uuid;
 
-readonly class Credentials
+class Credentials
 {
+    /**
+     * @readonly
+     */
+    public string $domainUrl;
+    /**
+     * @readonly
+     */
+    public Uuid $clientId;
+    /**
+     * @readonly
+     */
+    public ?Uuid $adminApiKey;
+
     public function __construct(
-        public string $domainUrl,
-        public Uuid   $clientId,
-        public ?Uuid   $adminApiKey)
+        string $domainUrl,
+        Uuid   $clientId,
+        ?Uuid  $adminApiKey)
     {
+        $this->domainUrl = $domainUrl;
+        $this->clientId = $clientId;
+        $this->adminApiKey = $adminApiKey;
     }
 }
