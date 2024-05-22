@@ -9,17 +9,14 @@ use Throwable;
 
 class InternalServerErrorException extends BaseException
 {
-    protected ApiProblem $apiProblem;
-
     public function __construct(
-        ApiProblem $apiProblem,
+        protected ApiProblem $apiProblem,
         string     $message = "",
         int        $code = 0,
         ?Throwable $previous = null,
     )
     {
         parent::__construct($message, $code, $previous);
-        $this->apiProblem = $apiProblem;
     }
 
     public function getApiProblem(): ApiProblem

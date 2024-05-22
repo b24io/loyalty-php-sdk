@@ -13,8 +13,8 @@ use Psr\Log\LoggerInterface;
 class CardsFetcher
 {
     public function __construct(
-        private Cards           $cards,
-        private LoggerInterface $logger
+        private readonly Cards           $cards,
+        private readonly LoggerInterface $logger
     )
     {
     }

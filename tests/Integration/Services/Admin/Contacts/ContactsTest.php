@@ -56,6 +56,9 @@ class ContactsTest extends TestCase
             StatusCodeInterface::STATUS_OK,
             $addedContact->getCoreResponse()->httpResponse->getStatusCode()
         );
+        $this->assertNull($addedContact->getContact()->turnovers);
+        $this->assertNull($addedContact->getContact()->card);
+        $this->assertNull($addedContact->getContact()->cardLevel);
     }
 
     /**

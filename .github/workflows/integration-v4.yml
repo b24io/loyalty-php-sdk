@@ -1,6 +1,10 @@
 name: "Integration tests"
 
 on:
+  pull_request:
+    branches:
+      - v4
+      - master
   push:
     branches:
       - v4

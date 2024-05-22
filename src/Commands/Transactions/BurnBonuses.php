@@ -32,9 +32,14 @@ use Throwable;
     description: 'Burning of bonuses accrued before the specified date')]
 class BurnBonuses extends Command
 {
-    private const string REASON_ID = 'b24io.loyalty.sdk.cli.util';
+    /**
+     * @var string
+     */
+    private const REASON_ID = 'b24io.loyalty.sdk.cli.util';
 
-    public function __construct(private LoggerInterface $logger)
+    public function __construct(
+        private readonly LoggerInterface $logger
+    )
     {
         parent::__construct();
     }
@@ -167,9 +172,7 @@ class BurnBonuses extends Command
 
                 // get last 50 transactions for current card
                 $trxHistoryByCard = $admSb->transactionsScope()->transactions()->getByCardNumber($card->number);
-                $reasonCodeHistory = array_map(static function (Reason $reason) {
-                    return $reason->code;
-                }, array_column($trxHistoryByCard->getTransactions(), 'reason'));
+                $reasonCodeHistory = array_map(static fn(Reason $reason) => $reason->code, array_column($trxHistoryByCard->getTransactions(), 'reason'));
 
                 // if trx with reason-code exists, pass card
                 if (in_array($reasonCode, $reasonCodeHistory, true)) {

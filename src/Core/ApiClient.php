@@ -15,21 +15,18 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 
 class ApiClient implements ApiClientInterface
 {
-    protected HttpClientInterface $client;
-    protected LoggerInterface $logger;
-    protected Credentials\Credentials $credentials;
-    protected const SDK_VERSION = '3.0.0';
+    protected const SDK_VERSION = '4.1.0';
     protected const SDK_USER_AGENT = 'b24io-loyalty-php-sdk';
 
-    public function __construct(Credentials\Credentials $credentials, HttpClientInterface $client, LoggerInterface $logger)
+    public function __construct(
+        protected Credentials\Credentials $credentials,
+        protected HttpClientInterface     $client,
+        protected LoggerInterface         $logger)
     {
-        $this->credentials = $credentials;
-        $this->client = $client;
-        $this->logger = $logger;
         $this->logger->debug(
             'ApiClient.init',
             [
-                'httpClientType' => get_class($client),
+                'httpClientType' => $this->client::class,
             ]
         );
     }

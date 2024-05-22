@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace B24io\Loyalty\SDK\Common\Result\Cards;
 
 use B24io\Loyalty\SDK\Common\Result\Contacts\ContactItemResult;
+use B24io\Loyalty\SDK\Common\Result\Turnovers\TurnoversItemResult;
 use B24io\Loyalty\SDK\Core\Result\AbstractItem;
 use DateTimeImmutable;
 use Money\Currency;
@@ -24,6 +25,7 @@ use Symfony\Component\Uid\Uuid;
  * @property-read string $externalId
  * @property-read ?CardLevelItemResult $level
  * @property-read ContactItemResult $contact
+ * @property-read TurnoversItemResult $turnovers
  */
 class CardItemResult extends AbstractItem
 {
@@ -51,6 +53,11 @@ class CardItemResult extends AbstractItem
                     return null;
                 }
                 return new ContactItemResult($this->data[$offset]);
+            case 'turnovers':
+                if ($this->data[$offset] === null) {
+                    return null;
+                }
+                return new TurnoversItemResult($this->data[$offset]);
             default:
                 return parent::__get($offset);
         }

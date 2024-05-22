@@ -7,6 +7,8 @@ namespace B24io\Loyalty\SDK\Common\Result\Contacts;
 use B24io\Loyalty\SDK\Common\FullName;
 use B24io\Loyalty\SDK\Common\Gender;
 use B24io\Loyalty\SDK\Common\Result\Cards\CardItemResult;
+use B24io\Loyalty\SDK\Common\Result\Cards\CardLevelItemResult;
+use B24io\Loyalty\SDK\Common\Result\Turnovers\TurnoversItemResult;
 use B24io\Loyalty\SDK\Core\Result\AbstractItem;
 use DateTimeImmutable;
 use DateTimeZone;
@@ -22,6 +24,8 @@ use Symfony\Component\Uid\Uuid;
  * @property-read DateTimeImmutable $created
  * @property-read DateTimeImmutable $modified
  * @property-read ?CardItemResult $card
+ * @property-read ?CardLevelItemResult $cardLevel
+ * @property-read ?TurnoversItemResult $turnovers
  */
 class ContactItemResult extends AbstractItem
 {
@@ -51,6 +55,16 @@ class ContactItemResult extends AbstractItem
                     return null;
                 }
                 return new CardItemResult($this->data['card']);
+            case 'cardLevel':
+                if ($this->data['card_level'] === null) {
+                    return null;
+                }
+                return new CardLevelItemResult($this->data['card_level']);
+            case 'turnovers':
+                if ($this->data['turnovers'] === null) {
+                    return null;
+                }
+                return new TurnoversItemResult($this->data['turnovers']);
             default:
                 return parent::__get($offset);
         }
