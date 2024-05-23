@@ -30,25 +30,23 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Throwable;
 
-#[AsCommand(
-    name: 'transactions:load-from-file',
-    description: 'Process transactions from csv file' . PHP_EOL .
-    'file columns:' . PHP_EOL .
-    '   card_number - card number, example: 12345' . PHP_EOL .
-    '   transaction_amount - bonus amount, example: 245.65' . PHP_EOL .
-    '   transaction_type - accrual or payment transaction, example: accrual' . PHP_EOL .
-    '   reason_id - unique reason id per client transaction list, example: gift2024.04.25' . PHP_EOL .
-    '   reason_code -  reason code, example: marketingGiftProgram ' . PHP_EOL .
-    '   reason_comment - reason comment for user, example: Spring gift! We double your bonuses!'
-)]
 class LoadTransactionsFromFile extends Command
 {
+    private TransactionsReader $transactionsReader;
+    private DecimalMoneyFormatter $decimalMoneyFormatter;
+    private LoggerInterface $logger;
+    protected static $defaultName = 'transactions:process';
+    protected static $defaultDescription = 'Process transactions from csv file';
+
     public function __construct(
-        private TransactionsReader    $transactionsReader,
-        private DecimalMoneyFormatter $decimalMoneyFormatter,
-        private LoggerInterface       $logger
+        TransactionsReader    $transactionsReader,
+        DecimalMoneyFormatter $decimalMoneyFormatter,
+        LoggerInterface       $logger
     )
     {
+        $this->transactionsReader = $transactionsReader;
+        $this->decimalMoneyFormatter = $decimalMoneyFormatter;
+        $this->logger = $logger;
         parent::__construct();
     }
 
@@ -216,7 +214,7 @@ class LoadTransactionsFromFile extends Command
                                 'cardNumber' => $newTrx->cardNumber
                             ]);
                             $status = sprintf('transaction type %s with amount %s for card %s number already processed',
-                                $newTrx->type->value,
+                                (string)$newTrx->type,
                                 $this->decimalMoneyFormatter->format($newTrx->amount),
                                 $newTrx->cardNumber,
                             );
@@ -226,7 +224,7 @@ class LoadTransactionsFromFile extends Command
                             $revokedTrxLog->insertOne([
                                 $newTrx->cardId->toRfc4122(),
                                 $newTrx->cardNumber,
-                                $newTrx->type->value,
+                                (string)$newTrx->type,
                                 $this->decimalMoneyFormatter->format($newTrx->amount),
                                 $newTrx->amount->getCurrency()->getCode(),
                                 'транзакция уже проведена',
@@ -238,9 +236,9 @@ class LoadTransactionsFromFile extends Command
                         }
                     }
                 }
-
+                $resTrx = null;
                 switch ($newTrx->type) {
-                    case TransactionType::accrual:
+                    case TransactionType::accrual():
                         $resTrx = $admSb->transactionsScope()->transactions()->processAccrualTransactionByCardNumber(
                             $newTrx->cardNumber,
                             $newTrx->amount,
@@ -250,7 +248,7 @@ class LoadTransactionsFromFile extends Command
                         $status = sprintf('accrual transaction %s processed - %s', $resTrx->getTransaction()->id, $resTrx->getTransaction()->value->getAmount());
 
                         break;
-                    case TransactionType::payment:
+                    case TransactionType::payment():
                         $resTrx = $admSb->transactionsScope()->transactions()->processPaymentTransactionByCardNumber(
                             $newTrx->cardNumber,
                             $newTrx->amount,
@@ -260,16 +258,18 @@ class LoadTransactionsFromFile extends Command
                         $status = sprintf('payment transaction %s processed - %s', $resTrx->getTransaction()->id, $resTrx->getTransaction()->value->getAmount());
                         break;
                 }
-                // write to processed file
-                $processedTrxLog->insertOne([
-                        $newTrx->cardId->toRfc4122(),
-                        $newTrx->cardNumber,
-                        $newTrx->type->value,
-                        $this->decimalMoneyFormatter->format($newTrx->amount),
-                        $newTrx->amount->getCurrency()->getCode(),
-                        $resTrx->getTransaction()->id->toRfc4122(),
-                    ]
-                );
+                if ($resTrx !== null) {
+                    // write to processed file
+                    $processedTrxLog->insertOne([
+                            $newTrx->cardId->toRfc4122(),
+                            $newTrx->cardNumber,
+                            (string)$newTrx->type,
+                            $this->decimalMoneyFormatter->format($newTrx->amount),
+                            $newTrx->amount->getCurrency()->getCode(),
+                            $resTrx->getTransaction()->id->toRfc4122(),
+                        ]
+                    );
+                }
             } catch (Throwable $exception) {
                 $this->logger->error('LoadTransactionsFromFile.processItem.error', [
                     'message' => $exception->getMessage()
@@ -277,7 +277,7 @@ class LoadTransactionsFromFile extends Command
                 $failureTrxLog->insertOne([
                     $newTrx->cardId->toRfc4122(),
                     $newTrx->cardNumber,
-                    $newTrx->type->value,
+                    (string)$newTrx->type,
                     $this->decimalMoneyFormatter->format($newTrx->amount),
                     $newTrx->amount->getCurrency()->getCode(),
                     $exception->getMessage()

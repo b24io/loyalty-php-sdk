@@ -32,7 +32,7 @@ class Contacts extends AbstractService
      * @param PhoneNumber $mobilePhone
      * @param DateTimeImmutable|null $birthdate
      * @param array<string, string> $externalIds
-     * @return AddedContactResult
+     *@return AddedContactResult
      */
     public function add(
         FullName           $fullName,
@@ -45,14 +45,14 @@ class Contacts extends AbstractService
     {
         return new AddedContactResult($this->core->call(
             new Command(
-                Context::admin,
+                Context::admin(),
                 RequestMethodInterface::METHOD_POST,
                 'contacts',
                 [
                     'full_name' => $fullName->toArray(),
                     'timezone' => $timezone->getName(),
-                    'gender' => $gender->name,
-                    'birthday' => $birthdate?->format('Y.m.d'),
+                    'gender' => (string)$gender,
+                    'birthday' => ($nullsafeBirthdate = $birthdate) ? $nullsafeBirthdate->format('Y.m.d') : null,
                     'mobile_phone' => $this->phoneNumberUtil->format($mobilePhone, PhoneNumberFormat::E164),
                     'external_ids' => $externalIds
                 ],
@@ -67,7 +67,7 @@ class Contacts extends AbstractService
         return new ContactItemResult(
             $this->core->call(
                 new Command(
-                    Context::admin,
+                    Context::admin(),
                     RequestMethodInterface::METHOD_GET,
                     sprintf('contacts/%s', $id->toRfc4122()),
                 )
@@ -88,7 +88,7 @@ class Contacts extends AbstractService
         return new ContactsResult(
             $this->core->call(
                 new Command(
-                    Context::admin,
+                    Context::admin(),
                     RequestMethodInterface::METHOD_GET,
                     $url,
                     [],
@@ -112,7 +112,7 @@ class Contacts extends AbstractService
         return (int)(new ContactsResult(
             $this->core->call(
                 new Command(
-                    Context::admin,
+                    Context::admin(),
                     RequestMethodInterface::METHOD_GET,
                     $url,
                     [],

@@ -1,0 +1,152 @@
+### добавление операци на точке контакта в привязке к валидной карте
+POST https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/iiko/operations
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+
+{
+  "loyalty": {
+    "touch_point_id": "{{touch_point_id}}",
+    "card_id": "{{card_uuid_valid_card}}",
+    "processing_mode": "payment_immediately",
+    "bonus_points": {
+      "amount": "30.0",
+      "currency": "RUB"
+    }
+  },
+  "operation_type": "selling",
+  "iiko": {
+    "operation_id": "20210807.2201",
+    "payload": {
+         "id": "f724f46d-85d2-4e47-b568-4faa746e2217",
+         "date": "03.06.2021 15:18:39",
+         "items": [
+      {
+        "sum": "52.00",
+        "price": "52.00",
+        "amount": "1.00",
+        "totalSum": "52.00",
+        "modifiers": [],
+        "product-id": "c4a784d7-e882-408a-aa42-58e2714c79f9",
+        "position-id": "f558baa0-3a7a-4609-a716-171c845ed23d",
+        "group-modifiers": []
+      },
+      {
+        "sum": "7.00",
+        "price": "7.00",
+        "amount": "1.00",
+        "totalSum": "7.00",
+        "modifiers": [],
+        "product-id": "fdeec13a-e781-40a6-b4fe-5f713bedfe3c",
+        "position-id": "04ddbddc-452b-4e7f-b767-f9fc14308962",
+        "group-modifiers": []
+      },
+      {
+        "sum": "429.00",
+        "price": "429.00",
+        "amount": "1.00",
+        "totalSum": "563.00",
+        "modifiers": [
+          {
+            "sum": "22.00",
+            "price": "22.00",
+            "amount": "1.00",
+            "product-id": "c840d6cb-fb03-49f6-baa6-211adc93d708"
+          },
+          {
+            "sum": "66.00",
+            "price": "66.00",
+            "amount": "1.00",
+            "product-id": "20eb247e-9aaa-4816-a9af-9d1c18d90b1c"
+          },
+          {
+            "sum": "11.00",
+            "price": "11.00",
+            "amount": "1.00",
+            "product-id": "cf4bf0ae-a7c4-496b-a953-b0ac8892800f"
+          }
+        ],
+        "product-id": "a4c376f0-275a-4f6c-8a30-31504420b8c3",
+        "position-id": "9ccf2d63-6546-49bc-8906-5ab39b405353",
+        "group-modifiers": [
+          {
+            "items": [
+              {
+                "sum": "11.00",
+                "price": "11.00",
+                "amount": 1,
+                "product-id": "cf4bf0ae-a7c4-496b-a953-b0ac8892800f"
+              },
+              {
+                "sum": "24.00",
+                "price": "12.00",
+                "amount": 2,
+                "product-id": "a0877bd0-3145-468e-84f3-c08d0ca36b77"
+              }
+            ],
+            "group-id": "96705951-2b50-46ab-8a5a-f0dffb47a3d4"
+          }
+        ]
+      },
+      {
+        "sum": "12.00",
+        "price": "12.00",
+        "amount": "1.00",
+        "totalSum": "12.00",
+        "modifiers": [],
+        "product-id": "a0877bd0-3145-468e-84f3-c08d0ca36b77",
+        "position-id": "a4fb14d2-7df4-4b80-bfc1-232efde1935b",
+        "group-modifiers": []
+      }
+    ],
+         "status": "Bill",
+         "moneySum": "607.00",
+         "scoreSum": "30.00",
+         "totalSum": "637.00",
+         "card-number": "79780183843"
+    },
+    "products_description": [
+    {
+      "id": "c4a784d7-e882-408a-aa42-58e2714c79f9",
+      "name": "Новый товар1",
+      "full_name": "вапвап"
+    },
+    {
+      "id": "fdeec13a-e781-40a6-b4fe-5f713bedfe3c",
+      "name": "Test",
+      "full_name": ""
+    },
+    {
+      "id": "a4c376f0-275a-4f6c-8a30-31504420b8c3",
+      "name": "Теплый маковый тортик1",
+      "full_name": "Теплый маковый тортик"
+    },
+    {
+      "id": "c840d6cb-fb03-49f6-baa6-211adc93d708",
+      "name": "Модфикатор простой",
+      "full_name": ""
+    },
+    {
+      "id": "20eb247e-9aaa-4816-a9af-9d1c18d90b1c",
+      "name": "Модификатор обязательный для торта",
+      "full_name": ""
+    },
+    {
+      "id": "cf4bf0ae-a7c4-496b-a953-b0ac8892800f",
+      "name": "Модификатор1",
+      "full_name": ""
+    },
+    {
+      "id": "a0877bd0-3145-468e-84f3-c08d0ca36b77",
+      "name": "Модификатор3",
+      "full_name": ""
+    },
+    {
+      "id": "a0877bd0-3145-468e-84f3-c08d0ca36b77",
+      "name": "Модификатор3",
+      "full_name": ""
+    }
+  ]
+  }
+}

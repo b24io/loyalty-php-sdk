@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace B24io\Loyalty\SDK\Common\Result\Cards;
 
 use B24io\Loyalty\SDK\Common\Result\Contacts\ContactItemResult;
+use B24io\Loyalty\SDK\Core\Exceptions\InvalidArgumentException;
 use B24io\Loyalty\SDK\Core\Result\AbstractItem;
 use DateTimeImmutable;
 use Money\Currency;
@@ -27,7 +28,12 @@ use Symfony\Component\Uid\Uuid;
  */
 class CardItemResult extends AbstractItem
 {
-    public function __get(int|string $offset)
+    /**
+     * @param int|string $offset
+     * @throws InvalidArgumentException
+     * @throws \Exception
+     */
+    public function __get($offset)
     {
         switch ($offset) {
             case 'number':
@@ -40,7 +46,7 @@ class CardItemResult extends AbstractItem
             case 'percentage':
                 return new Percentage($this->data[$offset]);
             case 'status':
-                return CardStatus::from($this->data[$offset]);
+                return new CardStatus($this->data[$offset]);
             case 'level':
                 if ($this->data['card_level'] === null) {
                     return null;

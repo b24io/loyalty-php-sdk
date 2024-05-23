@@ -1,0 +1,39 @@
+### чекин по валидному номеру карты
+GET https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/iiko/checkin/{{touch_point_id}}/with-card-number/{{card_number_valid_card}}
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+
+### чекин по валидному номеру карты - ок
+GET https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/iiko/checkin/{{touch_point_id}}/with-card-number/74952581646
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### чекин по валидному номеру карты 79162584570 - проблема
+GET https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/iiko/checkin/{{touch_point_id}}/with-card-number/79162584570
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}

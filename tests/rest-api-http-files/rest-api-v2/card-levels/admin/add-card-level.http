@@ -1,0 +1,16 @@
+###
+POST https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/card-levels
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+Idempotency-Key: 123456-85d2-4e47-b568-4faa746e2213
+
+{
+  "name": "Серебряный уровень карты",
+  "code": "silver",
+  "default_percentage": 5.0,
+  "next_level_id": "b9c2e11d-5dd9-4052-85f7-f75ef00933a6",
+  "description": "Серебряный уровень карты",
+  "external_id": null
+}

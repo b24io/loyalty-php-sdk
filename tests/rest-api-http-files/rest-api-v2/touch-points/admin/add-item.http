@@ -1,0 +1,15 @@
+POST https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/touch-points
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+
+{
+  "name": "Pro-кофе11",
+  "external_id": null,
+  "description": "кафе в 9 подъезде",
+  "options": {
+    "loyalty_is_allow_accrual_bonuses": true,
+    "loyalty_is_allow_payment_bonuses": true
+  }
+}

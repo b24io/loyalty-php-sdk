@@ -1,0 +1,95 @@
+### добавление операци на точке контакта в привязке к валидной карте
+POST https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/1c/operations
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+
+{
+  "loyalty": {
+    "touch_point_id": "{{touch_point_id}}",
+    "card_id": "{{card_uuid_valid_card}}",
+    "processing_mode": "payment_immediately",
+    "bonus_points": {
+      "amount": "50.00",
+      "currency": "USD"
+    },
+    "chargeback_payment_transactions": []
+  },
+  "operation_type": "selling",
+  "payload": {
+    "version": 1,
+    "order": {
+        "id": "f724f46d-85d2-4e47-b568-4faa746e2217",
+        "created": "03.06.2021 15:18:39",
+        "money_sum": {
+            "amount": "0.00",
+            "currency": "USD"
+        },
+        "bonus_sum": {
+            "amount": "50.00",
+            "currency": "USD"
+        },
+        "total_sum": {
+            "amount": "50.00",
+            "currency": "USD"
+        },
+        "items": [
+           {
+             "id": "1114f46d-85d2-4e47-b568-4faa746e2217",
+             "title": "Banana",
+             "product_id": "2224f46d-85d2-4e47-b568-4faa746e2217",
+             "sku_id": null,
+             "category_id": "3334f46d-85d2-4e47-b568-4faa746e2217",
+             "discount_type": "monetary",
+             "discount_rate": "0.0",
+             "discount_sum": {
+                "amount": "0.00",
+                "currency": "USD"
+             },
+             "quantity": 1,
+             "is_tax_included_in_price": false,
+             "tax_rate": "0.0",
+             "net_price_per_item": {
+                "amount": "50.00",
+                "currency": "USD"
+             }
+           }
+        ],
+        "status": "Bill",
+        "card-number": "79780183843"
+    },
+    "products": [
+        {
+          "id": "1114f46d-85d2-4e47-b568-4faa746e2217",
+          "title": "Banana",
+          "description": "super banana",
+          "category_id": "9994f46d-85d2-4e47-b568-4faa746e2217",
+          "is_tax_included_in_price": false,
+          "tax_rate": "0.0",
+          "net_price": {
+                "amount": "50.00",
+                "currency": "USD"
+          },
+          "external_id": []
+        }
+  ],
+    "categories": [
+       {
+          "id": "9994f46d-85d2-4e47-b568-4faa746e2217",
+          "title": "merchant fruits",
+          "description": "merchant fruits",
+          "parent_id": null,
+          "external_id": []
+       }
+    ]
+  }
+}
+
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+

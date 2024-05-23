@@ -6,6 +6,7 @@ namespace B24io\Loyalty\SDK\Common\Result\Cards;
 
 use B24io\Loyalty\SDK\Core\Result\AbstractItem;
 use DateTimeImmutable;
+use Exception;
 use MoneyPHP\Percentage\Percentage;
 use Symfony\Component\Uid\Uuid;
 
@@ -22,7 +23,11 @@ use Symfony\Component\Uid\Uuid;
  */
 class CardLevelItemResult extends AbstractItem
 {
-    public function __get(int|string $offset)
+    /**
+     * @param int|string $offset
+     * @throws Exception
+     */
+    public function __get($offset)
     {
         switch ($offset) {
             case 'nextLevelId':

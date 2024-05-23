@@ -1,0 +1,62 @@
+name: "Integration tests"
+
+on:
+  push:
+    branches:
+      - v4
+      - master
+
+env:
+  COMPOSER_FLAGS: "--ansi --no-interaction --no-progress --prefer-dist"
+  LOYALTY_API_ENDPOINT_URL: ${{ vars.LOYALTY_API_ENDPOINT_URL }}
+  LOYALTY_API_CLIENT_ID: ${{ secrets.LOYALTY_API_CLIENT_ID }}
+  LOYALTY_API_ADMIN_KEY: ${{ secrets.LOYALTY_API_ADMIN_KEY }}
+
+jobs:
+  tests:
+    name: "Integration tests"
+    runs-on: ${{ matrix.operating-system }}
+    environment: integration-tests
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version:
+          - "8.2"
+          - "8.3"
+        dependencies: [ highest ]
+        operating-system: [ ubuntu-latest, windows-latest ]
+
+    steps:
+
+      - name: "Checkout"
+        uses: "actions/checkout@v2"
+
+      - name: "Install PHP"
+        uses: shivammathur/setup-php@2.30.4
+        with:
+          coverage: xdebug
+          extensions: mbstring, intl, json, bcmath, curl
+          php-version: "${{ matrix.php-version }}"
+          ini-values: variables_order=EGPCS
+
+      - name: "Install dependencies"
+        run: |
+          composer update ${{ env.COMPOSER_FLAGS }}
+
+      - name: "Debug ENV variables"
+        run: |
+          printenv
+
+      - name: "Run integration tests"
+        run: |
+          php vendor/bin/phpunit --colors=always --testsuite integration-tests
+
+      - name: "integration tests succeeded"
+        if: ${{ success() }}
+        run: |
+          echo '✅ integration tests pass, congratulations!'
+
+      - name: "integration tests failed"
+        if: ${{ failure() }}
+        run: |
+          echo '::error:: ❗integration tests failed (╯°益°)╯彡┻━┻ '

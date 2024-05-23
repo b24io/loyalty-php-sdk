@@ -51,7 +51,6 @@ class CardsTest extends TestCase
 
     /**
      * @throws BaseException
-     * @throws RandomException
      * @throws NumberParseException
      */
     public function testAddCard(): void
@@ -62,7 +61,7 @@ class CardsTest extends TestCase
                 $this->faker->lastName(),
             ),
             new DateTimeZone('Europe/Moscow'),
-            Gender::male,
+            Gender::male(),
             $this->phoneNumberUtil->parse(
                 $this->faker->phoneNumber,
                 'RU'
@@ -73,7 +72,7 @@ class CardsTest extends TestCase
         $cardNumber = (string)time();
         $cardBalance = new Money(random_int(1000, 1000000), new Currency('RUB'));
         $cardPercentage = new Percentage('5.5');
-        $cardStatus = CardStatus::active;
+        $cardStatus = CardStatus::active();
 
         $addedCard = $this->sb->cardsScope()->cards()->add(
             $contactId,
@@ -155,7 +154,7 @@ class CardsTest extends TestCase
     public static function orderDataProvider(): Generator
     {
         yield 'order by created desc' => [
-            new ItemsOrder('created', OrderDirection::desc),
+            new ItemsOrder('created', OrderDirection::desc()),
             static function (
                 ItemsOrder $itemsOrder,
                 /**
@@ -186,69 +185,78 @@ class CardsTest extends TestCase
             null,
         ];
         yield 'order by created asc' => [
-            new ItemsOrder('created', OrderDirection::asc),
+            new ItemsOrder('created', OrderDirection::asc()),
             static function (
                 ItemsOrder $itemsOrder,
                 /**
                  * @phpstan-param CardItemResult[] $cards
                  */
                 array      $cards) {
-                $prev = null;
+                $prevCard = null;
                 foreach ($cards as $cnt => $card) {
-                    print($card->created->format('Y-m-d H:i:s') . PHP_EOL);
+                    print(sprintf('%s | %s %s', $cnt, $card->number, $card->created->format('Y-m-d H:i:s') . PHP_EOL));
                     /**
                      * @var CardItemResult $card
                      */
-                    if ($prev === null) {
-                        $prev = $card->created;
+                    if ($prevCard === null) {
+                        $prevCard = $card;
                         continue;
                     }
-                    if ($prev->getTimestamp() > $card->created->getTimestamp()) {
-                        self::fail(sprintf('Card #%d created at %s is not greater than previous card #%d created at %s',
+                    if ($prevCard->created->getTimestamp() > $card->created->getTimestamp()) {
+                        self::fail(sprintf('Card #%d with number %s created at %s (%s) is not greater than previous card #%d number %s created at %s (%s)',
                             $cnt,
+                            $card->number,
                             $card->created->format('Y-m-d H:i:s'),
+                            $card->created->getTimestamp(),
                             $cnt - 1,
-                            $prev->format('Y-m-d H:i:s')
+                            $prevCard->number,
+                            $prevCard->created->format('Y-m-d H:i:s'),
+                            $prevCard->created->getTimestamp()
                         ));
                     }
-                    $prev = $card->created;
+                    $prevCard = $card;
                 }
             },
             null
         ];
         yield 'order by modified desc' => [
-            new ItemsOrder('modified', OrderDirection::desc),
+            new ItemsOrder('modified', OrderDirection::desc()),
             static function (
                 ItemsOrder $itemsOrder,
                 /**
                  * @phpstan-param CardItemResult[] $cards
                  */
                 array      $cards) {
-                $prev = null;
+                $prevCard = null;
+                print('order by modified desc' . PHP_EOL);
                 foreach ($cards as $cnt => $card) {
-                    print($card->modified->format('Y-m-d H:i:s') . PHP_EOL);
+                    print(sprintf('%s | %s - %s', $cnt, $card->number, $card->modified->format('Y-m-d H:i:s')) . PHP_EOL);
                     /**
                      * @var CardItemResult $card
                      */
-                    if ($prev === null) {
-                        $prev = $card->modified;
+                    if ($prevCard === null) {
+                        $prevCard = $card;
                         continue;
                     }
-                    if ($prev->getTimestamp() < $card->modified->getTimestamp()) {
-                        self::fail(sprintf('Card #%d modified at %s is not greater than previous card #%d modified at %s',
+                    if ($prevCard->modified->getTimestamp() < $card->modified->getTimestamp()) {
+                        self::fail(sprintf('Card %s  #%d modified at %s(%s) is not greater than previous card %s #%d modified at %s (%s)',
                             $cnt,
+                            $card->number,
                             $card->modified->format('Y-m-d H:i:s'),
+                            $card->modified->getTimestamp(),
                             $cnt - 1,
-                            $prev->format('Y-m-d H:i:s')
+                            $prevCard->number,
+                            $prevCard->modified->format('Y-m-d H:i:s'),
+                            $prevCard->modified->getTimestamp()
                         ));
                     }
-                    $prev = $card->modified;
+                    $prevCard = $card;
                 }
             },
             null
         ];
         yield 'order by modified asc' => [
-            new ItemsOrder('modified', OrderDirection::asc),
+            new ItemsOrder('modified', OrderDirection::asc()),
             static function (
                 ItemsOrder $itemsOrder,
                 /**
@@ -279,7 +287,7 @@ class CardsTest extends TestCase
             null
         ];
         yield 'order by balance desc' => [
-            new ItemsOrder('balance', OrderDirection::desc),
+            new ItemsOrder('balance', OrderDirection::desc()),
             static function (
                 ItemsOrder $itemsOrder,
                 /**
@@ -312,7 +320,7 @@ class CardsTest extends TestCase
             null
         ];
         yield 'order by balance asc' => [
-            new ItemsOrder('balance', OrderDirection::asc),
+            new ItemsOrder('balance', OrderDirection::asc()),
             static function (
                 ItemsOrder $itemsOrder,
                 /**
@@ -320,6 +328,7 @@ class CardsTest extends TestCase
                  */
                 array      $cards) {
                 $prev = null;
+                print('order by balance asc');
                 foreach ($cards as $cnt => $card) {
                     /**
                      * @var CardItemResult $card
@@ -344,10 +353,22 @@ class CardsTest extends TestCase
             null
         ];
         yield 'wrong order by field' => [
-            new ItemsOrder('balance1', OrderDirection::desc),
+            new ItemsOrder('balance1', OrderDirection::desc()),
             null,
             BadRequestException::class
         ];
+    }
+
+    /**
+     * @return void
+     * @throws BaseException
+     * @covers Cards::count()
+     * @testdox Test count cards method
+     */
+    public function testCount(): void
+    {
+        $cnt = $this->sb->cardsScope()->cards()->count();
+        $this->assertGreaterThan(0, $cnt);
     }
 
     public function setUp(): void

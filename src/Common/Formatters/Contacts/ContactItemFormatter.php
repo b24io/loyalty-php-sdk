@@ -6,7 +6,10 @@ namespace B24io\Loyalty\SDK\Common\Formatters\Contacts;
 
 use B24io\Loyalty\SDK\Common\Result\Contacts\ContactItemResult;
 
-readonly class ContactItemFormatter
+/**
+ * @readonly
+ */
+class ContactItemFormatter
 {
     /**
      * @return string[]
@@ -37,8 +40,8 @@ readonly class ContactItemFormatter
             'contact_surname' => $contact->fullName->surname,
             'contact_patronymic' => $contact->fullName->patronymic,
             'contact_timezone_name' => $contact->timezone->getName(),
-            'contact_birthday' => $contact->birthday?->format('Y.m.d'),
-            'contact_gender' => $contact->gender->name,
+            'contact_birthday' => ($nullsafeVariable1 = $contact->birthday) ? $nullsafeVariable1->format('Y.m.d') : null,
+            'contact_gender' => (string)$contact->gender,
             'contact_external_id' => $contact->externalIds[$externalIdKey],
             'contact_created' => $contact->created->format(DATE_ATOM),
             'contact_modified' => $contact->modified->format(DATE_ATOM),

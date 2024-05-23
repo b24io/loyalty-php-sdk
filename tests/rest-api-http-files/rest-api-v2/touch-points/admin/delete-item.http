@@ -1,0 +1,5 @@
+DELETE https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/touch-points/0d9d120a-bf4c-4cf6-a6eb-8829f9aa3af5
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}

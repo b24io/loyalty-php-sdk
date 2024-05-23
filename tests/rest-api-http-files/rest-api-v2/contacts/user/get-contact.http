@@ -1,0 +1,25 @@
+###
+POST https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/contacts
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+Idempotency-Key: {{$random.uuid}}
+
+{
+  "full_name": {
+    "name": "Иван1",
+    "surname": "Иванов1",
+    "patronymic": "Иванович1"
+  },
+  "timezone_utc_offset": null,
+  "gender": "male",
+  "birthday": null,
+  "external_ids": []
+}
+
+###
+GET https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/user/contacts/4bea1c44-004f-4abd-af32-34a44a342e86
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8

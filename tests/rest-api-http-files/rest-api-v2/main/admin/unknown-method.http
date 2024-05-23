@@ -1,0 +1,6 @@
+###
+GET https://{{host}}/api/{{api_version_prefix}}/health
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}

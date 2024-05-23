@@ -36,7 +36,8 @@ class IntegrationTestsContextBuilder
     public static function getDefaultLogger(): LoggerInterface
     {
         $log = new Logger('loyalty-php-sdk-integration-test');
-        $log->pushHandler(new StreamHandler($_ENV['INTEGRATION_TEST_LOG_FILE'], (int)$_ENV['INTEGRATION_TEST_LOG_LEVEL']));
+        $logLevel = $_ENV['INTEGRATION_TEST_LOG_LEVEL'];
+        $log->pushHandler(new StreamHandler($_ENV['INTEGRATION_TEST_LOG_FILE'], $logLevel));
         $log->pushProcessor(new MemoryUsageProcessor(true, true));
         $log->pushProcessor(new IntrospectionProcessor());
 

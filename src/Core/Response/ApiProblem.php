@@ -4,16 +4,41 @@ declare(strict_types=1);
 
 namespace B24io\Loyalty\SDK\Core\Response;
 
-readonly class ApiProblem
+class ApiProblem
 {
+    /**
+     * @readonly
+     */
+    public string $title;
+    /**
+     * @readonly
+     */
+    public string $type;
+    /**
+     * @readonly
+     */
+    public int $status;
+    /**
+     * @readonly
+     */
+    public string $detail;
+    /**
+     * @readonly
+     */
+    public string $instance;
+
     public function __construct(
-        public string $title,
-        public string $type,
-        public int    $status,
-        public string $detail,
-        public string $instance,
-    )
+        string $title,
+        string $type,
+        int    $status,
+        string $detail,
+        string $instance)
     {
+        $this->title = $title;
+        $this->type = $type;
+        $this->status = $status;
+        $this->detail = $detail;
+        $this->instance = $instance;
     }
 
     /**

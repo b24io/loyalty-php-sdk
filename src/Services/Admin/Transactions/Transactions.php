@@ -23,7 +23,7 @@ class Transactions extends AbstractService
         return new TransactionsResult(
             $this->core->call(
                 new Command(
-                    Context::admin,
+                    Context::admin(),
                     RequestMethodInterface::METHOD_GET,
                     'transactions',
                     [],
@@ -39,7 +39,7 @@ class Transactions extends AbstractService
         return new TransactionsResult(
             $this->core->call(
                 new Command(
-                    Context::admin,
+                    Context::admin(),
                     RequestMethodInterface::METHOD_GET,
                     sprintf('transactions/with-card-number/%s', $cardNumber),
                     [],
@@ -54,11 +54,11 @@ class Transactions extends AbstractService
     {
         return new ProcessedTransactionResult($this->core->call(
             new Command(
-                Context::admin,
+                Context::admin(),
                 RequestMethodInterface::METHOD_POST,
                 sprintf('transactions/with-card-number/%s', $cardNumber),
                 [
-                    'type' => TransactionType::payment->name,
+                    'type' => (string)TransactionType::payment(),
                     'bonus_points' => [
                         'amount' => $this->decimalMoneyFormatter->format($amount),
                         'currency' => $amount->getCurrency()->getCode(),
@@ -76,11 +76,11 @@ class Transactions extends AbstractService
     {
         return new ProcessedTransactionResult($this->core->call(
             new Command(
-                Context::admin,
+                Context::admin(),
                 RequestMethodInterface::METHOD_POST,
                 sprintf('transactions/with-card-number/%s', $cardNumber),
                 [
-                    'type' => TransactionType::accrual->name,
+                    'type' => (string)TransactionType::accrual(),
                     'bonus_points' => [
                         'amount' => $this->decimalMoneyFormatter->format($amount),
                         'currency' => $amount->getCurrency()->getCode(),
@@ -102,7 +102,7 @@ class Transactions extends AbstractService
         return (int)(new TransactionsResult(
             $this->core->call(
                 new Command(
-                    Context::admin,
+                    Context::admin(),
                     RequestMethodInterface::METHOD_GET,
                     'transactions',
                     [],

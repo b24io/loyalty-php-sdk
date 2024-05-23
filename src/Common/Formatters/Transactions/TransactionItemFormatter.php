@@ -8,7 +8,10 @@ use B24io\Loyalty\SDK\Common\Result\Transactions\TransactionItemResult;
 use Money\Currencies\ISOCurrencies;
 use Money\Formatter\DecimalMoneyFormatter;
 
-readonly class TransactionItemFormatter
+/**
+ * @readonly
+ */
+class TransactionItemFormatter
 {
     /**
      * @return string[]
@@ -40,7 +43,7 @@ readonly class TransactionItemFormatter
             'transaction_id' => $trx->id->toRfc4122(),
             'transaction_amount' => $decimalMoneyFormatter->format($trx->value),
             'transaction_iso_currency_code' => $trx->value->getCurrency()->getCode(),
-            'transaction_type' => $trx->type->value,
+            'transaction_type' => $trx->type,
             'transaction_created' => $trx->created->format(DATE_ATOM),
             'transaction_reason_id' => $trx->reason->id,
             'transaction_reason_code' => $trx->reason->code,

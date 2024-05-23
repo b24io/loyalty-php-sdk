@@ -1,0 +1,112 @@
+###
+POST https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/contacts
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+Idempotency-Key: {{$uuid}}
+
+{
+  "full_name": {
+    "name": "Иван22221113331",
+    "surname": "Иванов22221112133331",
+    "patronymic": "Иванович33333111112342342342341"
+  },
+  "gender": "unknown",
+  "timezone": "Asia/Novosibirsk",
+  "birthday": "27.05.1984",
+  "external_ids": null,
+  "mobile_phone": "79780192058"
+}
+
+###
+POST https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/contacts
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+Idempotency-Key: {{$uuid}}
+
+{
+  "full_name": {
+    "name": "Иван22221113331",
+    "surname": "Иванов22221112133331",
+    "patronymic": "Иванович33333111112342342342341"
+  },
+  "gender": "unknown",
+  "timezone": "Asia/Novosibirsk",
+  "birthday": "27.05.1984",
+  "external_ids": {
+    "bitrix24": "1234565",
+    "mobile_backend": "5624",
+    "site": "2dbc9c35-bf39-433c-b596-6b08aa941bac"
+  }
+}
+
+###
+POST https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/contacts
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+Idempotency-Key: {{$uuid}}
+
+{
+  "full_name": {
+    "name": "Иван22221113331",
+    "surname": "Иванов22221112133331",
+    "patronymic": "Иванович33333111112342342342341"
+  },
+  "gender": "unknown",
+  "timezone": "America/Buenos_Aires",
+  "birthday": "27.05.1984",
+  "external_ids": {
+    "bitrix24": "123456",
+    "mobile_backend": "5624",
+    "site": "2dbc9c35-bf39-433c-b596-6b08aa941bac"
+  }
+}
+
+###
+POST https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/contacts
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+Idempotency-Key: {{$uuid}}
+
+{
+  "full_name": {
+    "name": "Иван22221113331",
+    "surname": "Иванов22221112133331",
+    "patronymic": "Иванович33333111112342342342341"
+  },
+  "gender": "unknown",
+  "timezone": "Asia/Kathmandu",
+  "birthday": "27.05.1984",
+  "external_ids": {
+    "bitrix24": "123456",
+    "mobile_backend": "5624",
+    "site": "2dbc9c35-bf39-433c-b596-6b08aa941bac"
+  }
+}
+
+###
+POST https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/contacts
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+Idempotency-Key: 123456-85d2-4e47-b568-4faa746e2213
+
+{
+  "full_name": {
+    "name": "Иван1",
+    "surname": "Иванов1",
+    "patronymic": "Иванович1"
+  },
+  "timezone_utc_offset": null,
+  "gender": "male",
+  "birthday": null,
+  "external_ids": []
+}

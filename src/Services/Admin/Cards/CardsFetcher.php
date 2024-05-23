@@ -12,11 +12,12 @@ use Psr\Log\LoggerInterface;
 
 class CardsFetcher
 {
-    public function __construct(
-        private Cards           $cards,
-        private LoggerInterface $logger
-    )
+    private Cards $cards;
+    private LoggerInterface $logger;
+    public function __construct(Cards           $cards, LoggerInterface $logger)
     {
+        $this->cards = $cards;
+        $this->logger = $logger;
     }
 
     /**

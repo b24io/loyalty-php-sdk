@@ -1,0 +1,21 @@
+###
+GET https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/transactions/with-card-id/{{card_uuid_valid_card}}?page=1
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+
+###
+GET https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/transactions/with-card-id/d15c9ced-eddf-47d8-8b57-5c447e3b9c93
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+
+
+###
+GET https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/user/transactions/with-card-id/d15c9ced-eddf-47d8-8b57-5c447e3b9c93
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}

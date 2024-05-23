@@ -1,0 +1,21 @@
+### установка нужного уровня логирования
+POST https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/application-journal-options/core-application-journal-record-level
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+
+{
+  "level": "debug"
+}
+
+### установка несуществующего уровня логирования
+POST https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/application-journal-options/core-application-journal-record-level
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+
+{
+  "level": "test"
+}

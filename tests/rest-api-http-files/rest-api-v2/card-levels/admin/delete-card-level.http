@@ -1,0 +1,7 @@
+###
+DELETE https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/card-levels/a8d8b5f4-65c7-4063-8b19-9395d563a613
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+Idempotency-Key: 123456-85d2-4e47-b568-4faa746e2213

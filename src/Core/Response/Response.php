@@ -6,7 +6,6 @@ namespace B24io\Loyalty\SDK\Core\Response;
 
 use B24io\Loyalty\SDK\Core\Command;
 use B24io\Loyalty\SDK\Core\Exceptions\BaseException;
-use B24io\Loyalty\SDK\Core\Exceptions\TransportException;
 use B24io\Loyalty\SDK\Core\Response\DTO\Metadata;
 use B24io\Loyalty\SDK\Core\Response\DTO\Pagination;
 use Psr\Log\LoggerInterface;
@@ -15,13 +14,30 @@ use Throwable;
 
 class Response
 {
+    /**
+     * @readonly
+     */
+    public ResponseInterface $httpResponse;
+    /**
+     * @readonly
+     */
+    public Command $apiCommand;
+    /**
+     * @readonly
+     */
+    private LoggerInterface $logger;
+    private ?DTO\ResponseData $responseData = null;
+
     public function __construct(
-        public readonly ResponseInterface $httpResponse,
-        public readonly Command           $apiCommand,
-        private readonly LoggerInterface  $logger,
-        private ?DTO\ResponseData         $responseData = null,
-    )
+        ResponseInterface $httpResponse,
+        Command           $apiCommand,
+        LoggerInterface   $logger,
+        ?DTO\ResponseData $responseData = null)
     {
+        $this->httpResponse = $httpResponse;
+        $this->apiCommand = $apiCommand;
+        $this->logger = $logger;
+        $this->responseData = $responseData;
     }
 
     /**

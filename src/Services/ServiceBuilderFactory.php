@@ -15,15 +15,9 @@ use Symfony\Component\HttpClient\CurlHttpClient;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-readonly class ServiceBuilderFactory
+class ServiceBuilderFactory
 {
-    public static function createAdminRoleServiceBuilder(
-        string               $apiEndpointUrl,
-        string               $apiClientId,
-        string               $apiAdminKey,
-        LoggerInterface      $logger,
-        ?HttpClientInterface $httpClient = null,
-    ): AdminServiceBuilder
+    public static function createAdminRoleServiceBuilder(string               $apiEndpointUrl, string               $apiClientId, string               $apiAdminKey, LoggerInterface      $logger, ?HttpClientInterface $httpClient = null): AdminServiceBuilder
     {
         return new AdminServiceBuilder(
             self::getCore(

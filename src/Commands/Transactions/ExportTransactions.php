@@ -23,18 +23,20 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
-#[AsCommand(
-    name: 'transactions:export',
-    description: 'Export transactions to csv file')]
 class ExportTransactions extends Command
 {
+    protected TransactionItemFormatter $transactionItemFormatter;
+    protected LoggerInterface $logger;
+    protected static $defaultName = 'transactions:export';
+    protected static $defaultDescription = 'Export transactions to csv file';
     public function __construct(
-        protected TransactionItemFormatter $transactionItemFormatter,
-        protected LoggerInterface          $logger)
+        TransactionItemFormatter $transactionItemFormatter,
+        LoggerInterface          $logger)
     {
+        $this->transactionItemFormatter = $transactionItemFormatter;
+        $this->logger = $logger;
         parent::__construct();
     }
-
     protected function configure(): void
     {
         $this->addOption(
@@ -59,7 +61,6 @@ class ExportTransactions extends Command
             InputOption::VALUE_REQUIRED,
             'file to store transactions');
     }
-
     /**
      * @throws UnavailableStream
      * @throws CannotInsertRecord

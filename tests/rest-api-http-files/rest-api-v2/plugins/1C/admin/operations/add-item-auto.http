@@ -1,0 +1,141 @@
+### добавление операци на точке контакта в привязке к валидной карте
+POST https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/1c/operations
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+Idempotency-Key: 4114f46d-85d2-4e47-b568-4faa746e2213
+
+{
+  "loyalty": {
+    "touch_point_id": "{{touch_point_id}}",
+    "card_id": "{{card_uuid_valid_card}}",
+    "processing_mode": "auto",
+    "bonus_points": {
+      "amount": "550.34",
+      "currency": "RUB"
+    },
+    "chargeback_payment_transactions": []
+  },
+  "operation_type": "selling",
+  "payload": {
+    "version": 1,
+    "order": {
+        "id": "1224f46d-85d2-4e47-b568-4faa746e2217",
+        "created": "03.06.2021 15:18:39",
+        "money_sum": {
+            "amount": "10.00",
+            "currency": "RUB"
+        },
+        "bonus_sum": {
+            "amount": "0.00",
+            "currency": "RUB"
+        },
+        "total_sum": {
+            "amount": "10.00",
+            "currency": "RUB"
+        },
+        "items": [
+           {
+             "id": "1114f46d-85d2-4e47-b568-4faa746e2217",
+             "title": "Услуга химчистки паром",
+             "product_id": "2224f46d-85d2-4e47-b568-4faa746e2217",
+             "sku_id": null,
+             "category_id": "3334f46d-85d2-4e47-b568-4faa746e2217",
+             "discount_type": "monetary",
+             "discount_rate": "10.0",
+             "discount_sum": {
+                "amount": "10.00",
+                "currency": "RUB"
+             },
+             "quantity": 2,
+             "is_tax_included_in_price": false,
+             "tax_rate": "0.0",
+             "net_price_per_item": {
+                "amount": "100.00",
+                "currency": "RUB"
+             }
+           },
+           {
+             "id": "6664f46d-85d2-4e47-b568-4faa746e2217",
+             "title": "Услуга химчистки химией",
+             "product_id": "7774f46d-85d2-4e47-b568-4faa746e2217",
+             "sku_id": null,
+             "category_id": "3334f46d-85d2-4e47-b568-4faa746e2217",
+             "discount_type": "percentage",
+             "discount_rate": "5.0",
+             "discount_sum": {
+                "amount": "5.00",
+                "currency": "RUB"
+             },
+             "quantity": 1,
+             "is_tax_included_in_price": true,
+             "tax_rate": "10.0",
+             "net_price_per_item": {
+                "amount": "100.00",
+                "currency": "RUB"
+             }
+           }
+        ],
+        "status": "Bill",
+        "card-number": "79780183843"
+    },
+    "products": [
+        {
+          "id": "2224f46d-85d2-4e47-b568-4faa746e2217",
+          "title": "Услуга химчистки паром",
+          "description": "Услуга химчистки паром: двойная обработка самым горячим паром",
+          "category_id": "9994f46d-85d2-4e47-b568-4faa746e2217",
+          "is_tax_included_in_price": false,
+          "tax_rate": "20.0",
+          "net_price": {
+                "amount": "100.00",
+                "currency": "RUB"
+          },
+      "external_id": [
+        {
+          "bitrix24_product_id": "3"
+        }
+      ]
+        },
+        {
+          "id": "7774f46d-85d2-4e47-b568-4faa746e2217",
+          "title": "Услуга химчистки химией",
+          "description": "Услуга химчистки химией: двойная обработка самыми лучшими реагентами",
+          "category_id": "9994f46d-85d2-4e47-b568-4faa746e2217",
+          "is_tax_included_in_price": false,
+          "tax_rate": "20.0",
+          "net_price": {
+                "amount": "100.00",
+                "currency": "RUB"
+          },
+      "external_id": [
+        {
+          "bitrix24_product_id": "1"
+        }
+      ]
+        }
+  ],
+    "categories": [
+       {
+          "id": "9994f46d-85d2-4e47-b568-4faa746e2217",
+          "title": "услуги химчистки",
+          "description": "услуги автоматической химчистки",
+          "parent_id": null,
+      "external_id": [
+        {
+          "bitrix24_product_id": "1"
+        }
+      ]
+       }
+    ]
+  }
+}
+
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+

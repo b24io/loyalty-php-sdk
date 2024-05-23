@@ -34,7 +34,7 @@ class Cards extends AbstractService
     {
         return new AddedCardResult($this->core->call(
             new Command(
-                Context::admin,
+                Context::admin(),
                 RequestMethodInterface::METHOD_POST,
                 'cards',
                 [
@@ -45,9 +45,9 @@ class Cards extends AbstractService
                         'currency' => $balance->getCurrency()->getCode()
                     ],
                     'percentage' => (string)$percentage,
-                    'status' => $cardStatus->value,
-                    'card_level_id' => $cardLevelId?->toRfc4122(),
-                    'affiliate_card_id' => $affiliateCardId?->toRfc4122(),
+                    'status' => (string)$cardStatus,
+                    'card_level_id' => ($nullsafeCardLevelId = $cardLevelId) ? $nullsafeCardLevelId->toRfc4122() : null,
+                    'affiliate_card_id' => ($nullsafeAffiliateCardId = $affiliateCardId) ? $nullsafeAffiliateCardId->toRfc4122() : null,
                     'barcode' => $barcode,
                     'external_id' => $externalId
                 ],
@@ -63,7 +63,7 @@ class Cards extends AbstractService
         return new CardItemResult(
             $this->core->call(
                 new Command(
-                    Context::admin,
+                    Context::admin(),
                     RequestMethodInterface::METHOD_GET,
                     sprintf('cards/%s', $id->toRfc4122()),
                 )
@@ -76,7 +76,7 @@ class Cards extends AbstractService
         return new CardsResult(
             $this->core->call(
                 new Command(
-                    Context::admin,
+                    Context::admin(),
                     RequestMethodInterface::METHOD_GET,
                     'cards',
                     [],
@@ -95,7 +95,7 @@ class Cards extends AbstractService
         return (int)(new CardsResult(
             $this->core->call(
                 new Command(
-                    Context::admin,
+                    Context::admin(),
                     RequestMethodInterface::METHOD_GET,
                     'cards',
                     [],

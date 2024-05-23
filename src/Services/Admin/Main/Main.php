@@ -16,7 +16,7 @@ class Main extends AbstractService
     public function health(): Response
     {
         return $this->core->call(new Command(
-            Context::admin,
+            Context::admin(),
             RequestMethodInterface::METHOD_GET,
             'health',
         ));
