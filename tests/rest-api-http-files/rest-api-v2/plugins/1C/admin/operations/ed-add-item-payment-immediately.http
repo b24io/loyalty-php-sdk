@@ -1,0 +1,95 @@
+### добавление операци на точке контакта в привязке к валидной карте
+POST https://loyalty.b24.cloud/api/v2/04601655-00bb-473e-8737-32710fdbe9d8/admin/1c/operations
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: e6506db5-7994-4b3e-8f97-68d62b0a8ac8
+
+{
+  "loyalty": {
+    "touch_point_id": "fd3df15e-199b-41b6-b499-7d4d4d3267b9",
+    "card_id": "5188a40a-7545-45b6-bb23-5c598f18bdc1",
+    "processing_mode": "payment_immediately",
+    "bonus_points": {
+      "amount": "10.0",
+      "currency": "NPR"
+    },
+    "chargeback_payment_transactions": []
+  },
+  "operation_type": "selling",
+  "payload": {
+    "version": 1,
+    "order": {
+        "id": "f724f46d-85d2-4e47-b568-4faa746e0003",
+        "created": "03.06.2021 15:18:39",
+        "money_sum": {
+            "amount": "20.00",
+            "currency": "NPR"
+        },
+        "bonus_sum": {
+            "amount": "10.00",
+            "currency": "RUB"
+        },
+        "total_sum": {
+            "amount": "30.00",
+            "currency": "RUB"
+        },
+        "items": [
+           {
+             "id": "1114f46d-85d2-4e47-b568-4faa746e2217",
+             "title": "Bananas product item",
+             "product_id": "2224f46d-85d2-4e47-b568-4faa746e2217",
+             "sku_id": null,
+             "category_id": "3334f46d-85d2-4e47-b568-4faa746e2217",
+             "discount_type": "monetary",
+             "discount_rate": "10.0",
+             "discount_sum": {
+                "amount": "10.00",
+                "currency": "NPR"
+             },
+             "quantity": 2,
+             "is_tax_included_in_price": false,
+             "tax_rate": "0.0",
+             "net_price_per_item": {
+                "amount": "100.00",
+                "currency": "NPR"
+             }
+           }
+        ],
+        "status": "Bill",
+        "card-number": "79780183843"
+    },
+    "products": [
+        {
+          "id": "Bananas",
+          "title": "Super cool bananas",
+          "description": "Super cool bananas from africa",
+          "category_id": "9994f46d-85d2-4e47-b568-4faa746e2217",
+          "is_tax_included_in_price": false,
+          "tax_rate": "20.0",
+          "net_price": {
+                "amount": "100.00",
+                "currency": "NPR"
+          },
+          "external_id": []
+        }
+  ],
+    "categories": [
+       {
+          "id": "9994f46d-85d2-4e47-b568-4faa746e2217",
+          "title": "fruits from africa",
+          "description": "fruits from africa",
+          "parent_id": null,
+          "external_id": []
+       }
+    ]
+  }
+}
+
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+

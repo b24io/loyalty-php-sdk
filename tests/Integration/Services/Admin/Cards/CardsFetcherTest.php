@@ -25,7 +25,7 @@ class CardsFetcherTest extends TestCase
     {
         // in parallel, we can run tests for CRUD operations
         $cardCnt = 0;
-        foreach ($this->sb->cardsScope()->fetcher()->list(new ItemsOrder('created', OrderDirection::desc)) as $card) {
+        foreach ($this->sb->cardsScope()->fetcher()->list(new ItemsOrder('created', OrderDirection::desc())) as $card) {
             $cardCnt++;
         }
 

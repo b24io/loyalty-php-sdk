@@ -19,7 +19,7 @@ class ApiClientTest extends TestCase
     public function testCallUnknownMethod(): void
     {
         $res = $this->apiClient->getResponse(
-            Context::admin,
+            Context::admin(),
             RequestMethodInterface::METHOD_GET,
             'unknown');
         $this->assertEquals(StatusCodeInterface::STATUS_NOT_FOUND, $res->getStatusCode());
@@ -28,11 +28,10 @@ class ApiClientTest extends TestCase
     public function testCallHealthMethod(): void
     {
         $res = $this->apiClient->getResponse(
-            Context::admin,
+            Context::admin(),
             RequestMethodInterface::METHOD_GET,
              'health');
         $this->assertEquals(StatusCodeInterface::STATUS_OK, $res->getStatusCode());
-        var_dump($res->toArray());
     }
 
     public function setUp(): void

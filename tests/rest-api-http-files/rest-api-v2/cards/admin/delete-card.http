@@ -1,0 +1,7 @@
+### удаление карты у контакта
+DELETE https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/cards/630abf9c-7d65-4c43-a86a-d7fc45858d51
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+Idempotency-Key: 123456-85d2-4e47-b568-4faa746e2213

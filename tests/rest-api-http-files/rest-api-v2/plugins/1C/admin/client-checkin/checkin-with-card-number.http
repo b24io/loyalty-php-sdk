@@ -1,0 +1,44 @@
+### чекин по валидному номеру карты
+GET https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/1c/checkin/{{touch_point_id}}/with-card-number/{{card_number_valid_card}}
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+
+### GET
+### GET
+
+
+GET https://loyalty.b24.cloud/api/v2/a9a53bf4-1108-4ea1-ae00-3c590788d703/admin/1c/checkin/46a41a62-714e-4dc2-8e01-5391a1d0ec48/with-card-number/70010000003
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+
+###
+GET https://loyalty.b24.cloud/api/v2/a9a53bf4-1108-4ea1-ae00-3c590788d703/admin/1c/checkin/46a41a62-714e-4dc2-8e01-5391a1d0ec48/with-card-number/70010000003
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+
+###
+GET https://loyalty.b24.cloud/api/v2/a9a53bf4-1108-4ea1-ae00-3c590788d703/admin/1с/checkin/46a41a62-714e-4dc2-8e01-5391a1d0ec48/with-card-number/70010000003
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+
+###
+GET http://loyalty.b24.cloud/api/v2/a9a53bf4-1108-4ea1-ae00-3c590788d703/admin/1c/checkin/3536826f-1b07-4c07-b04e-4d745fa3790f/with-card-number/70010000003
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}

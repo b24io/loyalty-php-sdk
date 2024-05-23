@@ -7,6 +7,7 @@ namespace B24io\Loyalty\SDK\Common\Result\Contacts;
 use B24io\Loyalty\SDK\Common\FullName;
 use B24io\Loyalty\SDK\Common\Gender;
 use B24io\Loyalty\SDK\Common\Result\Cards\CardItemResult;
+use B24io\Loyalty\SDK\Core\Exceptions\InvalidArgumentException;
 use B24io\Loyalty\SDK\Core\Result\AbstractItem;
 use DateTimeImmutable;
 use DateTimeZone;
@@ -25,7 +26,11 @@ use Symfony\Component\Uid\Uuid;
  */
 class ContactItemResult extends AbstractItem
 {
-    public function __get(int|string $offset)
+    /**
+     * @param int|string $offset
+     * @throws InvalidArgumentException
+     */
+    public function __get($offset)
     {
         switch ($offset) {
             case 'fullName':
@@ -43,7 +48,7 @@ class ContactItemResult extends AbstractItem
                 }
                 return new DateTimeImmutable($this->data[$offset]);
             case 'gender':
-                return Gender::from($this->data[$offset]);
+                return new Gender($this->data[$offset]);
             case 'externalIds':
                 return $this->data['external_ids'];
             case 'card':

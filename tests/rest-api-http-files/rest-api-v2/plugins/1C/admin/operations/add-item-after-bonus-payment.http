@@ -1,0 +1,137 @@
+### добавление операци на точке контакта в привязке к валидной карте
+POST https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/1c/operations
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+Idempotency-Key: 2216446d-85d1-4e47-b568-4faa746e2213
+
+{
+  "loyalty": {
+    "touch_point_id": "{{touch_point_id}}",
+    "card_id": "{{card_uuid_valid_card}}",
+    "processing_mode": "none",
+    "bonus_points": {
+      "amount": "143.0",
+      "currency": "RUB"
+    },
+    "chargeback_payment_transactions": []
+  },
+  "operation_type": "selling",
+  "payload": {
+    "version": 1,
+    "order": {
+        "id": "f724f46d-85d2-4e47-b568-4faa746e0001",
+        "created": "2022-02-28T23:59:59+03:00",
+        "bonus_sum": {
+          "amount": "143.00",
+          "currency": "RUB"
+        },
+        "money_sum": {
+          "amount": "284.50",
+          "currency": "RUB"
+        },
+        "total_sum": {
+          "amount": "427.50",
+          "currency": "RUB"
+        },
+        "items": [
+      {
+        "id": "1",
+        "title": "Кальсоны, Пижамные брюки (Г), Стирка",
+        "sku_id": "",
+        "quantity": 1,
+        "tax_rate": "20.0%",
+        "product_id": "a2da1756-e0ce-11da-b4b4-0002b35596d5",
+        "category_id": "",
+        "discount_sum": {
+          "amount": "77.50",
+          "currency": "RUB"
+        },
+        "discount_rate": "25.0%",
+        "discount_type": "percentage",
+        "net_price_per_item": {
+          "amount": "310.00",
+          "currency": "RUB"
+        },
+        "is_tax_included_in_price": true
+      },
+      {
+        "id": "2",
+        "title": "Майка, Топ (Г), Стирка",
+        "sku_id": "",
+        "quantity": 1,
+        "tax_rate": "20.0%",
+        "product_id": "a2da1750-e0ce-11da-b4b4-0002b35596d5",
+        "category_id": "",
+        "discount_sum": {
+          "amount": "65.00",
+          "currency": "RUB"
+        },
+        "discount_rate": "25.0%",
+        "discount_type": "percentage",
+        "net_price_per_item": {
+          "amount": "260.00",
+          "currency": "RUB"
+        },
+        "is_tax_included_in_price": true
+      }
+        ],
+        "status": "Bill",
+        "card-number": "79780183843"
+    },
+    "products": [
+    {
+      "id": "a2da1756-e0ce-11da-b4b4-0002b35596d5",
+      "title": "Кальсоны, Пижамные брюки (Г), Стирка",
+      "tax_rate": "20.0%",
+      "net_price": {
+        "amount": "310.00",
+        "currency": "RUB"
+      },
+      "category_id": "",
+      "description": "Кальсоны, Пижамные брюки (Г), Стирка",
+      "external_id": [
+        {
+          "bitrix24_product_id": "3"
+        }
+      ],
+      "is_tax_included_in_price": true
+    },
+    {
+      "id": "a2da1750-e0ce-11da-b4b4-0002b35596d5",
+      "title": "Майка, Топ (Г), Стирка",
+      "tax_rate": "20.0%",
+      "net_price": {
+        "amount": "260.00",
+        "currency": "RUB"
+      },
+      "category_id": "",
+      "description": "Майка, Топ (Г), Стирка",
+      "external_id": [
+        {
+          "bitrix24_product_id": "5"
+        }
+      ],
+      "is_tax_included_in_price": true
+    }
+  ],
+    "categories": [
+       {
+          "id": "9994f46d-85d2-4e47-b568-4faa746e2217",
+          "title": "услуги химчистки",
+          "description": "услуги автоматической химчистки",
+          "parent_id": null,
+          "external_id": []
+       }
+    ]
+  }
+}
+
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+

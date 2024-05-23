@@ -9,13 +9,20 @@ use B24io\Loyalty\SDK\Core\Exceptions\BaseException;
 use Generator;
 use Psr\Log\LoggerInterface;
 
-readonly class TransactionsFetcher
+class TransactionsFetcher
 {
-    public function __construct(
-        private Transactions    $transactions,
-        private LoggerInterface $logger
-    )
+    /**
+     * @readonly
+     */
+    private Transactions $transactions;
+    /**
+     * @readonly
+     */
+    private LoggerInterface $logger;
+    public function __construct(Transactions    $transactions, LoggerInterface $logger)
     {
+        $this->transactions = $transactions;
+        $this->logger = $logger;
     }
 
     /**

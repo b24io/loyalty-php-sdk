@@ -1,0 +1,11 @@
+###
+POST https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/user/contacts/auth/start-by-phone
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+Idempotency-Key: 89da2281-3db1-4f14-ae2b-8228a6d2f453
+
+{
+  "mobile_phone": "79780192058"
+}

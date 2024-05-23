@@ -1,0 +1,87 @@
+### добавление операци на точке контакта в привязке к валидной карте
+POST https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/1c/operations
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+Idempotency-Key: 1114f46d-85d2-4e47-b568-4faa746e2214
+
+{
+  "loyalty": {
+    "touch_point_id": "{{touch_point_id}}",
+    "card_id": "{{card_uuid_valid_card}}",
+    "processing_mode": "none",
+    "bonus_points": {
+      "amount": "0.0",
+      "currency": "RUB"
+    },
+    "chargeback_payment_transactions": []
+  },
+  "operation_type": "selling",
+  "payload": {
+  "order": {
+    "id": "3e0e7a7a-7a84-11ec-9a74-d8d385ffda82",
+    "items": [
+      {
+        "id": "1",
+        "title": "Джемпер,пуловер,жакет трикотаж. (Х/Ч ПАО)",
+        "sku_id": "",
+        "quantity": 2,
+        "tax_rate": "20.0%",
+        "product_id": "54f8ca42-624d-11db-b4c5-0002b35596d5",
+        "category_id": "",
+        "discount_sum": {
+          "amount": "0.00",
+          "currency": "RUB"
+        },
+        "discount_rate": "0.0%",
+        "discount_type": "percentage",
+        "net_price_per_item": {
+          "amount": "410.00",
+          "currency": "RUB"
+        },
+        "is_tax_included_in_price": true
+      }
+    ],
+    "created": "2022-01-31T23:59:59+03:00",
+    "bonus_sum": {
+      "amount": "0.00",
+      "currency": "RUB"
+    },
+    "money_sum": {
+      "amount": "820.00",
+      "currency": "RUB"
+    },
+    "total_sum": {
+      "amount": "820.00",
+      "currency": "RUB"
+    }
+  },
+  "version": 1,
+  "products": [
+    {
+      "id": "54f8ca42-624d-11db-b4c5-0002b35596d5",
+      "title": "Джемпер,пуловер,жакет трикотаж. (Х/Ч ПАО)",
+      "tax_rate": "20.0%",
+      "net_price": {
+        "amount": "410.00",
+        "currency": "RUB"
+      },
+      "category_id": "",
+      "description": "Джемпер,пуловер,жакет трикотаж. (Х/Ч ПАО)",
+      "external_id": [
+        "2650"
+      ],
+      "is_tax_included_in_price": true
+    }
+  ],
+  "categories": []
+  }
+}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+

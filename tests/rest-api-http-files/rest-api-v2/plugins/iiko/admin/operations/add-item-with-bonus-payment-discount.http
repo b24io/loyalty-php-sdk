@@ -1,0 +1,50 @@
+### добавление операци на точке контакта в привязке к валидной карте
+POST https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/iiko/operations
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+
+{
+  "loyalty": {
+    "touch_point_id": "{{touch_point_id}}",
+    "card_id": "{{card_uuid_valid_card}}",
+    "processing_mode": "auto",
+    "bonus_points": {
+      "amount": "5.0",
+      "currency": "RUB"
+    }
+  },
+  "operation_type": "selling",
+  "iiko": {
+    "operation_id": "20210807.2302",
+    "payload": {
+         "id": "f724f46d-85d2-4e47-b568-4faa746e2217",
+         "date": "03.06.2021 15:18:39",
+         "items": [
+      {
+        "sum": "20.00",
+        "price": "20.00",
+        "amount": "1.00",
+        "totalSum": "20.00",
+        "modifiers": [],
+        "product-id": "c4a784d7-e882-408a-aa42-58e2714c79f9",
+        "position-id": "f558baa0-3a7a-4609-a716-171c845ed23d",
+        "group-modifiers": []
+      }
+    ],
+         "status": "Bill",
+         "moneySum": "20.00",
+         "scoreSum": "5.00",
+         "totalSum": "25.00",
+         "card-number": "79789761530"
+    },
+    "products_description": [
+    {
+      "id": "c4a784d7-e882-408a-aa42-58e2714c79f9",
+      "name": "Миндальный латте - гранде",
+      "full_name": "Латте на миндальном молоке, 500 мл"
+    }
+  ]
+  }
+}

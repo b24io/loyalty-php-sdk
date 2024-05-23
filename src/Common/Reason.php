@@ -4,16 +4,26 @@ declare(strict_types=1);
 
 namespace B24io\Loyalty\SDK\Common;
 
-readonly class Reason
+class Reason
 {
-    public function __construct(
-        public string $id,
-        public string $code,
-        public string $comment,
-    )
+    /**
+     * @readonly
+     */
+    public string $id;
+    /**
+     * @readonly
+     */
+    public string $code;
+    /**
+     * @readonly
+     */
+    public string $comment;
+    public function __construct(string $id, string $code, string $comment)
     {
+        $this->id = $id;
+        $this->code = $code;
+        $this->comment = $comment;
     }
-
     /**
      * @return array<string, string>
      */

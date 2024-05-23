@@ -1,0 +1,22 @@
+###
+GET https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/contacts?orderBy=birthday&orderDirection=asc
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+
+
+###
+GET https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/contacts?external_ids[bitrix24]=123456
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+
+
+###
+GET https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/contacts?external_ids[mobile_backend]=5624
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}

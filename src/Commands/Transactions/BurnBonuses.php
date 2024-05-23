@@ -27,15 +27,19 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
 
-#[AsCommand(
-    name: 'transactions:burn-bonuses',
-    description: 'Burning of bonuses accrued before the specified date')]
 class BurnBonuses extends Command
 {
-    private const string REASON_ID = 'b24io.loyalty.sdk.cli.util';
+    private LoggerInterface $logger;
+    /**
+     * @var string
+     */
+    private const REASON_ID = 'b24io.loyalty.sdk.cli.util';
+    protected static $defaultName = 'transactions:burn-bonuses';
+    protected static $defaultDescription = 'Burning of bonuses accrued before the specified date';
 
-    public function __construct(private LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger)
     {
+        $this->logger = $logger;
         parent::__construct();
     }
 
@@ -135,7 +139,7 @@ class BurnBonuses extends Command
             return Command::INVALID;
         }
         $burnoutDate = DateTime::createFromFormat('d.m.Y', $rawBurnoutDate);
-        if(!$burnoutDate){
+        if (!$burnoutDate) {
             $io->error('you must set valid «date» option in format dd.mm.YYYY');
 
             return Command::INVALID;
@@ -156,7 +160,7 @@ class BurnBonuses extends Command
         }
 
         $progressBar = new ProgressBar($output, $cardsTotal);
-        foreach ($admSb->cardsScope()->fetcher()->list(new ItemsOrder('created', OrderDirection::desc)) as $cnt => $card) {
+        foreach ($admSb->cardsScope()->fetcher()->list(new ItemsOrder('created', OrderDirection::desc())) as $cnt => $card) {
             $progressBar->advance();
             try {
                 // filter cards with balance > 0
@@ -167,9 +171,7 @@ class BurnBonuses extends Command
 
                 // get last 50 transactions for current card
                 $trxHistoryByCard = $admSb->transactionsScope()->transactions()->getByCardNumber($card->number);
-                $reasonCodeHistory = array_map(static function (Reason $reason) {
-                    return $reason->code;
-                }, array_column($trxHistoryByCard->getTransactions(), 'reason'));
+                $reasonCodeHistory = array_map(static fn(Reason $reason) => $reason->code, array_column($trxHistoryByCard->getTransactions(), 'reason'));
 
                 // if trx with reason-code exists, pass card
                 if (in_array($reasonCode, $reasonCodeHistory, true)) {
@@ -226,7 +228,7 @@ class BurnBonuses extends Command
     {
         $totalSum = new Money(0, $defaultCurrency);
         foreach ($adminServiceBuilder->transactionsScope()->fetcher()->listByCardNumber($cardNumber) as $trxItem) {
-            if ($burnDate < $trxItem->created && $trxItem->type === TransactionType::accrual) {
+            if ($burnDate < $trxItem->created && $trxItem->type === TransactionType::accrual()) {
                 $totalSum = $totalSum->add($trxItem->value);
             }
         }

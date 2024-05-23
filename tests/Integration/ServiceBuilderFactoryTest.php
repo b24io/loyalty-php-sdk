@@ -24,7 +24,7 @@ class ServiceBuilderFactoryTest extends TestCase
             $url,
             [
                 'headers' => [
-                    'X-LOYALTY-API-KEY-ADMIN' => $credentials->adminApiKey?->toRfc4122()
+                    'X-LOYALTY-API-KEY-ADMIN' => ($nullsafeVariable1 = $credentials->adminApiKey) ? $nullsafeVariable1->toRfc4122() : null
                 ],
             ]
         );

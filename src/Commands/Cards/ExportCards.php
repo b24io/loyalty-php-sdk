@@ -24,21 +24,28 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
-#[AsCommand(
-    name: 'cards:export',
-    description: 'Export loyalty cards to csv file')]
+
 class ExportCards extends Command
 {
+    protected CardItemFormatter $cardItemFormatter;
+    protected CardLevelItemFormatter $cardLevelItemFormatter;
+    protected ContactItemFormatter $contactItemFormatter;
+    protected LoggerInterface $logger;
+    protected static $defaultName = 'cards:export';
+    protected static $defaultDescription = 'Export loyalty cards to csv file';
     public function __construct(
-        protected CardItemFormatter      $cardItemFormatter,
-        protected CardLevelItemFormatter $cardLevelItemFormatter,
-        protected ContactItemFormatter   $contactItemFormatter,
-        protected LoggerInterface        $logger
+        CardItemFormatter      $cardItemFormatter,
+        CardLevelItemFormatter $cardLevelItemFormatter,
+        ContactItemFormatter   $contactItemFormatter,
+        LoggerInterface        $logger
     )
     {
+        $this->cardItemFormatter = $cardItemFormatter;
+        $this->cardLevelItemFormatter = $cardLevelItemFormatter;
+        $this->contactItemFormatter = $contactItemFormatter;
+        $this->logger = $logger;
         parent::__construct();
     }
-
     protected function configure(): void
     {
         $this->addOption(
@@ -63,7 +70,6 @@ class ExportCards extends Command
             InputOption::VALUE_REQUIRED,
             'file to store cards');
     }
-
     /**
      * @throws UnavailableStream
      * @throws CannotInsertRecord
@@ -133,7 +139,7 @@ class ExportCards extends Command
             )
         );
 
-        foreach ($admSb->cardsScope()->fetcher()->list(new ItemsOrder('created', OrderDirection::desc)) as $card) {
+        foreach ($admSb->cardsScope()->fetcher()->list(new ItemsOrder('created', OrderDirection::desc())) as $card) {
             $contact = array_fill(0, count($this->contactItemFormatter->fields()), null);
             if ($card->contact !== null) {
                 //todo add external_id_key to cli arguments

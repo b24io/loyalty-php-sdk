@@ -1,0 +1,15 @@
+### чекин по валидному номеру карты
+GET https://loyalty.b24.cloud/api/{{api_version_prefix}}/04601655-00bb-473e-8737-32710fdbe9d8/admin/1c/checkin/fd3df15e-199b-41b6-b499-7d4d4d3267b9/with-card-number/79780192058
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: e6506db5-7994-4b3e-8f97-68d62b0a8ac8
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+
+

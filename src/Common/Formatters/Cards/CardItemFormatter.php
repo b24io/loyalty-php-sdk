@@ -8,7 +8,10 @@ use B24io\Loyalty\SDK\Common\Result\Cards\CardItemResult;
 use Money\Currencies\ISOCurrencies;
 use Money\Formatter\DecimalMoneyFormatter;
 
-readonly class CardItemFormatter
+/**
+ * @readonly
+ */
+class CardItemFormatter
 {
     /**
      * @return string[]
@@ -39,7 +42,7 @@ readonly class CardItemFormatter
             [
                 'card_id' => $card->id->toRfc4122(),
                 'card_number' => $card->number,
-                'card_status' => $card->status->name,
+                'card_status' => (string)$card->status,
                 'card_barcode' => $card->barcode,
                 'card_balance' => $decimalMoneyFormatter->format($card->balance),
                 'card_iso_currency_code' => $card->balance->getCurrency()->getCode(),

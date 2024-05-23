@@ -8,6 +8,7 @@ use B24io\Loyalty\SDK\Common\Reason;
 use B24io\Loyalty\SDK\Common\TransactionType;
 use B24io\Loyalty\SDK\Core\Result\AbstractItem;
 use DateTimeImmutable;
+use Exception;
 use Money\Currency;
 use Money\Money;
 use Symfony\Component\Uid\Uuid;
@@ -23,7 +24,11 @@ use Symfony\Component\Uid\Uuid;
  */
 class TransactionItemResult extends AbstractItem
 {
-    public function __get(int|string $offset)
+    /**
+     * @param int|string $offset
+     * @throws Exception
+     */
+    public function __get($offset)
     {
         switch ($offset) {
             case 'value':
@@ -32,7 +37,7 @@ class TransactionItemResult extends AbstractItem
                     new Currency(($this->data[$offset]['currency']) ?? '')
                 );
             case 'type':
-                return TransactionType::from(str_replace('_transaction', '', $this->data[$offset]));
+                return new TransactionType(str_replace('_transaction', '', $this->data[$offset]));
             case 'cardId':
                 return Uuid::fromString($this->data['card']['id']);
             case 'cardNumber':

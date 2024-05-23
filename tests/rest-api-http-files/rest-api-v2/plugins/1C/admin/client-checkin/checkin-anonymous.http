@@ -1,0 +1,12 @@
+### анонимный чекин
+GET https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/1c/checkin/{{touch_point_id}}/anonymous
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}

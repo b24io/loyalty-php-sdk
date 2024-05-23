@@ -10,32 +10,34 @@ use B24io\Loyalty\SDK\Core\Exceptions\BaseException;
 use Generator;
 use Psr\Log\LoggerInterface;
 
-readonly class ContactsFetcher
+class ContactsFetcher
 {
-    public function __construct(
-        private Contacts        $contacts,
-        private LoggerInterface $logger
-    )
+    /**
+     * @readonly
+     */
+    private Contacts $contacts;
+    /**
+     * @readonly
+     */
+    private LoggerInterface $logger;
+    public function __construct(Contacts        $contacts, LoggerInterface $logger)
     {
+        $this->contacts = $contacts;
+        $this->logger = $logger;
     }
 
     /**
      * @return Generator<ContactItemResult>
      * @throws BaseException
      */
-    public function list(
-        ?ContactsFilter $filter = null,
-        ?ItemsOrder     $order = null,
-    ): Generator
+    public function list(?ContactsFilter $filter = null, ?ItemsOrder     $order = null): Generator
     {
         $res = $this->contacts->list($filter);
-
         $pages = $res->getCoreResponse()->getResponseData()->pagination->pages;
         $this->logger->debug('ContactsFetcher.list.start', [
             'total' => $res->getCoreResponse()->getResponseData()->pagination->total,
             'pages' => $pages
         ]);
-
         $contactCnt = 0;
         for ($i = 1; $i <= $pages; $i++) {
             $res = $this->contacts->list($filter, $order, $i);

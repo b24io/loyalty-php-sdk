@@ -8,6 +8,7 @@ class ResponseData
 {
     /**
      * @readonly
+     * @var array<string,mixed> $result
      */
     public array $result;
     /**
@@ -19,6 +20,11 @@ class ResponseData
      */
     public Pagination $pagination;
 
+    /**
+     * @param array<string,mixed> $result
+     * @param Metadata $metadata
+     * @param Pagination $pagination
+     */
     public function __construct(
         array      $result,
         Metadata   $metadata,

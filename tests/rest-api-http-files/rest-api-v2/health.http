@@ -1,0 +1,12 @@
+GET https://{{host}}/api/{{api_version_prefix}}/health
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+###

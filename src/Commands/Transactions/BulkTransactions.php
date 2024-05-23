@@ -8,6 +8,8 @@ use B24io\Loyalty\SDK\Common\Reason;
 use B24io\Loyalty\SDK\Common\Requests\ItemsOrder;
 use B24io\Loyalty\SDK\Common\Requests\OrderDirection;
 use B24io\Loyalty\SDK\Common\TransactionType;
+use B24io\Loyalty\SDK\Core\Exceptions\BaseException;
+use B24io\Loyalty\SDK\Core\Exceptions\InvalidArgumentException;
 use B24io\Loyalty\SDK\Services\ServiceBuilderFactory;
 use Money\Currencies\ISOCurrencies;
 use Money\Currency;
@@ -23,16 +25,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
 
-#[AsCommand(
-    name: 'transactions:bulk-transaction',
-    description: 'Bulk accrual or payment transaction to all active cards')]
 class BulkTransactions extends Command
 {
-    public function __construct(private LoggerInterface $logger)
+    private LoggerInterface $logger;
+    protected static $defaultName='transactions:bulk-transaction';
+    protected static $defaultDescription='Bulk accrual or payment transaction to all active cards';
+    public function __construct(LoggerInterface $logger)
     {
+        $this->logger = $logger;
         parent::__construct();
     }
-
     protected function configure(): void
     {
         $this->addOption(
@@ -88,6 +90,10 @@ class BulkTransactions extends Command
         );
     }
 
+    /**
+     * @throws InvalidArgumentException
+     * @throws BaseException
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln([
@@ -120,13 +126,16 @@ class BulkTransactions extends Command
 
             return Command::INVALID;
         }
-
-        $transactionType = TransactionType::tryFrom((string)$input->getOption('transaction-type'));
-        if ($transactionType === null) {
+        /**
+         * @var ?string $rawTransactionType
+         */
+        $rawTransactionType = $input->getOption('transaction-type');
+        if ($rawTransactionType === null) {
             $io->error('you must set «transaction-type» option: «accrual» or «payment»');
 
             return Command::INVALID;
         }
+        $transactionType = new TransactionType($rawTransactionType);
 
         $currency = $input->getOption('currency');
         if ($currency === null) {
@@ -178,7 +187,7 @@ class BulkTransactions extends Command
         ]);
 
         $progressBar = new ProgressBar($output, $cardsTotal);
-        foreach ($admSb->cardsScope()->fetcher()->list(new ItemsOrder('created', OrderDirection::desc)) as $card) {
+        foreach ($admSb->cardsScope()->fetcher()->list(new ItemsOrder('created', OrderDirection::desc())) as $card) {
             try {
                 if ($isDryrun) {
                     $io->note(['', 'dry run mode is active', '']);
@@ -186,9 +195,7 @@ class BulkTransactions extends Command
                 }
 
                 $trxHistoryByCard = $admSb->transactionsScope()->transactions()->getByCardNumber($card->number);
-                $reasonCodeHistory = array_map(static function (Reason $reason) {
-                    return $reason->code;
-                }, array_column($trxHistoryByCard->getTransactions(), 'reason'));
+                $reasonCodeHistory = array_map(static fn(Reason $reason) => $reason->code, array_column($trxHistoryByCard->getTransactions(), 'reason'));
                 if (in_array($reasonCode, $reasonCodeHistory, true)) {
                     $this->logger->info(sprintf('transaction already processed for card %s', $card->number));
                     continue;

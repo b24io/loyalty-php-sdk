@@ -1,0 +1,45 @@
+### добавление карты для контакта
+POST https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/cards
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+Idempotency-Key: 123456-85d2-4e47-b568-4faa746e2213
+
+{
+  "number": "1",
+  "barcode": "1",
+  "balance": {
+    "amount": "50.00",
+    "currency": "RUB"
+  },
+  "percentage": "5",
+  "contact_id": "0ff888bc-8b2a-47d9-88dc-da821eed1203",
+  "card_level_id": null,
+  "affiliate_card_id": null,
+  "status": "active",
+  "external_id": null
+}
+
+### добавление карты для контакта с указанием уровня
+POST https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/cards
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+Idempotency-Key: 123456-85d2-4e47-b568-4faa746e2213
+
+{
+  "number": "1234597",
+  "barcode": "2eee22222",
+  "balance": {
+    "amount": "34444.00",
+    "currency": "RUB"
+  },
+  "percentage": "5",
+  "contact_id": "756276cb-839a-4086-aad4-800113d05a69",
+  "card_level_id": "3de87be3-90f5-4c36-ad6a-088ac41d7828",
+  "affiliate_card_id": null,
+  "status": "blocked",
+  "external_id": null
+}

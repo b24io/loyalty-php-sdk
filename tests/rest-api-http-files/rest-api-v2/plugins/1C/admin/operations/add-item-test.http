@@ -1,0 +1,80 @@
+### добавление операци на точке контакта в привязке к валидной карте
+POST https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/1c/operations
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+
+{
+  "loyalty": {
+    "touch_point_id": "{{touch_point_id}}",
+    "card_id": "{{card_uuid_valid_card}}",
+    "processing_mode": "auto",
+    "bonus_points": {
+      "amount": "550.34",
+      "currency": "RUB"
+    },
+    "chargeback_payment_transactions": []
+  },
+  "operation_type": "selling",
+    "payload": {
+        "version": 1,
+        "order": {
+            "id": "7a067cdc-e883-11eb-9335-d89d671e51fc",
+            "created": "26.07.2021 14:11:36",
+            "money_sum": {
+                "amount": 156.03,
+                "currency": "RUB"
+            },
+            "bonus_sum": {
+                "amount": 77,
+                "currency": "RUB"
+            },
+            "total_sum": {
+                "amount": 233.03,
+                "currency": "RUB"
+            },
+            "items": [
+                {
+                    "id": "1",
+                    "title": "Выведение пятен (2,5 кв.см) (Г), Пятна",
+                    "product_id": "7e934c7d-e0d2-11da-b4b4-0002b35596d5",
+                    "sku_id": "",
+                    "category_id": "",
+                    "discount_type": "percentage",
+                    "discount_rate": 24.83,
+                    "discount_sum": 76.97,
+                    "quantity": 1,
+                    "is_tax_included_in_price": true,
+                    "tax_rate": 20,
+                    "net_price_per_item": {
+                        "amount": 310,
+                        "currency": "RUB"
+                    },
+                    "net_price_total": {
+                        "amount": 233.03,
+                        "currency": "RUB"
+                    }
+                }
+            ]
+        },
+        "products": [
+            {
+                "id": "7e934c7d-e0d2-11da-b4b4-0002b35596d5",
+                "title": "Выведение пятен (2,5 кв.см) (Г), Пятна",
+                "description": "Выведение пятен (2,5 кв.см) (Г), Пятна",
+                "category_id": "",
+                "tax_rate": 20,
+                "is_tax_included_in_price": true,
+                "net_price": {
+                    "amount": 310,
+                    "currency": "RUB"
+                },
+                "external_id": [
+                    "1536"
+                ]
+            }
+        ],
+        "categories": []
+    }
+}

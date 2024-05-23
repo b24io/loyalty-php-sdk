@@ -1,0 +1,13 @@
+### получение конкретного поля настроек
+GET https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/application-journal-options/core-application-journal-record-level
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+
+### получение несуществующего поля настроек
+GET https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/application-journal-options/core-application-journal-record-levelffffff
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}

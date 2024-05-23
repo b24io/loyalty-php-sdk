@@ -1,0 +1,20 @@
+### добавление операци на точке контакта в привязке к валидной карте
+POST https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/transactions/with-card-number/{{card_number_valid_card}}
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+Idempotency-Key: 7e5bb9db-388e-4d0a-bd10-f954f0f0a3c2
+
+{
+  "type": "accrual",
+  "bonus_points": {
+    "amount": 99.951,
+    "currency": "RUB"
+  },
+  "reason": {
+    "code": "external.background.operations",
+    "comment": "external operation with user John Doe with card number 2",
+    "id": "2018110312156345"
+  }
+}

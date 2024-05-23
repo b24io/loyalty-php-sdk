@@ -5,9 +5,9 @@
       <directory>tests/Integration/</directory>
     </testsuite>
   </testsuites>
-  <source>
-    <include>
+  <filter>
+    <whitelist>
       <directory suffix=".php">src/</directory>
-    </include>
-  </source>
+    </whitelist>
+  </filter>
 </phpunit>

@@ -20,7 +20,7 @@ class CoreTest extends TestCase
     {
         $this->expectException(\B24io\Loyalty\SDK\Core\Exceptions\MethodNotFoundException::class);
         $res = $this->core->call(new Command(
-            Context::admin,
+            Context::admin(),
             RequestMethodInterface::METHOD_GET,
             'unknownMethod'
 
@@ -32,7 +32,7 @@ class CoreTest extends TestCase
     public function testCallHealthMethod(): void
     {
         $res = $this->core->call(new Command(
-            Context::admin,
+            Context::admin(),
             RequestMethodInterface::METHOD_GET,
             'health'
 

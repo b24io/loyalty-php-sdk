@@ -25,7 +25,7 @@ class ContactsFetcherTest extends TestCase
     {
         // in parallel, we can run tests for CRUD operations
         $itemCnt = 0;
-        foreach ($this->sb->contactsScope()->fetcher()->list(null, new ItemsOrder('created', OrderDirection::desc)) as $item) {
+        foreach ($this->sb->contactsScope()->fetcher()->list(null, new ItemsOrder('created', OrderDirection::desc())) as $item) {
             $itemCnt++;
         }
         $this->assertGreaterThanOrEqual(0, $itemCnt);

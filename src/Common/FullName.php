@@ -4,14 +4,25 @@ declare(strict_types=1);
 
 namespace B24io\Loyalty\SDK\Common;
 
-readonly class FullName
+class FullName
 {
-    public function __construct(
-        public string  $name,
-        public ?string $surname = null,
-        public ?string $patronymic = null
-    )
+    /**
+     * @readonly
+     */
+    public string $name;
+    /**
+     * @readonly
+     */
+    public ?string $surname = null;
+    /**
+     * @readonly
+     */
+    public ?string $patronymic = null;
+    public function __construct(string  $name, ?string $surname = null, ?string $patronymic = null)
     {
+        $this->name = $name;
+        $this->surname = $surname;
+        $this->patronymic = $patronymic;
     }
 
     /**
