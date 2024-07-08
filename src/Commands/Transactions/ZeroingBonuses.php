@@ -1,0 +1,185 @@
+<?php
+
+declare(strict_types=1);
+
+namespace B24io\Loyalty\SDK\Commands\Transactions;
+
+use B24io\Loyalty\SDK\Common\Reason;
+use B24io\Loyalty\SDK\Common\Requests\ItemsOrder;
+use B24io\Loyalty\SDK\Common\Requests\OrderDirection;
+use B24io\Loyalty\SDK\Services\ServiceBuilderFactory;
+use Money\Currency;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use Throwable;
+
+#[AsCommand(
+    name: 'transactions:zeroing-bonuses',
+    description: 'Reset bonuses on active cards')]
+class ZeroingBonuses extends Command
+{
+    public function __construct(
+        private readonly LoggerInterface $logger
+    ) {
+        parent::__construct();
+    }
+
+    protected function configure(): void
+    {
+        $this->addOption(
+            'api-endpoint-url',
+            null,
+            InputOption::VALUE_REQUIRED,
+            'API endpoint URL',
+        );
+        $this->addOption(
+            'api-client-id',
+            null,
+            InputOption::VALUE_REQUIRED,
+            'API client id from application settings'
+        );
+        $this->addOption(
+            'api-admin-key',
+            null,
+            InputOption::VALUE_REQUIRED,
+            'API admin key from application settings'
+        );
+        $this->addOption(
+            'currency',
+            null,
+            InputOption::VALUE_REQUIRED,
+            'ISO currency code'
+        );
+        $this->addOption(
+            'reason-code',
+            null,
+            InputOption::VALUE_REQUIRED,
+            'reason code'
+        );
+        $this->addOption(
+            'reason-comment',
+            null,
+            InputOption::VALUE_REQUIRED,
+            'reason comment'
+        );
+        $this->addOption(
+            'dryrun',
+            null,
+            InputOption::VALUE_NONE,
+            'validate input and show information',
+        );
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        $output->writeln([
+            'Apply transaction to all active cards',
+            '============',
+            '',
+        ]);
+        $io = new SymfonyStyle($input, $output);
+        $apiEndpointUrl = $input->getOption('api-endpoint-url');
+        if ($apiEndpointUrl === null) {
+            $io->error('you must set «api-endpoint-url» option');
+
+            return Command::INVALID;
+        }
+
+        $apiClientId = $input->getOption('api-client-id');
+        if ($apiClientId === null) {
+            $io->error('you must set «api-client-id» option');
+
+            return Command::INVALID;
+        }
+
+        $apiAdminKey = $input->getOption('api-admin-key');
+        if ($apiAdminKey === null) {
+            $io->error('you must set «api-admin-key» option');
+
+            return Command::INVALID;
+        }
+
+        $currency = $input->getOption('currency');
+        if ($currency === null) {
+            $io->error('you must set «currency» option, use ISO-currency codes');
+
+            return Command::INVALID;
+        }
+        $currency = new Currency($currency);
+
+        $reasonCode = $input->getOption('reason-code');
+        if ($reasonCode === null) {
+            $io->error('you must set «reason-code» option');
+
+            return Command::INVALID;
+        }
+
+        $reasonComment = $input->getOption('reason-comment');
+        if ($reasonComment === null) {
+            $io->error('you must set «reason-comment» option');
+
+            return Command::INVALID;
+        }
+        $isDryrun = $input->getOption('dryrun');
+
+
+        // add result trx log
+
+        $admSb = ServiceBuilderFactory::createAdminRoleServiceBuilder(
+            $apiEndpointUrl,
+            $apiClientId,
+            $apiAdminKey,
+            $this->logger
+        );
+        $cardsTotal = $admSb->cardsScope()->cards()->count();
+        $io->info([
+            '',
+            sprintf('cards affected: %s', $cardsTotal),
+            sprintf('reason code: %s', $reasonCode),
+            sprintf('reason comment: %s', $reasonComment),
+        ]);
+
+        $progressBar = new ProgressBar($output, $cardsTotal);
+        foreach ($admSb->cardsScope()->fetcher()->list(new ItemsOrder('created', OrderDirection::desc)) as $card) {
+            try {
+                if ($card->balance->isZero()) {
+                    $progressBar->advance();
+                    continue;
+                }
+
+                $trxResult = $admSb->transactionsScope()->transactions()->processPaymentTransactionByCardNumber(
+                    $card->number,
+                    $card->balance,
+                    new Reason(
+                        'loyalty-php-sdk',
+                        $reasonCode,
+                        $reasonComment
+                    )
+                );
+                $this->logger->info(
+                    sprintf('transaction for card %s processed', $card->number),
+                    [
+                        'trxId' => $trxResult->getTransaction()->id->toRfc4122()
+                    ]
+                );
+            } catch (Throwable $exception) {
+                $io->error([
+                    '',
+                    $exception->getMessage(),
+                    $exception->getTraceAsString()
+                ]);
+            }
+
+            $progressBar->advance();
+        }
+        $progressBar->finish();
+
+        return Command::SUCCESS;
+    }
+}

@@ -55,16 +55,24 @@ $log->pushHandler(new StreamHandler($_ENV['LOYALTY_SDK_CLI_LOGS_FILE'], (int)$_E
 $log->pushProcessor(new MemoryUsageProcessor(true, true));
 
 $application = new Application();
-$application->add(new Commands\Transactions\LoadTransactionsFromFile(
+$application->add(
+    new Commands\Transactions\LoadTransactionsFromFile(
         new Infrastructure\Filesystem\TransactionsReader($log),
         new DecimalMoneyFormatter(new ISOCurrencies()),
-        $log));
-$application->add(new Commands\Cards\ExportCards(
-    new CardItemFormatter(),
-    new CardLevelItemFormatter(),
-    new ContactItemFormatter(),
-    $log));
+        $log
+    )
+);
+$application->add(
+    new Commands\Cards\ExportCards(
+        new CardItemFormatter(),
+        new CardLevelItemFormatter(),
+        new ContactItemFormatter(),
+        $log
+    )
+);
 $application->add(new Commands\Transactions\BulkTransactions($log));
 $application->add(new Commands\Transactions\BurnBonuses($log));
 $application->add(new Commands\Transactions\ExportTransactions(new TransactionItemFormatter(), $log));
+$application->add(new Commands\Transactions\ZeroingBonuses($log));
+
 $application->run($input);

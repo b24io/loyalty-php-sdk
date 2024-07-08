@@ -3,7 +3,7 @@ default:
 	@egrep -e '^\S+' ./Makefile | grep -v default | sed -r 's/://' | sed -r 's/^/ - /'
 
 lint-phpstan:
-	vendor/bin/phpstan analyse
+	vendor/bin/phpstan --memory-limit=1G analyse -v
 lint-phpinsights:
 	vendor/bin/phpinsights analyse ./src
 lint-rector:
