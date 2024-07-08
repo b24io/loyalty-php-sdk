@@ -10,6 +10,7 @@ use B24io\Loyalty\SDK\Core\Exceptions\ImmutableResultViolationException;
 use DateTimeImmutable;
 use Exception;
 use IteratorAggregate;
+use libphonenumber\PhoneNumberUtil;
 use Money\Currencies\ISOCurrencies;
 use Money\Parser\DecimalMoneyParser;
 use Symfony\Component\Uid\Uuid;
@@ -25,6 +26,7 @@ abstract class AbstractItem implements IteratorAggregate
      */
     protected array $data;
     protected DecimalMoneyParser $decimalMoneyParser;
+    protected PhoneNumberUtil $phoneNumberUtil;
 
     /**
      * @param array<string, mixed> $data
@@ -33,6 +35,7 @@ abstract class AbstractItem implements IteratorAggregate
     {
         $this->data = $data;
         $this->decimalMoneyParser = new DecimalMoneyParser(new ISOCurrencies());
+        $this->phoneNumberUtil = PhoneNumberUtil::getInstance();
     }
 
     /**

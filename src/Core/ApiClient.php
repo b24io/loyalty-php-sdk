@@ -69,7 +69,7 @@ class ApiClient implements ApiClientInterface
         $this->logger->info(
             'getResponse.start',
             [
-                'context' => $context,
+                'context' => (string)$context,
                 'apiMethod' => $apiMethod,
                 'domainUrl' => $this->credentials->domainUrl,
                 'parameters' => $parameters,

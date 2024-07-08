@@ -1,5 +1,28 @@
 # loyalty-php-sdk
 
+## 3.4.0 Upcoming
+
+### Added
+* add support for email account for contacts
+
+
+## 3.3.0 (2024.07.10)
+
+### Added
+
+* add `MobilePhoneItemResult` – information about mobile phone.
+* add support for mobile phone for `ContactItemResult`
+* add support for mobile phone for `CardItemResult`
+
+### Changed
+
+* change signature for method `Loyalty\SDK\Services\Admin\Contacts::add`, argument `$mobilePhone` can be nullable.
+
+## 3.2.0 (2024.05.23)
+
+* Downgrade branch v3 to `PHP 7.4`
+* Bump branch v4 to `PHP 8.2`
+
 ## 3.1.0 (2024.05.11)
 
 * add requirements:
