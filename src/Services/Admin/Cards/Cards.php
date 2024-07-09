@@ -6,7 +6,7 @@ namespace B24io\Loyalty\SDK\Services\Admin\Cards;
 
 use B24io\Loyalty\SDK\Common\Requests\ItemsOrder;
 use B24io\Loyalty\SDK\Common\Result\Cards\AddedCardResult;
-use B24io\Loyalty\SDK\Common\Result\Cards\CardItemResult;
+use B24io\Loyalty\SDK\Common\Result\Cards\CardResult;
 use B24io\Loyalty\SDK\Common\Result\Cards\CardsResult;
 use B24io\Loyalty\SDK\Common\Result\Cards\CardStatus;
 use B24io\Loyalty\SDK\Core\Command;
@@ -58,16 +58,16 @@ class Cards extends AbstractService
         ));
     }
 
-    public function getById(Uuid $id): CardItemResult
+    public function getById(Uuid $id): CardResult
     {
-        return new CardItemResult(
+        return new CardResult(
             $this->core->call(
                 new Command(
                     Context::admin(),
                     RequestMethodInterface::METHOD_GET,
                     sprintf('cards/%s', $id->toRfc4122()),
                 )
-            )->getResponseData()->result
+            )
         );
     }
 

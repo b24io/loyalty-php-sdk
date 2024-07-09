@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace B24io\Loyalty\SDK\Common\Result\Cards;
 
 use B24io\Loyalty\SDK\Core\Result\AbstractItem;
+use Carbon\CarbonImmutable;
 use DateTimeImmutable;
 use Exception;
 use MoneyPHP\Percentage\Percentage;
@@ -18,8 +19,8 @@ use Symfony\Component\Uid\Uuid;
  * @property-read Percentage $defaultPercentage
  * @property-read string $description
  * @property-read string $externalId
- * @property-read DateTimeImmutable $created
- * @property-read DateTimeImmutable $modified
+ * @property-read CarbonImmutable $created
+ * @property-read CarbonImmutable $modified
  */
 class CardLevelItemResult extends AbstractItem
 {

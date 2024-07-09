@@ -5,3 +5,4 @@ parameters:
     - tests/
   bootstrapFiles:
     - tests/bootstrap.php
+  treatPhpDocTypesAsCertain: false

@@ -40,6 +40,38 @@ class ContactsTest extends TestCase
      */
     public function testAdd(): void
     {
+        $fullName = new FullName($this->faker->firstName(), $this->faker->lastName());
+        $timeZone = new DateTimeZone('Europe/Moscow');
+        $gender = Gender::male();
+        $phone = $this->phoneNumberUtil->parse($this->faker->phoneNumber, 'RU');
+        $addedContact = $this->sb->contactsScope()->contacts()->add($fullName, $timeZone, $gender, $phone);
+
+        $this->assertEquals(
+            StatusCodeInterface::STATUS_OK,
+            $addedContact->getCoreResponse()->httpResponse->getStatusCode()
+        );
+
+        $this->assertTrue($fullName->equals($addedContact->getContact()->fullName));
+        $this->assertEquals($gender, $addedContact->getContact()->gender);
+        $this->assertEquals($timeZone, $addedContact->getContact()->timezone);
+        if ($addedContact->getContact()->mobilePhone !== null) {
+            $this->assertTrue($addedContact->getContact()->mobilePhone->phoneNumber->equals($phone));
+            $this->assertTrue($addedContact->getContact()->mobilePhone->verificationStatus->isUnverified());
+        }
+    }
+
+    /**
+     * @throws TransportExceptionInterface|BaseException|NumberParseException
+     * @testdox Test add contact with mobile phone
+     * @covers \B24io\Loyalty\SDK\Services\Admin\Contacts\Contacts::add
+     * @covers \B24io\Loyalty\SDK\Services\Admin\Contacts\Contacts::getById
+     */
+    public function testAddWithMobilePhone(): void
+    {
+        $phoneNumber = $this->phoneNumberUtil->parse(
+            $this->faker->phoneNumber,
+            'RU'
+        );
         $addedContact = $this->sb->contactsScope()->contacts()->add(
             new FullName(
                 $this->faker->firstName(),
@@ -47,15 +79,45 @@ class ContactsTest extends TestCase
             ),
             new DateTimeZone('Europe/Moscow'),
             Gender::male(),
-            $this->phoneNumberUtil->parse(
-                $this->faker->phoneNumber,
-                'RU'
-            )
+            $phoneNumber
         );
         $this->assertEquals(
             StatusCodeInterface::STATUS_OK,
             $addedContact->getCoreResponse()->httpResponse->getStatusCode()
         );
+
+        $foundContact = $this->sb->contactsScope()->contacts()->getById($addedContact->getContact()->id);
+        if ($foundContact->getContact()->mobilePhone !== null) {
+            $this->assertTrue($phoneNumber->equals($foundContact->getContact()->mobilePhone->phoneNumber));
+            $this->assertTrue($foundContact->getContact()->mobilePhone->verificationStatus->isUnverified());
+        }
+    }
+
+    /**
+     * @throws TransportExceptionInterface|BaseException|NumberParseException
+     * @testdox Test add contact without mobile phone
+     * @covers \B24io\Loyalty\SDK\Services\Admin\Contacts\Contacts::add
+     * @covers \B24io\Loyalty\SDK\Services\Admin\Contacts\Contacts::getById
+     */
+    public function testAddWithoutMobilePhone(): void
+    {
+
+        $addedContact = $this->sb->contactsScope()->contacts()->add(
+            new FullName(
+                $this->faker->firstName(),
+                $this->faker->lastName(),
+            ),
+            new DateTimeZone('Europe/Moscow'),
+            Gender::male(),
+            null
+        );
+        $this->assertEquals(
+            StatusCodeInterface::STATUS_OK,
+            $addedContact->getCoreResponse()->httpResponse->getStatusCode()
+        );
+
+        $contact = $this->sb->contactsScope()->contacts()->getById($addedContact->getContact()->id);
+        $this->assertNull($contact->getContact()->mobilePhone);
     }
 
     /**
@@ -250,7 +312,7 @@ class ContactsTest extends TestCase
     }
 
     /**
-     * @throws TransportExceptionInterface|BaseException|NumberParseException
+     * @throws TransportExceptionInterface
      * @testdox Test filter contacts with cards
      * @covers \B24io\Loyalty\SDK\Services\Admin\Contacts\Contacts::list
      */
@@ -263,7 +325,7 @@ class ContactsTest extends TestCase
     }
 
     /**
-     * @throws TransportExceptionInterface|BaseException|NumberParseException
+     * @throws BaseException
      * @testdox Count contacts
      * @covers \B24io\Loyalty\SDK\Services\Admin\Contacts\Contacts::count
      */

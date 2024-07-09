@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace B24io\Loyalty\SDK\Common\Result\Cards;
 
 use B24io\Loyalty\SDK\Common\Result\Contacts\ContactItemResult;
+use B24io\Loyalty\SDK\Common\Result\Contacts\MobilePhoneItemResult;
 use B24io\Loyalty\SDK\Core\Exceptions\InvalidArgumentException;
 use B24io\Loyalty\SDK\Core\Result\AbstractItem;
-use DateTimeImmutable;
+use Carbon\CarbonImmutable;
+use Exception;
 use Money\Currency;
 use Money\Money;
 use MoneyPHP\Percentage\Percentage;
@@ -19,19 +21,20 @@ use Symfony\Component\Uid\Uuid;
  * @property-read string $barcode
  * @property-read Money $balance
  * @property-read Percentage $percentage
- * @property-read DateTimeImmutable $created
- * @property-read DateTimeImmutable $modified
+ * @property-read CarbonImmutable $created
+ * @property-read CarbonImmutable $modified
  * @property-read CardStatus $status
  * @property-read string $externalId
  * @property-read ?CardLevelItemResult $level
  * @property-read ContactItemResult $contact
+ * @property-read MobilePhoneItemResult|null $mobilePhone
  */
 class CardItemResult extends AbstractItem
 {
     /**
      * @param int|string $offset
      * @throws InvalidArgumentException
-     * @throws \Exception
+     * @throws Exception
      */
     public function __get($offset)
     {
@@ -57,6 +60,11 @@ class CardItemResult extends AbstractItem
                     return null;
                 }
                 return new ContactItemResult($this->data[$offset]);
+            case 'mobilePhone':
+                if ($this->data['mobile_phone'] === null) {
+                    return null;
+                }
+                return new MobilePhoneItemResult($this->data['mobile_phone']);
             default:
                 return parent::__get($offset);
         }

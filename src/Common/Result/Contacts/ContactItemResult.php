@@ -23,12 +23,14 @@ use Symfony\Component\Uid\Uuid;
  * @property-read DateTimeImmutable $created
  * @property-read DateTimeImmutable $modified
  * @property-read ?CardItemResult $card
+ * @property-read MobilePhoneItemResult|null $mobilePhone
  */
 class ContactItemResult extends AbstractItem
 {
     /**
      * @param int|string $offset
      * @throws InvalidArgumentException
+     * @throws \Exception
      */
     public function __get($offset)
     {
@@ -56,6 +58,11 @@ class ContactItemResult extends AbstractItem
                     return null;
                 }
                 return new CardItemResult($this->data['card']);
+            case 'mobilePhone':
+                if ($this->data['mobile_phone'] === null) {
+                    return null;
+                }
+                return new MobilePhoneItemResult($this->data['mobile_phone']);
             default:
                 return parent::__get($offset);
         }

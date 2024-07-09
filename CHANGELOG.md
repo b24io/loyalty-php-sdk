@@ -1,5 +1,32 @@
 # loyalty-php-sdk
 
+## Upcoming
+
+### Added
+* WIP add support for email account for contacts
+
+
+## 3.3.0 (2024.07.10)
+
+### Added
+* add requirements:
+    * `nesbot/carbon` version `^2.*`,
+* add `MobilePhoneItemResult` – information about mobile phone.
+* add support for mobile phone for `ContactItemResult`
+* add support for mobile phone for `CardItemResult`
+
+### Changed
+
+* change signature for method `Loyalty\SDK\Services\Admin\Contacts::add`, argument `$mobilePhone` can be nullable.
+* change signature for method  `Loyalty\SDK\Services\Admin\Contacts::getById` from `ContactItemResult` to `ContactResult`
+* change signature for method  `Loyalty\SDK\Services\Admin\Cards::getById` from `CardItemResult` to `CardResult`
+* change `DateTimeImmutable` to `CarbonImmutable` in all results
+
+## 3.2.0 (2024.05.23)
+
+* Downgrade branch v3 to `PHP 7.4`
+* Bump branch v4 to `PHP 8.2`
+
 ## 3.1.0 (2024.05.11)
 
 * add requirements:

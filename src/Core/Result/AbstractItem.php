@@ -7,7 +7,7 @@ namespace B24io\Loyalty\SDK\Core\Result;
 use ArrayIterator;
 use B24io\Loyalty\SDK\Common\Reason;
 use B24io\Loyalty\SDK\Core\Exceptions\ImmutableResultViolationException;
-use DateTimeImmutable;
+use Carbon\CarbonImmutable;
 use Exception;
 use IteratorAggregate;
 use Money\Currencies\ISOCurrencies;
@@ -25,7 +25,6 @@ abstract class AbstractItem implements IteratorAggregate
      */
     protected array $data;
     protected DecimalMoneyParser $decimalMoneyParser;
-
     /**
      * @param array<string, mixed> $data
      */
@@ -58,7 +57,7 @@ abstract class AbstractItem implements IteratorAggregate
                 return (string)$this->data['external_id'];
             case 'created':
             case 'modified':
-                return new DateTimeImmutable($this->data[$offset]);
+                return new CarbonImmutable($this->data[$offset]);
             case 'reason':
                 return new Reason(
                     $this->data[$offset]['id'],
