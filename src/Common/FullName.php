@@ -8,7 +8,6 @@ class FullName
 {
     /**
      * @readonly
-     * @var non-empty-string
      */
     public string $name;
     /**
