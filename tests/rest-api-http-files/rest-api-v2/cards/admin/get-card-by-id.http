@@ -1,5 +1,5 @@
 ###
-GET https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/cards/e5956a62-b45c-4e9f-b881-6693ea99bcc3
+GET https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/cards/a2da94f5-fa82-4f8e-973a-8aa8d15207f8
 Accept: */*
 Cache-Control: no-cache
 Content-Type: application/json; charset=utf-8

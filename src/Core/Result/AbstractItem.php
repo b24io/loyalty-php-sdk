@@ -7,10 +7,9 @@ namespace B24io\Loyalty\SDK\Core\Result;
 use ArrayIterator;
 use B24io\Loyalty\SDK\Common\Reason;
 use B24io\Loyalty\SDK\Core\Exceptions\ImmutableResultViolationException;
-use DateTimeImmutable;
+use Carbon\CarbonImmutable;
 use Exception;
 use IteratorAggregate;
-use libphonenumber\PhoneNumberUtil;
 use Money\Currencies\ISOCurrencies;
 use Money\Parser\DecimalMoneyParser;
 use Symfony\Component\Uid\Uuid;
@@ -58,7 +57,7 @@ abstract class AbstractItem implements IteratorAggregate
                 return (string)$this->data['external_id'];
             case 'created':
             case 'modified':
-                return new DateTimeImmutable($this->data[$offset]);
+                return new CarbonImmutable($this->data[$offset]);
             case 'reason':
                 return new Reason(
                     $this->data[$offset]['id'],

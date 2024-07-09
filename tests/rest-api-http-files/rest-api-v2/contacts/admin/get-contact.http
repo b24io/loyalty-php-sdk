@@ -1,25 +1,7 @@
 ###
-POST https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/contacts
-Accept: */*
-Cache-Control: no-cache
-Content-Type: application/json; charset=utf-8
-X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
-Idempotency-Key: 123456-85d2-4e47-b568-4faa746e2213
-
-{
-  "full_name": {
-    "name": "Иван1",
-    "surname": "Иванов1",
-    "patronymic": "Иванович1"
-  },
-  "timezone_utc_offset": null,
-  "gender": "male",
-  "birthday": null,
-  "external_ids": []
-}
-
-###
-GET https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/contacts/74957029-e3b8-4419-8557-38a42140cc6d
+# WTF 404??????
+# GET https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/contacts/a2da94f5-fa82-4f8e-973a-8aa8d15207f8
+GET https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/contacts/dc088068-9904-4272-b0a8-985a109582e1
 Accept: */*
 Cache-Control: no-cache
 Content-Type: application/json; charset=utf-8

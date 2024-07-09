@@ -7,14 +7,14 @@ X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
 Idempotency-Key: 123456-85d2-4e47-b568-4faa746e2213
 
 {
-  "number": "1",
-  "barcode": "1",
+  "number": "155555",
+  "barcode": "144444",
   "balance": {
     "amount": "50.00",
     "currency": "RUB"
   },
   "percentage": "5",
-  "contact_id": "0ff888bc-8b2a-47d9-88dc-da821eed1203",
+  "contact_id": "dc088068-9904-4272-b0a8-985a109582e1",
   "card_level_id": null,
   "affiliate_card_id": null,
   "status": "active",

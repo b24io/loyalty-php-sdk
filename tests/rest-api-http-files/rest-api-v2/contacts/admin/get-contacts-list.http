@@ -1,5 +1,5 @@
 ###
-GET https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/contacts?orderBy=birthday&orderDirection=asc
+GET https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/contacts?orderBy=modified&orderDirection=asc
 Accept: */*
 Cache-Control: no-cache
 Content-Type: application/json; charset=utf-8

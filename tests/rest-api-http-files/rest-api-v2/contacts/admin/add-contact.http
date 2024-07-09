@@ -10,13 +10,34 @@ Idempotency-Key: {{$uuid}}
   "full_name": {
     "name": "Иван22221113331",
     "surname": "Иванов22221112133331",
-    "patronymic": "Иванович33333111112342342342341"
+    "patronymic": "Иванович33333"
   },
   "gender": "unknown",
   "timezone": "Asia/Novosibirsk",
   "birthday": "27.05.1984",
   "external_ids": null,
-  "mobile_phone": "79780192058"
+  "mobile_phone": "79780192051"
+}
+
+###
+POST https://{{host}}/api/{{api_version_prefix}}/{{api_key_client}}/admin/contacts
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json; charset=utf-8
+X-LOYALTY-API-KEY-ADMIN: {{api_key_role_admin}}
+Idempotency-Key: {{$uuid}}
+
+{
+  "full_name": {
+    "name": "Иван1",
+    "surname": "Иванов2",
+    "patronymic": "Иванович3"
+  },
+  "gender": "unknown",
+  "timezone": "Asia/Novosibirsk",
+  "birthday": "27.05.1984",
+  "external_ids": null,
+  "mobile_phone": null
 }
 
 ###

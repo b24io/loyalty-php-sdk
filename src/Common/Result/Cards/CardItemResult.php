@@ -8,7 +8,7 @@ use B24io\Loyalty\SDK\Common\Result\Contacts\ContactItemResult;
 use B24io\Loyalty\SDK\Common\Result\Contacts\MobilePhoneItemResult;
 use B24io\Loyalty\SDK\Core\Exceptions\InvalidArgumentException;
 use B24io\Loyalty\SDK\Core\Result\AbstractItem;
-use DateTimeImmutable;
+use Carbon\CarbonImmutable;
 use Exception;
 use Money\Currency;
 use Money\Money;
@@ -21,8 +21,8 @@ use Symfony\Component\Uid\Uuid;
  * @property-read string $barcode
  * @property-read Money $balance
  * @property-read Percentage $percentage
- * @property-read DateTimeImmutable $created
- * @property-read DateTimeImmutable $modified
+ * @property-read CarbonImmutable $created
+ * @property-read CarbonImmutable $modified
  * @property-read CardStatus $status
  * @property-read string $externalId
  * @property-read ?CardLevelItemResult $level

@@ -7,6 +7,7 @@ namespace B24io\Loyalty\SDK\Common\Result\Transactions;
 use B24io\Loyalty\SDK\Common\Reason;
 use B24io\Loyalty\SDK\Common\TransactionType;
 use B24io\Loyalty\SDK\Core\Result\AbstractItem;
+use Carbon\CarbonImmutable;
 use DateTimeImmutable;
 use Exception;
 use Money\Currency;
@@ -19,7 +20,7 @@ use Symfony\Component\Uid\Uuid;
  * @property-read string $cardNumber
  * @property-read Money $value
  * @property-read TransactionType $type
- * @property-read DateTimeImmutable $created
+ * @property-read CarbonImmutable $created
  * @property-read Reason $reason
  */
 class TransactionItemResult extends AbstractItem
