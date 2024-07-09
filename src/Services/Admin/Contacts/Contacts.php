@@ -7,9 +7,8 @@ namespace B24io\Loyalty\SDK\Services\Admin\Contacts;
 use B24io\Loyalty\SDK\Common\FullName;
 use B24io\Loyalty\SDK\Common\Gender;
 use B24io\Loyalty\SDK\Common\Requests\ItemsOrder;
-use B24io\Loyalty\SDK\Common\Result\Cards\CardsResult;
 use B24io\Loyalty\SDK\Common\Result\Contacts\AddedContactResult;
-use B24io\Loyalty\SDK\Common\Result\Contacts\ContactItemResult;
+use B24io\Loyalty\SDK\Common\Result\Contacts\ContactResult;
 use B24io\Loyalty\SDK\Common\Result\Contacts\ContactsResult;
 use B24io\Loyalty\SDK\Core\Command;
 use B24io\Loyalty\SDK\Core\Credentials\Context;
@@ -67,16 +66,16 @@ class Contacts extends AbstractService
             )));
     }
 
-    public function getById(Uuid $id): ContactItemResult
+    public function getById(Uuid $id): ContactResult
     {
-        return new ContactItemResult(
+        return new ContactResult(
             $this->core->call(
                 new Command(
                     Context::admin(),
                     RequestMethodInterface::METHOD_GET,
                     sprintf('contacts/%s', $id->toRfc4122()),
                 )
-            )->getResponseData()->result
+            )
         );
     }
 

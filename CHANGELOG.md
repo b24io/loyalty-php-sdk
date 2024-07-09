@@ -17,6 +17,8 @@
 ### Changed
 
 * change signature for method `Loyalty\SDK\Services\Admin\Contacts::add`, argument `$mobilePhone` can be nullable.
+* change signature for method  `Loyalty\SDK\Services\Admin\Contacts::getById` from `ContactItemResult` to `ContactResult`
+* WIP change signature for method  `Loyalty\SDK\Services\Admin\Cards::getById` from `` to ``
 
 ## 3.2.0 (2024.05.23)
 

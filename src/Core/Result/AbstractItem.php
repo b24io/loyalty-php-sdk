@@ -26,8 +26,6 @@ abstract class AbstractItem implements IteratorAggregate
      */
     protected array $data;
     protected DecimalMoneyParser $decimalMoneyParser;
-    protected PhoneNumberUtil $phoneNumberUtil;
-
     /**
      * @param array<string, mixed> $data
      */
@@ -35,7 +33,6 @@ abstract class AbstractItem implements IteratorAggregate
     {
         $this->data = $data;
         $this->decimalMoneyParser = new DecimalMoneyParser(new ISOCurrencies());
-        $this->phoneNumberUtil = PhoneNumberUtil::getInstance();
     }
 
     /**

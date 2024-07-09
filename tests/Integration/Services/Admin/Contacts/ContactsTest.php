@@ -85,7 +85,7 @@ class ContactsTest extends TestCase
         );
 
         $contact = $this->sb->contactsScope()->contacts()->getById($addedContact->getContact()->id);
-        $this->assertTrue($phoneNumber->equals($contact->mobilePhone->number));
+        $this->assertTrue($phoneNumber->equals($contact->getContact()->mobilePhone->number));
     }
 
     /**
@@ -112,7 +112,7 @@ class ContactsTest extends TestCase
         );
 
         $contact = $this->sb->contactsScope()->contacts()->getById($addedContact->getContact()->id);
-        $this->assertNull($contact->mobilePhone);
+        $this->assertNull($contact->getContact()->mobilePhone);
     }
 
     /**
