@@ -12,6 +12,7 @@ use B24io\Loyalty\SDK\Common\Result\Cards\CardItemResult;
 use B24io\Loyalty\SDK\Common\Result\Cards\CardStatus;
 use B24io\Loyalty\SDK\Core\Exceptions\BadRequestException;
 use B24io\Loyalty\SDK\Core\Exceptions\BaseException;
+use B24io\Loyalty\SDK\Core\Exceptions\MethodNotFoundException;
 use B24io\Loyalty\SDK\Services\Admin\AdminServiceBuilder;
 use B24io\Loyalty\SDK\Tests\Integration\IntegrationTestsContextBuilder;
 use DateTimeZone;
@@ -26,6 +27,7 @@ use Fig\Http\Message\StatusCodeInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Faker;
 use Throwable;
+use Symfony\Component\Uid\Uuid;
 
 class CardsTest extends TestCase
 {
@@ -111,6 +113,80 @@ class CardsTest extends TestCase
             $this->assertTrue($addedCard->getCard()->mobilePhone->verificationStatus->isUnverified());
             $this->assertTrue($phone->equals($addedCard->getCard()->mobilePhone->phoneNumber));
         }
+    }
+
+    /**
+     * @throws BaseException
+     * @throws NumberParseException
+     * @testdox Test add card and contact with mobile phone
+     * @covers \B24io\Loyalty\SDK\Services\Admin\Contacts\Contacts::add
+     * @covers \B24io\Loyalty\SDK\Services\Admin\Cards\Cards::add
+     * @covers \B24io\Loyalty\SDK\Services\Admin\Cards\Cards::getById
+     */
+    public function testGetCardByIdHappyPath(): void
+    {
+        $phone = $this->phoneNumberUtil->parse(
+            $this->faker->phoneNumber,
+            'RU'
+        );
+        $addedContact = $this->sb->contactsScope()->contacts()->add(
+            new FullName(
+                $this->faker->firstName(),
+                $this->faker->lastName(),
+            ),
+            new DateTimeZone('Europe/Moscow'),
+            Gender::male(),
+            $phone
+        );
+
+        $contactId = $addedContact->getContact()->id;
+        $cardNumber = (string)time();
+        $cardBalance = new Money(random_int(1000, 1000000), new Currency('RUB'));
+        $cardPercentage = new Percentage('5.5');
+        $cardStatus = CardStatus::active();
+
+        $addedCard = $this->sb->cardsScope()->cards()->add(
+            $contactId,
+            $cardNumber,
+            $cardBalance,
+            $cardPercentage,
+            $cardStatus
+        );
+
+        $card = $this->sb->cardsScope()->cards()->getById($addedCard->getCard()->id)->getCard();
+
+        $this->assertEquals($cardNumber, $card->number,
+            sprintf('expected «%s» card number, but «%s» number returned',
+                $cardNumber,
+                $card->number));
+        $this->assertEquals(
+            $cardBalance->getAmount(),
+            $card->balance->getAmount(),
+            sprintf('for card with id %s and number %s expected balance «%s», but «%s» balance returned',
+                $card->id->toRfc4122(),
+                $cardNumber,
+                $cardBalance->getAmount(),
+                $card->balance->getAmount()
+            )
+        );
+        $this->assertEquals(
+            $cardPercentage->format(),
+            $card->percentage->format()
+        );
+        $this->assertEquals(
+            $cardStatus,
+            $card->status
+        );
+        if ($card->mobilePhone !== null) {
+            $this->assertTrue($card->mobilePhone->verificationStatus->isUnverified());
+            $this->assertTrue($phone->equals($card->mobilePhone->phoneNumber));
+        }
+    }
+
+    public function testGetByIdNonExistingCard():void
+    {
+        $this->expectException(MethodNotFoundException::class);
+        $this->sb->cardsScope()->cards()->getById(Uuid::v4());
     }
 
     /**
