@@ -23,7 +23,7 @@ use Symfony\Component\Uid\Uuid;
  * @property-read DateTimeImmutable $created
  * @property-read DateTimeImmutable $modified
  * @property-read ?CardItemResult $card
- * @property-read ?MobilePhoneItemResult $mobilePhone
+ * @property-read MobilePhoneItemResult|null $mobilePhone
  */
 class ContactItemResult extends AbstractItem
 {

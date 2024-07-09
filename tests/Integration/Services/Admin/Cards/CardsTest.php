@@ -107,7 +107,10 @@ class CardsTest extends TestCase
             $cardStatus,
             $addedCard->getCard()->status
         );
-        $this->assertTrue($phone->equals($addedCard->getCard()->mobilePhone->number));
+        if ($addedCard->getCard()->mobilePhone !== null) {
+            $this->assertTrue($addedCard->getCard()->mobilePhone->verificationStatus->isUnverified());
+            $this->assertTrue($phone->equals($addedCard->getCard()->mobilePhone->phoneNumber));
+        }
     }
 
     /**

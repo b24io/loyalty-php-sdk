@@ -27,7 +27,7 @@ use Symfony\Component\Uid\Uuid;
  * @property-read string $externalId
  * @property-read ?CardLevelItemResult $level
  * @property-read ContactItemResult $contact
- * @property-read ?MobilePhoneItemResult $mobilePhone
+ * @property-read MobilePhoneItemResult|null $mobilePhone
  */
 class CardItemResult extends AbstractItem
 {

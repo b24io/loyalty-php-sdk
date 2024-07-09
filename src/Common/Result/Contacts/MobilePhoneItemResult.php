@@ -13,8 +13,8 @@ use libphonenumber\PhoneNumberUtil;
 
 
 /**
+ * @property-read PhoneNumber $phoneNumber
  * @property-read VerificationStatus $verificationStatus
- * @property-read PhoneNumber $number
  */
 class MobilePhoneItemResult extends AbstractItem
 {
@@ -25,14 +25,14 @@ class MobilePhoneItemResult extends AbstractItem
     public function __get($offset)
     {
         switch ($offset) {
-            case 'number':
+            case 'verificationStatus':
+                return new VerificationStatus($this->data['verification_status']);
+            case 'phoneNumber':
                 $phoneNumberUtil = PhoneNumberUtil::getInstance();
                 if ($phoneNumberUtil === null) {
                     throw new InvalidArgumentException('cannot create libphonenumber util instance');
                 }
-                return $phoneNumberUtil->parse($this->data[$offset], null);
-            case 'verificationStatus':
-                return new VerificationStatus($this->data['verification_status']);
+                return $phoneNumberUtil->parse($this->data['number'], '');
             default:
                 return parent::__get($offset);
         }
