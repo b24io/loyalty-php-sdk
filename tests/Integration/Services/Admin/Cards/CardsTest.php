@@ -23,7 +23,6 @@ use Money\Money;
 use MoneyPHP\Percentage\Percentage;
 use PHPUnit\Framework\TestCase;
 use Fig\Http\Message\StatusCodeInterface;
-use Random\RandomException;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Faker;
 use Throwable;
@@ -52,9 +51,16 @@ class CardsTest extends TestCase
     /**
      * @throws BaseException
      * @throws NumberParseException
+     * @testdox Test add card and contact with mobile phone
+     * @covers \B24io\Loyalty\SDK\Services\Admin\Contacts\Contacts::add
+     * @covers \B24io\Loyalty\SDK\Services\Admin\Cards\Cards::add
      */
     public function testAddCard(): void
     {
+        $phone = $this->phoneNumberUtil->parse(
+            $this->faker->phoneNumber,
+            'RU'
+        );
         $addedContact = $this->sb->contactsScope()->contacts()->add(
             new FullName(
                 $this->faker->firstName(),
@@ -62,10 +68,7 @@ class CardsTest extends TestCase
             ),
             new DateTimeZone('Europe/Moscow'),
             Gender::male(),
-            $this->phoneNumberUtil->parse(
-                $this->faker->phoneNumber,
-                'RU'
-            )
+            $phone
         );
 
         $contactId = $addedContact->getContact()->id;
@@ -104,6 +107,7 @@ class CardsTest extends TestCase
             $cardStatus,
             $addedCard->getCard()->status
         );
+        $this->assertTrue($phone->equals($addedCard->getCard()->mobilePhone->number));
     }
 
     /**

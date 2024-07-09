@@ -29,20 +29,25 @@ class Contacts extends AbstractService
      * @param FullName $fullName
      * @param DateTimeZone $timezone
      * @param Gender $gender
-     * @param PhoneNumber $mobilePhone
+     * @param PhoneNumber|null $mobilePhone
      * @param DateTimeImmutable|null $birthdate
      * @param array<string, string> $externalIds
-     *@return AddedContactResult
+     * @return AddedContactResult
      */
     public function add(
         FullName           $fullName,
         DateTimeZone       $timezone,
         Gender             $gender,
-        PhoneNumber        $mobilePhone,
+        ?PhoneNumber       $mobilePhone = null,
         ?DateTimeImmutable $birthdate = null,
         array              $externalIds = []
     ): AddedContactResult
     {
+        $rawMobilePhone = null;
+        if ($mobilePhone !== null) {
+            $rawMobilePhone = $this->phoneNumberUtil->format($mobilePhone, PhoneNumberFormat::E164);
+        }
+
         return new AddedContactResult($this->core->call(
             new Command(
                 Context::admin(),
@@ -53,7 +58,7 @@ class Contacts extends AbstractService
                     'timezone' => $timezone->getName(),
                     'gender' => (string)$gender,
                     'birthday' => ($nullsafeBirthdate = $birthdate) ? $nullsafeBirthdate->format('Y.m.d') : null,
-                    'mobile_phone' => $this->phoneNumberUtil->format($mobilePhone, PhoneNumberFormat::E164),
+                    'mobile_phone' => $rawMobilePhone,
                     'external_ids' => $externalIds
                 ],
                 null,

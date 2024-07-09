@@ -59,6 +59,63 @@ class ContactsTest extends TestCase
     }
 
     /**
+     * @throws TransportExceptionInterface|BaseException|NumberParseException
+     * @testdox Test add contact with mobile phone
+     * @covers \B24io\Loyalty\SDK\Services\Admin\Contacts\Contacts::add
+     * @covers \B24io\Loyalty\SDK\Services\Admin\Contacts\Contacts::getById
+     */
+    public function testAddWithMobilePhone(): void
+    {
+        $phoneNumber = $this->phoneNumberUtil->parse(
+            $this->faker->phoneNumber,
+            'RU'
+        );
+        $addedContact = $this->sb->contactsScope()->contacts()->add(
+            new FullName(
+                $this->faker->firstName(),
+                $this->faker->lastName(),
+            ),
+            new DateTimeZone('Europe/Moscow'),
+            Gender::male(),
+            $phoneNumber
+        );
+        $this->assertEquals(
+            StatusCodeInterface::STATUS_OK,
+            $addedContact->getCoreResponse()->httpResponse->getStatusCode()
+        );
+
+        $contact = $this->sb->contactsScope()->contacts()->getById($addedContact->getContact()->id);
+        $this->assertTrue($phoneNumber->equals($contact->mobilePhone->number));
+    }
+
+    /**
+     * @throws TransportExceptionInterface|BaseException|NumberParseException
+     * @testdox Test add contact without mobile phone
+     * @covers \B24io\Loyalty\SDK\Services\Admin\Contacts\Contacts::add
+     * @covers \B24io\Loyalty\SDK\Services\Admin\Contacts\Contacts::getById
+     */
+    public function testAddWithoutMobilePhone(): void
+    {
+
+        $addedContact = $this->sb->contactsScope()->contacts()->add(
+            new FullName(
+                $this->faker->firstName(),
+                $this->faker->lastName(),
+            ),
+            new DateTimeZone('Europe/Moscow'),
+            Gender::male(),
+            null
+        );
+        $this->assertEquals(
+            StatusCodeInterface::STATUS_OK,
+            $addedContact->getCoreResponse()->httpResponse->getStatusCode()
+        );
+
+        $contact = $this->sb->contactsScope()->contacts()->getById($addedContact->getContact()->id);
+        $this->assertNull($contact->mobilePhone);
+    }
+
+    /**
      * @throws TransportExceptionInterface|BaseException
      * @testdox Get contacts list with null arguments - test default options on server side
      * @covers \B24io\Loyalty\SDK\Services\Admin\Contacts\Contacts::list
