@@ -5,6 +5,9 @@
 ### Added
 * WIP add support for email account for contacts
 
+## 3.3.1 (2024.07.29) 
+### Changed
+* removed `ext-bcmath` in composer requirement
 
 ## 3.3.0 (2024.07.10)
 

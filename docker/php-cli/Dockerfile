@@ -1,8 +1,8 @@
 FROM php:7.4-cli-alpine
 
 RUN apk add unzip libpq-dev git icu-dev \
-    && docker-php-ext-install bcmath intl \
-    && docker-php-ext-enable bcmath intl
+    && docker-php-ext-install intl \
+    && docker-php-ext-enable intl
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/bin --filename=composer --quiet
 
