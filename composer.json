@@ -22,7 +22,6 @@
   "require": {
     "php": "7.4.* || 8.2.* || 8.3.*",
     "ext-json": "*",
-    "ext-bcmath": "*",
     "ext-curl": "*",
     "ext-intl": "*",
     "psr/log": "^1.1.4 || ^2.0 || ^3.0",
